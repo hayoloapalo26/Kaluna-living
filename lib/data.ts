@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 
+// Ambil semua produk
 export const getproduks = async () => {
   try {
     const result = await prisma.produk.findMany({
@@ -12,8 +13,11 @@ export const getproduks = async () => {
   }
 };
 
-export const getprodukById = async (id: string) => {
+// Ambil produk by id (AMAN: tidak query kalau id kosong)
+export const getprodukById = async (id?: string) => {
   try {
+    if (!id) return null;
+
     const produk = await prisma.produk.findUnique({
       where: { id },
     });
@@ -25,12 +29,16 @@ export const getprodukById = async (id: string) => {
   }
 };
 
+// Add to cart
 export const addToCart = async (
   userId: string,
   produkId: string,
   quantity = 1
 ) => {
   try {
+    if (!userId) throw new Error("UserId wajib");
+    if (!produkId) throw new Error("ProdukId wajib");
+
     const produk = await prisma.produk.findUnique({
       where: { id: produkId },
     });
@@ -39,9 +47,15 @@ export const addToCart = async (
       throw new Error("Produk tidak ditemukan");
     }
 
-    // Pakai cast any supaya TS nggak protes
+    // Pakai cast any supaya TS nggak protes jika schema kamu tidak expose model secara typed
     const cartModel = (prisma as any).cart;
     const cartItemModel = (prisma as any).cartItem;
+
+    if (!cartModel || !cartItemModel) {
+      throw new Error(
+        "Model cart/cartItem tidak ditemukan di Prisma Client. Periksa schema.prisma"
+      );
+    }
 
     // Cari cart existing untuk user ini
     let cart = await cartModel.findFirst({
@@ -83,13 +97,14 @@ export const addToCart = async (
   }
 };
 
-// === FUNCTION: getReservationByUserId ===
+// Ambil reservation milik user
 export const getReservationByUserId = async (userId: string) => {
   try {
+    if (!userId) return [];
+
     const reservations = await prisma.reservation.findMany({
       where: { userId },
       include: {
-        // sesuai saran TypeScript: pakai 'produk' (R besar)
         produk: true,
       },
       orderBy: {

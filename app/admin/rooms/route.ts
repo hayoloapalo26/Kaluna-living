@@ -17,15 +17,26 @@ export async function POST(req: NextRequest) {
 
     const formData = await req.formData();
 
-    const name = String(formData.get("name") || "");
-    const description = String(formData.get("description") || "");
-    const price = Number(formData.get("price") || 0);
-    const capacity = Number(formData.get("capacity") || 1);
-    const imageFile = formData.get("image") as File | null;
+    const name = String(formData.get("name") || "").trim();
+    const description = String(formData.get("description") || "").trim();
 
-    if (!name || !price || !imageFile) {
+    // price bisa dikirim "15.000" -> bersihin jadi 15000
+    const rawPrice = String(formData.get("price") || "0");
+    const price = Number(rawPrice.replace(/[^\d]/g, "")) || 0;
+
+    const capacity = Number(formData.get("capacity") || 1) || 1;
+
+    const imageFile = formData.get("image");
+    if (!(imageFile instanceof File)) {
       return NextResponse.json(
         { error: "Nama, harga, dan gambar wajib diisi" },
+        { status: 400 }
+      );
+    }
+
+    if (!name || price <= 0) {
+      return NextResponse.json(
+        { error: "Nama dan harga wajib diisi" },
         { status: 400 }
       );
     }
@@ -37,7 +48,7 @@ export async function POST(req: NextRequest) {
     const uploadsDir = path.join(process.cwd(), "public", "uploads");
     await fs.mkdir(uploadsDir, { recursive: true });
 
-    const ext = path.extname(imageFile.name);
+    const ext = path.extname(imageFile.name) || ".png";
     const base = path.basename(imageFile.name, ext).replace(/\s+/g, "-");
     const filename = `${Date.now()}-${base}${ext}`;
 
@@ -47,7 +58,8 @@ export async function POST(req: NextRequest) {
     const imageUrl = `/uploads/${filename}`;
     // ------------------------------
 
-    const Produk = await prisma.Produk.create({
+    // IMPORTANT: Prisma client property biasanya lowercase -> prisma.produk
+    const produk = await prisma.produk.create({
       data: {
         name,
         description,
@@ -57,12 +69,12 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return NextResponse.json(Produk, { status: 201 });
+    return NextResponse.json(produk, { status: 201 });
   } catch (err: any) {
     console.error("Produk CREATE ERROR →", err);
 
     return NextResponse.json(
-      { error: err.message || "Internal server error" },
+      { error: err?.message || "Internal server error" },
       { status: 500 }
     );
   }
