@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { useSession } from "next-auth/react";
 
 type OrderItem = {
   id: string;
@@ -72,6 +73,7 @@ function badgeClass(label: string) {
 }
 
 export default function HistoryOrderPage() {
+  const { status } = useSession();
   const [orders, setOrders] = useState<Order[]>([]);
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -107,8 +109,16 @@ export default function HistoryOrderPage() {
   };
 
   useEffect(() => {
+    if (status === "loading") return;
+    if (status === "unauthenticated") {
+      setLoading(false);
+      setError("Silakan login untuk melihat history order.");
+      setOrders([]);
+      setReservations([]);
+      return;
+    }
     fetchHistory();
-  }, []);
+  }, [status]);
 
   const content = useMemo(() => {
     if (loading) {
@@ -138,11 +148,11 @@ export default function HistoryOrderPage() {
               No orders yet / failed to load.
             </p>
             <Link
-              href="/produk"
+              href="/signin"
               className="mt-6 inline-flex items-center justify-center rounded-2xl px-6 py-3 text-sm font-semibold
                          bg-[#224670] text-white hover:opacity-90 transition shadow-md"
             >
-              ← Shop Products
+              ← Sign In
             </Link>
           </div>
         </>
