@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     return [
       {
         // matching all API routes
-        source: "/api/payment/notification/:path*",
+        source: "/api/payments/midtrans/notification",
         headers: [
           { key: "Access-Control-Allow-Origin", value: "*" }, // replace this your actual origin
           {
@@ -28,6 +28,10 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "kepy9ajsvqv9m32o.public.blob.vercel-storage.com",
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
       },
       {
         protocol: "https",

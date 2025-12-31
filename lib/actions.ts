@@ -3,7 +3,7 @@
 import { produkSchema, ReserveSchema } from "@/lib/zod";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { del } from "@vercel/blob";
+import { deleteCloudinaryImageByUrl } from "@/lib/cloudinary";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
 import { differenceInCalendarDays } from "date-fns";
@@ -133,8 +133,8 @@ export const updateproduk = async (
 // =========================
 export const deleteproduk = async (id: string, image: string) => {
   try {
-    // Hapus file image di vercel blob (kalau memang image adalah blob URL)
-    await del(image);
+    // Hapus file image di Cloudinary (kalau image berupa URL Cloudinary)
+    await deleteCloudinaryImageByUrl(image);
 
     // Hapus join amenities dulu (untuk hindari constraint)
     await prisma.produkAmenities.deleteMany({

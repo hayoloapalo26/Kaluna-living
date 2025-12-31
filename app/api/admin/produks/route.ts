@@ -2,8 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
+import { uploadImageBuffer, requireCloudinaryConfig } from "@/lib/cloudinary";
 
 export const runtime = "nodejs";
 
@@ -65,23 +64,18 @@ export async function POST(req: NextRequest) {
       ? Math.max(1, Number.parseInt(capacityRaw, 10) || 1)
       : 1;
 
-    let imagePath = "/uploads/default-produk.jpg";
+    requireCloudinaryConfig();
 
-    if (file && file.size > 0) {
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-
-      const uploadsDir = path.join(process.cwd(), "public", "uploads");
-      await mkdir(uploadsDir, { recursive: true });
-
-      const safeName = file.name.replace(/\s+/g, "-").toLowerCase();
-      const filename = `${Date.now()}-${safeName}`;
-      const fullPath = path.join(uploadsDir, filename);
-
-      await writeFile(fullPath, buffer);
-
-      imagePath = `/uploads/${filename}`;
+    if (!file || file.size === 0) {
+      return NextResponse.json(
+        { message: "Gambar wajib diisi" },
+        { status: 400 }
+      );
     }
+
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const uploadResult = (await uploadImageBuffer(buffer, file.name)) as any;
+    const imagePath = uploadResult.secure_url as string;
 
     const produk = await prisma.produk.create({
       data: {

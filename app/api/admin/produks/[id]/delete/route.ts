@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { deleteCloudinaryImageByUrl } from "@/lib/cloudinary";
 
 export async function POST(
   req: NextRequest,
@@ -11,6 +12,15 @@ export async function POST(
     // optional: validasi id
     if (!id) {
       return NextResponse.json({ message: "ID produk tidak valid" }, { status: 400 });
+    }
+
+    const produk = await prisma.produk.findUnique({
+      where: { id },
+      select: { image: true },
+    });
+
+    if (produk?.image) {
+      await deleteCloudinaryImageByUrl(produk.image);
     }
 
     await prisma.produk.delete({

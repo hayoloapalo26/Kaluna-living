@@ -46,7 +46,7 @@ export async function POST(req: Request) {
     }
 
     // ✅ status aman (kalau prisma typings kamu aneh, ini tetap jalan)
-    const orderStatus = (order as any).status as string | undefined;
+    const orderStatus = (order as any).paymentStatus as string | undefined;
     if (orderStatus && orderStatus !== "PENDING") {
       return NextResponse.json(
         { message: "Order ini tidak berstatus PENDING (tidak bisa dibayar)." },

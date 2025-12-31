@@ -39,7 +39,9 @@ function mapOrderStatus(transactionStatus?: string, fraudStatus?: string) {
   if (t === "pending") return "PENDING";
 
   // failed/cancelled/expired
-  if (t === "deny" || t === "cancel" || t === "expire") return "FAILED";
+  if (t === "deny") return "FAILED";
+  if (t === "cancel") return "CANCELLED";
+  if (t === "expire") return "EXPIRED";
 
   return "PENDING";
 }
@@ -58,19 +60,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "order_id kosong" }, { status: 400 });
     }
 
-    const nextStatus = mapOrderStatus(payload.transaction_status, payload.fraud_status);
-
-    // ✅ bypass TS typings prisma yang belum update
-    const prismaAny = prisma as any;
+    const nextStatus = mapOrderStatus(
+      payload.transaction_status,
+      payload.fraud_status
+    );
 
     // 1) update order status
-    const order = await prismaAny.order.update({
+    const order = await prisma.order.update({
       where: { orderCode },
-      data: { status: nextStatus },
+      data: { paymentStatus: nextStatus as any },
     });
 
     // 2) upsert order payment record (simpan raw notification)
-    await prismaAny.orderPayment.upsert({
+    await prisma.orderPayment.upsert({
       where: { orderId: order.id },
       update: {
         transactionStatus: String(payload.transaction_status ?? ""),

@@ -1,8 +1,11 @@
 // app/api/admin/produks/[id]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
+import {
+  deleteCloudinaryImageByUrl,
+  requireCloudinaryConfig,
+  uploadImageBuffer,
+} from "@/lib/cloudinary";
 
 export const runtime = "nodejs";
 
@@ -88,19 +91,20 @@ export async function PATCH(req: NextRequest) {
     // upload gambar baru (opsional)
     let imagePath: string | undefined;
     if (file && file.size > 0) {
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
+      requireCloudinaryConfig();
 
-      const uploadsDir = path.join(process.cwd(), "public", "uploads");
-      await mkdir(uploadsDir, { recursive: true });
+      const existing = await prisma.produk.findUnique({
+        where: { id },
+        select: { image: true },
+      });
 
-      const safeName = file.name.replace(/\s+/g, "-").toLowerCase();
-      const filename = `${Date.now()}-${safeName}`;
-      const fullPath = path.join(uploadsDir, filename);
+      const buffer = Buffer.from(await file.arrayBuffer());
+      const uploadResult = (await uploadImageBuffer(buffer, file.name)) as any;
+      imagePath = uploadResult.secure_url as string;
 
-      await writeFile(fullPath, buffer);
-
-      imagePath = `/uploads/${filename}`;
+      if (existing?.image) {
+        await deleteCloudinaryImageByUrl(existing.image);
+      }
     }
 
     const updated = await prisma.produk.update({
@@ -134,6 +138,15 @@ export async function DELETE(req: NextRequest) {
         { message: "ID produk tidak ditemukan di URL" },
         { status: 400 }
       );
+    }
+
+    const produk = await prisma.produk.findUnique({
+      where: { id },
+      select: { image: true },
+    });
+
+    if (produk?.image) {
+      await deleteCloudinaryImageByUrl(produk.image);
     }
 
     await prisma.produk.delete({
