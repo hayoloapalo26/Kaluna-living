@@ -33,10 +33,10 @@ export default async function RootLayout({
 
           {/* ✅ Global offset untuk fixed navbar */}
           <main className="pt-16">
-            {/* ✅ Lebih lebar + ada panel supaya sisi kiri-kanan tidak kosong */}
-            <div className="mx-auto w-full max-w-7xl px-4 md:px-6 py-10">
-              <div className="rounded-3xl bg-white/55 ring-1 ring-black/5 shadow-sm backdrop-blur">
-                <div className="px-4 md:px-8 py-8">{children}</div>
+            {/* ✅ Mobile: full-bleed, Desktop: panel */}
+            <div className="mx-auto w-full max-w-7xl px-3 sm:px-4 md:px-6 py-6 md:py-10">
+              <div className="rounded-none md:rounded-3xl bg-transparent md:bg-white/55 ring-0 md:ring-1 ring-black/5 shadow-none md:shadow-sm md:backdrop-blur">
+                <div className="px-0 md:px-8 py-4 md:py-8">{children}</div>
               </div>
             </div>
           </main>

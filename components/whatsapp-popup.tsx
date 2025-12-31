@@ -12,7 +12,7 @@ const WhatsAppPopup = () => {
   return (
     <>
       {isOpen && (
-        <div className="fixed bottom-24 right-6 max-w-xs w-64 bg-white shadow-lg border rounded-lg p-4 text-sm z-40">
+        <div className="fixed bottom-24 right-4 sm:right-6 max-w-xs w-64 bg-white shadow-lg border rounded-lg p-4 text-sm z-40">
           <div className="flex items-center justify-between mb-2">
             <span className="font-semibold text-gray-800">Chat via WhatsApp</span>
             <button
@@ -39,9 +39,9 @@ const WhatsAppPopup = () => {
       <button
         aria-label="Buka WhatsApp"
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg z-40"
+        className="fixed bottom-5 right-4 sm:right-6 bg-green-500 hover:bg-green-600 text-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center shadow-lg z-40"
       >
-        <IoLogoWhatsapp className="size-7" />
+        <IoLogoWhatsapp className="size-6 sm:size-7" />
       </button>
     </>
   );
