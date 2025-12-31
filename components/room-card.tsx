@@ -1,6 +1,7 @@
 import Image from "next/image";
+import type { Produk } from "@prisma/client";
 
-export default function produkCard({ produk }) {
+export default function produkCard({ produk }: { produk: Produk }) {
   return (
     <div className="border rounded-lg overflow-hidden">
       <div className="relative w-full h-56">
