@@ -14,9 +14,11 @@ export const EditButton = ({ id }: { id: string }) => {
 };
 
 export const DeleteButton = ({ id, image }: { id: string; image: string }) => {
-  const DeleteprodukWithId = deleteproduk.bind(null, id, image);
+  const deleteProdukWithId = async (_formData: FormData) => {
+    await deleteproduk(id, image);
+  };
   return (
-    <form action={DeleteprodukWithId}>
+    <form action={deleteProdukWithId}>
       <button
         type="submit"
         className="rounded-sm p-1 hover:bg-gray-200 cursor-pointer"
