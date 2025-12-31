@@ -53,7 +53,7 @@ export const getprodukDetailById = async (
     const produk = await prisma.produk.findUnique({
       where: { id },
       include: {
-        produkAmenities: {
+        amenities: {
           include: {
             amenities: {
               select: { name: true },
