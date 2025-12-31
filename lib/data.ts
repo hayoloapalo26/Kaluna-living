@@ -118,3 +118,24 @@ export const getReservationByUserId = async (userId: string) => {
     return [];
   }
 };
+
+// Ambil reservation by id
+export const getReservationById = async (id?: string) => {
+  try {
+    if (!id) return null;
+
+    const reservation = await prisma.reservation.findUnique({
+      where: { id },
+      include: {
+        produk: true,
+        user: true,
+        payment: true,
+      },
+    });
+
+    return reservation;
+  } catch (err) {
+    console.error("Error getReservationById:", err);
+    return null;
+  }
+};
