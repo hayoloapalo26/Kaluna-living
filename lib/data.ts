@@ -42,6 +42,51 @@ export const getprodukById = async (id?: string) => {
   }
 };
 
+// Ambil detail produk + amenities
+export const getprodukDetailById = async (id?: string) => {
+  try {
+    if (!id) return null;
+
+    const produk = await prisma.produk.findUnique({
+      where: { id },
+      include: {
+        produkAmenities: {
+          include: {
+            amenities: {
+              select: { name: true },
+            },
+          },
+        },
+      },
+    });
+
+    return produk;
+  } catch (err) {
+    console.error("Error getprodukDetailById:", err);
+    return null;
+  }
+};
+
+// Ambil reservasi per produk (disabled date)
+export const getReservationByprodukId = async (produkId?: string) => {
+  try {
+    if (!produkId) return [];
+
+    const reservations = await prisma.reservation.findMany({
+      where: { produkId },
+      select: {
+        starDate: true,
+        endDate: true,
+      },
+    });
+
+    return reservations;
+  } catch (err) {
+    console.error("Error getReservationByprodukId:", err);
+    return [];
+  }
+};
+
 // Add to cart
 export const addToCart = async (
   userId: string,

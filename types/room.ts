@@ -8,7 +8,7 @@ export type produkProps2 = Prisma.produkGetPayload<{
   include: {
     produkAmenities: {
       include: {
-        Amenities: {
+        amenities: {
           select: {
             name: true;
           };
