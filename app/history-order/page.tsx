@@ -22,7 +22,9 @@ type OrderPayment = {
 type Order = {
   id: string;
   orderCode: string;
-  status: string;
+  status?: string;
+  paymentStatus?: string;
+  shippingStatus?: string;
   grossAmount: number;
   createdAt: string;
   recipientName: string | null;
@@ -33,6 +35,24 @@ type Order = {
   postalCode: string | null;
   items: OrderItem[];
   payment: OrderPayment | null;
+};
+
+type Reservation = {
+  id: string;
+  starDate: string;
+  endDate: string;
+  price: number;
+  createdAt: string;
+  produk: {
+    name: string;
+    image: string;
+    price: number;
+  };
+  payment: {
+    id: string;
+    amount: number | null;
+    status: string | null;
+  } | null;
 };
 
 function badgeClass(label: string) {
@@ -53,6 +73,7 @@ function badgeClass(label: string) {
 
 export default function HistoryOrderPage() {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [reservations, setReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -61,7 +82,10 @@ export default function HistoryOrderPage() {
     setError(null);
 
     try {
-      const res = await fetch("/api/orders/history", { cache: "no-store" });
+      const res = await fetch("/api/orders/history", {
+        cache: "no-store",
+        credentials: "include",
+      });
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
@@ -71,10 +95,12 @@ export default function HistoryOrderPage() {
       }
 
       setOrders(Array.isArray(data?.orders) ? data.orders : []);
+      setReservations(Array.isArray(data?.reservations) ? data.reservations : []);
     } catch (e) {
       console.error(e);
       setError("Gagal mengambil history order.");
       setOrders([]);
+      setReservations([]);
     } finally {
       setLoading(false);
     }
@@ -123,7 +149,7 @@ export default function HistoryOrderPage() {
       );
     }
 
-    if (orders.length === 0) {
+    if (orders.length === 0 && reservations.length === 0) {
       return (
         <div className="rounded-2xl bg-white p-8 ring-1 ring-black/5 shadow-md">
           <p className="text-xs uppercase tracking-[0.32em] text-black/40">
@@ -147,146 +173,240 @@ export default function HistoryOrderPage() {
     }
 
     return (
-      <div className="space-y-5">
-        {orders.map((o) => {
-          const paymentLabel = o.payment?.transactionStatus || "-";
-          const orderLabel = o.status || "-";
-
-          return (
-            <div
-              key={o.id}
-              className="rounded-2xl bg-white p-5 md:p-6 ring-1 ring-black/5 shadow-md"
-            >
-              {/* Header */}
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div>
-                  <div className="text-sm font-semibold text-[#111827]">
-                    Order <span className="text-[#224670]">{o.orderCode}</span>
-                  </div>
-                  <div className="mt-1 text-xs text-black/50">
-                    {new Date(o.createdAt).toLocaleString("id-ID")}
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-2">
-                  <span
-                    className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${badgeClass(
-                      orderLabel
-                    )}`}
-                    title="Status order"
-                  >
-                    Order: {orderLabel}
-                  </span>
-
-                  <span
-                    className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${badgeClass(
-                      paymentLabel
-                    )}`}
-                    title="Status transaksi"
-                  >
-                    Payment: {paymentLabel}
-                  </span>
-                </div>
-              </div>
-
-              {/* Total */}
-              <div className="mt-4 flex items-center justify-between rounded-2xl bg-black/[0.03] p-4 ring-1 ring-black/5">
-                <span className="text-sm text-[#111827]/75">Total</span>
-                <span className="text-base font-semibold text-[#224670]">
-                  Rp {Number(o.grossAmount || 0).toLocaleString("id-ID")}
-                </span>
-              </div>
-
-              {/* Body */}
-              <div className="mt-6 grid gap-6 lg:grid-cols-2">
-                {/* Items */}
-                <div className="rounded-2xl bg-white ring-1 ring-black/5 p-4">
-                  <div className="text-sm font-semibold text-[#111827]">
-                    Item
-                  </div>
-
-                  <div className="mt-3 space-y-3">
-                    {o.items.map((it) => (
-                      <div
-                        key={it.id}
-                        className="flex items-start justify-between gap-3"
-                      >
-                        <div className="min-w-0">
-                          <div className="text-sm font-medium text-[#111827] line-clamp-1">
-                            {it.name}
-                          </div>
-                          <div className="text-xs text-black/55 mt-0.5">
-                            {it.quantity} x Rp{" "}
-                            {Number(it.price || 0).toLocaleString("id-ID")}
-                          </div>
-                        </div>
-
-                        <div className="text-sm font-semibold text-[#111827]">
-                          Rp {(it.quantity * it.price).toLocaleString("id-ID")}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Shipping + Payment */}
-                <div className="space-y-4">
-                  <div className="rounded-2xl bg-white ring-1 ring-black/5 p-4">
-                    <div className="text-sm font-semibold text-[#111827]">
-                      Delivery
-                    </div>
-                    <div className="mt-3 text-sm text-[#111827]/75 space-y-1">
-                      <div>{o.recipientName || "-"}</div>
-                      <div>{o.recipientPhone || "-"}</div>
-                      <div className="leading-relaxed">
-                        {(o.addressLine || "-") +
-                          (o.city ? `, ${o.city}` : "") +
-                          (o.province ? `, ${o.province}` : "") +
-                          (o.postalCode ? `, ${o.postalCode}` : "")}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="rounded-2xl bg-white ring-1 ring-black/5 p-4">
-                    <div className="text-sm font-semibold text-[#111827]">
-                      Payment
-                    </div>
-                    <div className="mt-3 text-sm text-[#111827]/75 space-y-1">
-                      <div>
-                        Transaction:{" "}
-                        <span className="font-semibold text-[#111827]">
-                          {o.payment?.transactionStatus || "-"}
-                        </span>
-                      </div>
-                      <div>
-                        Fraud:{" "}
-                        <span className="font-semibold text-[#111827]">
-                          {o.payment?.fraudStatus || "-"}
-                        </span>
-                      </div>
-
-                      {/* Link bayar ulang (UI tetap) */}
-                      {o.payment?.redirectUrl && o.status === "PENDING" && (
-                        <a
-                          href={o.payment.redirectUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex mt-3 items-center justify-center rounded-2xl px-4 py-2
-                                     text-sm font-semibold bg-[#224670] text-white hover:opacity-90 transition shadow-md"
-                        >
-                          Pay
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
+      <div className="space-y-8">
+        {orders.length > 0 && (
+          <div className="space-y-5">
+            <div className="text-xs uppercase tracking-[0.32em] text-black/45">
+              Orders
             </div>
-          );
-        })}
+
+            {orders.map((o) => {
+              const paymentLabel = o.payment?.transactionStatus || o.paymentStatus || "-";
+              const orderLabel = o.status || o.paymentStatus || o.shippingStatus || "-";
+
+              return (
+                <div
+                  key={o.id}
+                  className="rounded-2xl bg-white p-5 md:p-6 ring-1 ring-black/5 shadow-md"
+                >
+                  {/* Header */}
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <div className="text-sm font-semibold text-[#111827]">
+                        Order <span className="text-[#224670]">{o.orderCode}</span>
+                      </div>
+                      <div className="mt-1 text-xs text-black/50">
+                        {new Date(o.createdAt).toLocaleString("id-ID")}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span
+                        className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${badgeClass(
+                          orderLabel
+                        )}`}
+                        title="Status order"
+                      >
+                        Order: {orderLabel}
+                      </span>
+
+                      <span
+                        className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${badgeClass(
+                          paymentLabel
+                        )}`}
+                        title="Status transaksi"
+                      >
+                        Payment: {paymentLabel}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Total */}
+                  <div className="mt-4 flex items-center justify-between rounded-2xl bg-black/[0.03] p-4 ring-1 ring-black/5">
+                    <span className="text-sm text-[#111827]/75">Total</span>
+                    <span className="text-base font-semibold text-[#224670]">
+                      Rp {Number(o.grossAmount || 0).toLocaleString("id-ID")}
+                    </span>
+                  </div>
+
+                  {/* Body */}
+                  <div className="mt-6 grid gap-6 lg:grid-cols-2">
+                    {/* Items */}
+                    <div className="rounded-2xl bg-white ring-1 ring-black/5 p-4">
+                      <div className="text-sm font-semibold text-[#111827]">
+                        Item
+                      </div>
+
+                      <div className="mt-3 space-y-3">
+                        {o.items.map((it) => (
+                          <div
+                            key={it.id}
+                            className="flex items-start justify-between gap-3"
+                          >
+                            <div className="min-w-0">
+                              <div className="text-sm font-medium text-[#111827] line-clamp-1">
+                                {it.name}
+                              </div>
+                              <div className="text-xs text-black/55 mt-0.5">
+                                {it.quantity} x Rp{" "}
+                                {Number(it.price || 0).toLocaleString("id-ID")}
+                              </div>
+                            </div>
+
+                            <div className="text-sm font-semibold text-[#111827]">
+                              Rp {(it.quantity * it.price).toLocaleString("id-ID")}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Shipping + Payment */}
+                    <div className="space-y-4">
+                      <div className="rounded-2xl bg-white ring-1 ring-black/5 p-4">
+                        <div className="text-sm font-semibold text-[#111827]">
+                          Delivery
+                        </div>
+                        <div className="mt-3 text-sm text-[#111827]/75 space-y-1">
+                          <div>{o.recipientName || "-"}</div>
+                          <div>{o.recipientPhone || "-"}</div>
+                          <div className="leading-relaxed">
+                            {(o.addressLine || "-") +
+                              (o.city ? `, ${o.city}` : "") +
+                              (o.province ? `, ${o.province}` : "") +
+                              (o.postalCode ? `, ${o.postalCode}` : "")}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="rounded-2xl bg-white ring-1 ring-black/5 p-4">
+                        <div className="text-sm font-semibold text-[#111827]">
+                          Payment
+                        </div>
+                        <div className="mt-3 text-sm text-[#111827]/75 space-y-1">
+                          <div>
+                            Transaction:{" "}
+                            <span className="font-semibold text-[#111827]">
+                              {o.payment?.transactionStatus || "-"}
+                            </span>
+                          </div>
+                          <div>
+                            Fraud:{" "}
+                            <span className="font-semibold text-[#111827]">
+                              {o.payment?.fraudStatus || "-"}
+                            </span>
+                          </div>
+
+                          {/* Link bayar ulang (UI tetap) */}
+                          {o.payment?.redirectUrl && orderLabel === "PENDING" && (
+                            <a
+                              href={o.payment.redirectUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex mt-3 items-center justify-center rounded-2xl px-4 py-2
+                                         text-sm font-semibold bg-[#224670] text-white hover:opacity-90 transition shadow-md"
+                            >
+                              Pay
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {reservations.length > 0 && (
+          <div className="space-y-5">
+            <div className="text-xs uppercase tracking-[0.32em] text-black/45">
+              Reservations
+            </div>
+
+            {reservations.map((r) => {
+              const paymentLabel = r.payment?.status || "UNPAID";
+              const total = r.payment?.amount ?? r.price;
+              const range = `${new Date(r.starDate).toLocaleDateString("id-ID")} - ${new Date(
+                r.endDate
+              ).toLocaleDateString("id-ID")}`;
+
+              return (
+                <div
+                  key={r.id}
+                  className="rounded-2xl bg-white p-5 md:p-6 ring-1 ring-black/5 shadow-md"
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <div className="text-sm font-semibold text-[#111827]">
+                        Reservasi <span className="text-[#224670]">{r.id}</span>
+                      </div>
+                      <div className="mt-1 text-xs text-black/50">
+                        {new Date(r.createdAt).toLocaleString("id-ID")}
+                      </div>
+                    </div>
+
+                    <span
+                      className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${badgeClass(
+                        paymentLabel
+                      )}`}
+                      title="Status pembayaran"
+                    >
+                      Payment: {paymentLabel}
+                    </span>
+                  </div>
+
+                  <div className="mt-4 flex items-center justify-between rounded-2xl bg-black/[0.03] p-4 ring-1 ring-black/5">
+                    <span className="text-sm text-[#111827]/75">Total</span>
+                    <span className="text-base font-semibold text-[#224670]">
+                      Rp {Number(total || 0).toLocaleString("id-ID")}
+                    </span>
+                  </div>
+
+                  <div className="mt-6 grid gap-6 lg:grid-cols-2">
+                    <div className="rounded-2xl bg-white ring-1 ring-black/5 p-4">
+                      <div className="text-sm font-semibold text-[#111827]">
+                        Produk
+                      </div>
+                      <div className="mt-3 space-y-2">
+                        <div className="text-sm font-medium text-[#111827]">
+                          {r.produk?.name || "-"}
+                        </div>
+                        <div className="text-xs text-black/55">
+                          Tanggal: {range}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl bg-white ring-1 ring-black/5 p-4">
+                      <div className="text-sm font-semibold text-[#111827]">
+                        Pembayaran
+                      </div>
+                      <div className="mt-3 text-sm text-[#111827]/75 space-y-1">
+                        <div>
+                          Status:{" "}
+                          <span className="font-semibold text-[#111827]">
+                            {paymentLabel}
+                          </span>
+                        </div>
+                        <div>
+                          Nominal:{" "}
+                          <span className="font-semibold text-[#111827]">
+                            Rp {Number(total || 0).toLocaleString("id-ID")}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     );
-  }, [loading, error, orders]);
+  }, [loading, error, orders, reservations]);
 
   return (
     <div className="min-h-screen bg-[#FAF7F2]">

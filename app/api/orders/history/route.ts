@@ -20,7 +20,22 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json({ orders }, { status: 200 });
+    const reservations = await prisma.reservation.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+      include: {
+        produk: {
+          select: {
+            name: true,
+            image: true,
+            price: true,
+          },
+        },
+        payment: true,
+      },
+    });
+
+    return NextResponse.json({ orders, reservations }, { status: 200 });
   } catch (err) {
     console.error("GET /api/orders/history error:", err);
     return NextResponse.json(
