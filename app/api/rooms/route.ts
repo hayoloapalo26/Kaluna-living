@@ -9,7 +9,7 @@ export const runtime = "nodejs";
 
 export async function GET() {
   try {
-    const Produks = await prisma.Produk.findMany({
+    const Produks = await prisma.produk.findMany({
       orderBy: { createdAt: "desc" },
     });
 
@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
       imagePath = `/uploads/${fileName}`;
     }
 
-    const Produk = await prisma.Produk.create({
+    const Produk = await prisma.produk.create({
       data: {
         name,
         description,
