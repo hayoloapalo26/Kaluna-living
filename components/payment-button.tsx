@@ -3,12 +3,6 @@
 import { useTransition } from "react";
 import { reservationProps } from "@/types/reservation";
 
-declare global {
-  interface Window {
-    snap: any;
-  }
-}
-
 export const PaymentButton = ({
   reservation,
 }: {
@@ -25,7 +19,11 @@ export const PaymentButton = ({
         });
         const { token } = await response.json();
         if (token) {
-          window.snap.pay(token);
+          if (window.snap) {
+            window.snap.pay(token);
+          } else {
+            console.error("Midtrans snap belum tersedia di window.");
+          }
         }
         // revalidatePath("/checkout/[id]");
       } catch (error) {
