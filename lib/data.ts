@@ -1,5 +1,18 @@
 import { prisma } from "@/lib/prisma";
 
+// Ambil semua amenities
+export const getAmenities = async () => {
+  try {
+    const result = await prisma.amenities.findMany({
+      orderBy: { name: "asc" },
+    });
+    return result;
+  } catch (err) {
+    console.error("Error getAmenities:", err);
+    return [];
+  }
+};
+
 // Ambil semua produk
 export const getproduks = async () => {
   try {
