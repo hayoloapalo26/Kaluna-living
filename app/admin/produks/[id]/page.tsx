@@ -3,6 +3,10 @@ import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+<<<<<<< HEAD
+=======
+import { resolveImageSrc } from "@/lib/image";
+>>>>>>> master
 
 type PageProps = {
   // Di Next.js 16 params adalah Promise
@@ -24,9 +28,13 @@ export default async function AdminProdukDetailPage(props: PageProps) {
     return notFound();
   }
 
+<<<<<<< HEAD
   const imageSrc = produk.image.startsWith("/")
     ? produk.image
     : `/${produk.image}`;
+=======
+  const imageSrc = resolveImageSrc(produk.image);
+>>>>>>> master
 
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-6">

@@ -6,7 +6,11 @@ const nextConfig: NextConfig = {
     return [
       {
         // matching all API routes
+<<<<<<< HEAD
         source: "/api/payment/notification/:path*",
+=======
+        source: "/api/payments/midtrans/notification",
+>>>>>>> master
         headers: [
           { key: "Access-Control-Allow-Origin", value: "*" }, // replace this your actual origin
           {
@@ -31,6 +35,13 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+<<<<<<< HEAD
+=======
+        hostname: "res.cloudinary.com",
+      },
+      {
+        protocol: "https",
+>>>>>>> master
         hostname: "lh3.googleusercontent.com",
       },
     ],

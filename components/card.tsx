@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { IoPeopleOutline } from "react-icons/io5";
+<<<<<<< HEAD
 import { produk } from "@prisma/client";
 import { formatCurrency } from "@/lib/utils";
 
@@ -8,16 +9,37 @@ const Card = ({ produk }: { produk: produk }) => {
   return (
     <div className="bg-white shadow-lg rounded-sm transition duration-100 hover:shadow-sm">
       {/* image waraper */}
+=======
+import type { Produk } from "@prisma/client";
+import { formatCurrency } from "@/lib/utils";
+
+type Props = {
+  produk: Produk;
+};
+
+const Card = ({ produk }: Props) => {
+  return (
+    <div className="bg-white shadow-lg rounded-sm transition duration-100 hover:shadow-sm">
+      {/* image wrapper */}
+>>>>>>> master
       <div className="h-[260px] w-auto rounded-t-sm relative">
         <Image
           src={produk.image}
           width={384}
           height={256}
+<<<<<<< HEAD
           alt="blog 1"
           className="w-full h-full object-cover rounded-t-sm"
         />
       </div>
       {/* Icons Wraper */}
+=======
+          alt={produk.name}
+          className="w-full h-full object-cover rounded-t-sm"
+        />
+      </div>
+
+>>>>>>> master
       <div className="p-8">
         <h4 className="text-2xl font-medium">
           <Link
@@ -27,6 +49,10 @@ const Card = ({ produk }: { produk: produk }) => {
             {produk.name}
           </Link>
         </h4>
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
         <h4 className="text-xl mb-7">
           <span className="font-semibold text-gray-600">
             {formatCurrency(produk.price)}
@@ -41,6 +67,10 @@ const Card = ({ produk }: { produk: produk }) => {
               {produk.capacity} {produk.capacity === 1 ? "person" : "people"}
             </span>
           </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
           <Link
             href={`/produk/${produk.id}`}
             className="px-6 py-2.5 md:px-10 md:py-3 font-semibold text-white bg-orange-400 rounded-sm hover:bg-orange-500 transition duration-150"

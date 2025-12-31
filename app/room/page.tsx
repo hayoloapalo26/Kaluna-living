@@ -65,7 +65,11 @@ export default async function produkDetailPage({ params }: { params: { id: strin
 
           {/* Tombol Aksi */}
           <button className="w-full py-3 bg-[#A7744B] text-white font-semibold rounded-sm hover:bg-[#8f633f] transition mb-3">
+<<<<<<< HEAD
             Tambah ke Keranjang
+=======
+            Add to cart
+>>>>>>> master
           </button>
 
           <Link
