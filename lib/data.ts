@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import type { DisabledDateProps, produkProps2 } from "@/types/room";
+import type { DisabledDateProps, produkProps, produkProps2 } from "@/types/room";
 
 // Ambil semua amenities
 export const getAmenities = async () => {
