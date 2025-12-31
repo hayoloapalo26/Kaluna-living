@@ -98,6 +98,7 @@ export default function Navbar() {
                   <Link
                     key={it.href}
                     href={it.href}
+                    prefetch={it.href === "/history-order" ? false : undefined}
                     className={[
                       "px-4 py-2 rounded-full text-sm font-semibold transition",
                       isActive(it.href)
@@ -258,6 +259,7 @@ export default function Navbar() {
                 key={it.href}
                 href={it.href}
                 onClick={() => setMobileOpen(false)}
+                prefetch={it.href === "/history-order" ? false : undefined}
                 className={[
                   "block px-4 py-3 rounded-2xl text-sm font-semibold transition",
                   isActive(it.href)
