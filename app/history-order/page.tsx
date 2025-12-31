@@ -1,60 +1,10 @@
-"use client";
-
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
-import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+import { auth } from "@/auth";
+import prisma from "@/lib/prisma";
 
-type OrderItem = {
-  id: string;
-  name: string;
-  image: string;
-  price: number;
-  quantity: number;
-};
-
-type OrderPayment = {
-  id: string;
-  snapToken: string | null;
-  redirectUrl: string | null;
-  transactionStatus: string | null;
-  fraudStatus: string | null;
-};
-
-type Order = {
-  id: string;
-  orderCode: string;
-  status?: string;
-  paymentStatus?: string;
-  shippingStatus?: string;
-  grossAmount: number;
-  createdAt: string;
-  recipientName: string | null;
-  recipientPhone: string | null;
-  addressLine: string | null;
-  city: string | null;
-  province: string | null;
-  postalCode: string | null;
-  items: OrderItem[];
-  payment: OrderPayment | null;
-};
-
-type Reservation = {
-  id: string;
-  starDate: string;
-  endDate: string;
-  price: number;
-  createdAt: string;
-  produk: {
-    name: string;
-    image: string;
-    price: number;
-  };
-  payment: {
-    id: string;
-    amount: number | null;
-    status: string | null;
-  } | null;
-};
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 function badgeClass(label: string) {
   const v = (label || "").toUpperCase();
@@ -72,93 +22,39 @@ function badgeClass(label: string) {
   return "bg-black/[0.04] text-black/70 ring-1 ring-black/10";
 }
 
-export default function HistoryOrderPage() {
-  const { status } = useSession();
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [reservations, setReservations] = useState<Reservation[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export default async function HistoryOrderPage() {
+  const session = await auth();
+  let userId = (session?.user as any)?.id as string | undefined;
 
-  const fetchHistory = async () => {
-    setLoading(true);
-    setError(null);
+  if (!userId && session?.user?.email) {
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      select: { id: true },
+    });
+    userId = user?.id;
+  }
 
-    try {
-      const res = await fetch("/api/orders/history", {
-        cache: "no-store",
-        credentials: "include",
-      });
-      const data = await res.json().catch(() => ({}));
+  if (!userId) {
+    redirect("/signin?callbackUrl=/history-order");
+  }
 
-      if (!res.ok) {
-        setError(data?.message || "Gagal mengambil history order.");
-        setOrders([]);
-        return;
-      }
+  const [orders, reservations] = await Promise.all([
+    prisma.order.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+      include: { items: true, payment: true },
+    }),
+    prisma.reservation.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+      include: {
+        produk: { select: { name: true, image: true, price: true } },
+        payment: true,
+      },
+    }),
+  ]);
 
-      setOrders(Array.isArray(data?.orders) ? data.orders : []);
-      setReservations(Array.isArray(data?.reservations) ? data.reservations : []);
-    } catch (e) {
-      console.error(e);
-      setError("Gagal mengambil history order.");
-      setOrders([]);
-      setReservations([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (status === "loading") return;
-    if (status === "unauthenticated") {
-      setLoading(false);
-      setError("Silakan login untuk melihat history order.");
-      setOrders([]);
-      setReservations([]);
-      return;
-    }
-    fetchHistory();
-  }, [status]);
-
-  const content = useMemo(() => {
-    if (loading) {
-      return (
-        <div className="rounded-2xl bg-white p-6 ring-1 ring-black/5 shadow-md">
-          <p className="text-sm text-black/60">Loading order history...</p>
-        </div>
-      );
-    }
-
-    if (error) {
-      return (
-        <>
-          <div className="rounded-2xl bg-white p-4 ring-1 ring-red-500/20 text-red-700 shadow-md">
-            <p className="text-sm font-semibold">There is an error</p>
-            <p className="text-sm mt-1 text-red-700/90">{error}</p>
-          </div>
-
-          <div className="mt-6 rounded-2xl bg-white p-8 ring-1 ring-black/5 shadow-md">
-            <p className="text-xs uppercase tracking-[0.32em] text-black/40">
-              Empty state
-            </p>
-            <h3 className="mt-3 text-lg md:text-xl font-semibold tracking-tight text-[#111827]">
-              Belum ada order / gagal load
-            </h3>
-            <p className="mt-2 text-sm text-[#111827]/70">
-              No orders yet / failed to load.
-            </p>
-            <Link
-              href="/signin"
-              className="mt-6 inline-flex items-center justify-center rounded-2xl px-6 py-3 text-sm font-semibold
-                         bg-[#224670] text-white hover:opacity-90 transition shadow-md"
-            >
-              ← Sign In
-            </Link>
-          </div>
-        </>
-      );
-    }
-
+  const content = () => {
     if (orders.length === 0 && reservations.length === 0) {
       return (
         <div className="rounded-2xl bg-white p-8 ring-1 ring-black/5 shadow-md">
@@ -191,15 +87,16 @@ export default function HistoryOrderPage() {
             </div>
 
             {orders.map((o) => {
-              const paymentLabel = o.payment?.transactionStatus || o.paymentStatus || "-";
-              const orderLabel = o.status || o.paymentStatus || o.shippingStatus || "-";
+              const paymentLabel =
+                o.payment?.transactionStatus || o.paymentStatus || "-";
+              const orderLabel =
+                o.paymentStatus || o.shippingStatus || "PENDING";
 
               return (
                 <div
                   key={o.id}
                   className="rounded-2xl bg-white p-5 md:p-6 ring-1 ring-black/5 shadow-md"
                 >
-                  {/* Header */}
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
                       <div className="text-sm font-semibold text-[#111827]">
@@ -231,7 +128,6 @@ export default function HistoryOrderPage() {
                     </div>
                   </div>
 
-                  {/* Total */}
                   <div className="mt-4 flex items-center justify-between rounded-2xl bg-black/[0.03] p-4 ring-1 ring-black/5">
                     <span className="text-sm text-[#111827]/75">Total</span>
                     <span className="text-base font-semibold text-[#224670]">
@@ -239,9 +135,7 @@ export default function HistoryOrderPage() {
                     </span>
                   </div>
 
-                  {/* Body */}
                   <div className="mt-6 grid gap-6 lg:grid-cols-2">
-                    {/* Items */}
                     <div className="rounded-2xl bg-white ring-1 ring-black/5 p-4">
                       <div className="text-sm font-semibold text-[#111827]">
                         Item
@@ -271,7 +165,6 @@ export default function HistoryOrderPage() {
                       </div>
                     </div>
 
-                    {/* Shipping + Payment */}
                     <div className="space-y-4">
                       <div className="rounded-2xl bg-white ring-1 ring-black/5 p-4">
                         <div className="text-sm font-semibold text-[#111827]">
@@ -307,7 +200,6 @@ export default function HistoryOrderPage() {
                             </span>
                           </div>
 
-                          {/* Link bayar ulang (UI tetap) */}
                           {o.payment?.redirectUrl && orderLabel === "PENDING" && (
                             <a
                               href={o.payment.redirectUrl}
@@ -416,7 +308,7 @@ export default function HistoryOrderPage() {
         )}
       </div>
     );
-  }, [loading, error, orders, reservations]);
+  };
 
   return (
     <div className="min-h-screen bg-[#FAF7F2]">
@@ -443,7 +335,7 @@ export default function HistoryOrderPage() {
           </Link>
         </div>
 
-        <div className="mt-8">{content}</div>
+        <div className="mt-8">{content()}</div>
       </div>
     </div>
   );
