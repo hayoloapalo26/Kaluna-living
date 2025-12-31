@@ -2,12 +2,6 @@
 
 import Link from "next/link";
 import Image from "next/image";
-<<<<<<< HEAD
-import { useSession, signOut } from "next-auth/react";
-
-const Navbar = () => {
-  const { data: session } = useSession();
-=======
 import { useEffect, useMemo, useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
@@ -29,7 +23,6 @@ export default function Navbar() {
   const pathname = usePathname();
   const { data: session, status } = useSession();
 
->>>>>>> master
   const role = (session?.user as any)?.role as
     | "ADMIN"
     | "OWNER"
@@ -38,71 +31,6 @@ export default function Navbar() {
 
   const isAdminLike = role === "ADMIN" || role === "OWNER";
 
-<<<<<<< HEAD
-  return (
-    <div className="fixed top-0 w-full bg-white shadow-sm z-20">
-      <div className="max-w-screen-xl mx-auto flex flex-wrap items-center justify-between p-4">
-        {/* Logo */}
-        <Link href={isAdminLike ? "/admin" : "/"}>
-          <Image
-            src="/logo.png"
-            alt="Kaluna Living"
-            width={0}
-            height={0}
-            sizes="100vw"
-            className="w-[128px] h-auto"
-            priority
-          />
-        </Link>
-
-        <div className="flex items-center gap-6">
-          {/* 👉 MENU CUSTOMER: hanya tampil kalau BUKAN admin/owner */}
-          {!isAdminLike && (
-            <nav className="hidden md:flex items-center gap-4 text-sm font-medium">
-              <Link href="/">HOME</Link>
-              <Link href="/about">ABOUT</Link>
-              <Link href="/produk">PRODUCT</Link>
-              <Link href="/checkout">ORDER</Link>
-              <Link href="/myreservation">MY RESERVATION</Link>
-            </nav>
-          )}
-
-          {/* Avatar + SignIn/SignOut */}
-          <div className="flex items-center gap-3">
-            {session && (
-              <div className="text-sm bg-gray-50 border rounded-full flex items-center justify-center w-8 h-8">
-                <span className="text-xs font-semibold">
-                  {session.user?.name?.charAt(0) ??
-                    (session.user as any)?.username?.charAt(0) ??
-                    "U"}
-                </span>
-              </div>
-            )}
-
-            {session ? (
-              <button
-                onClick={() => signOut({ callbackUrl: "/signin" })}
-                className="py-2 px-4 bg-gray-50 text-gray-700 hover:bg-gray-100 rounded-sm text-sm"
-              >
-                Sign Out
-              </button>
-            ) : (
-              <Link
-                href="/signin"
-                className="py-2 px-6 bg-orange-400 text-white hover:bg-orange-500 rounded-sm text-sm"
-              >
-                Sign In
-              </Link>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default Navbar;
-=======
   const [cartCount, setCartCount] = useState<number>(0);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -146,11 +74,9 @@ export default Navbar;
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
-      {/* Bar */}
       <div className="bg-[#faf7f2]/90 backdrop-blur border-b border-black/5">
         <div className="mx-auto max-w-6xl px-4 md:px-6">
           <div className="h-16 flex items-center justify-between gap-4">
-            {/* Left: Logo */}
             <Link
               href={isAdminLike ? "/admin" : "/"}
               className="flex items-center gap-3"
@@ -166,7 +92,6 @@ export default Navbar;
               />
             </Link>
 
-            {/* Center: Nav (desktop customer only) */}
             {!isAdminLike && (
               <nav className="hidden md:flex items-center gap-2">
                 {NAV.map((it) => (
@@ -186,9 +111,7 @@ export default Navbar;
               </nav>
             )}
 
-            {/* Right: Actions */}
             <div className="flex items-center gap-2">
-              {/* Mobile menu button (customer only) */}
               {!isAdminLike && (
                 <button
                   type="button"
@@ -214,7 +137,6 @@ export default Navbar;
                 </button>
               )}
 
-              {/* ✅ Cart icon – PREMIUM */}
               {!isAdminLike && session && (
                 <Link
                   href="/cart"
@@ -236,7 +158,6 @@ export default Navbar;
                   aria-label="Keranjang"
                   title="Keranjang"
                 >
-                  {/* Cart icon */}
                   <svg
                     width="22"
                     height="22"
@@ -266,7 +187,6 @@ export default Navbar;
                     <circle cx="18" cy="20" r="1.5" fill="currentColor" />
                   </svg>
 
-                  {/* Badge */}
                   {cartCount > 0 && (
                     <span
                       className="
@@ -290,7 +210,6 @@ export default Navbar;
                 </Link>
               )}
 
-              {/* Profile chip (when logged in) */}
               {session && (
                 <div className="hidden sm:flex items-center gap-2 rounded-full bg-white ring-1 ring-black/10 px-2 py-1">
                   <div className="w-9 h-9 rounded-full bg-[#224670] text-white flex items-center justify-center font-bold">
@@ -309,7 +228,6 @@ export default Navbar;
                 </div>
               )}
 
-              {/* Sign in/out */}
               {session ? (
                 <button
                   onClick={() => signOut({ callbackUrl: "/signin" })}
@@ -332,7 +250,6 @@ export default Navbar;
         </div>
       </div>
 
-      {/* Mobile drawer (customer only) */}
       {!isAdminLike && mobileOpen && (
         <div className="md:hidden bg-[#faf7f2]/95 backdrop-blur border-b border-black/5">
           <div className="mx-auto max-w-6xl px-4 py-3 space-y-2">
@@ -357,4 +274,3 @@ export default Navbar;
     </header>
   );
 }
->>>>>>> master

@@ -1,6 +1,4 @@
 @import "tailwindcss";
-<<<<<<< HEAD
-=======
 
 /* Font variables (diisi oleh next/font di layout.tsx) */
 :root {
@@ -96,4 +94,3 @@ a {
   background: #DEA9B6;
   color: #111827;
 }
->>>>>>> master

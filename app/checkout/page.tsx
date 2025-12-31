@@ -74,8 +74,8 @@ async function createReservation(formData: FormData) {
     },
   });
 
-  // Setelah berhasil, redirect ke halaman reservasi user
-  redirect("/myreservation");
+  // Setelah berhasil, redirect ke riwayat pesanan
+  redirect("/history-order");
 }
 
 export default async function CheckoutPage({ searchParams }: CheckoutPageProps) {

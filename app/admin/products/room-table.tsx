@@ -1,16 +1,6 @@
 "use client";
 
 import { useState } from "react";
-<<<<<<< HEAD
-import type { produk } from "@prisma/client";
-
-type Props = {
-  initialproduks: produk[];
-};
-
-export default function produkTable({ initialproduks }: Props) {
-  const [produks, setproduks] = useState<produk[]>(initialproduks);
-=======
 import type { Produk } from "@prisma/client";
 
 type Props = {
@@ -19,7 +9,6 @@ type Props = {
 
 export default function ProdukTable({ initialproduks }: Props) {
   const [produks, setProduks] = useState<Produk[]>(initialproduks);
->>>>>>> master
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     name: "",
@@ -41,13 +30,7 @@ export default function ProdukTable({ initialproduks }: Props) {
       fd.append("description", form.description);
       fd.append("price", form.price);
       fd.append("capacity", form.capacity);
-<<<<<<< HEAD
-      if (imageFile) {
-        fd.append("image", imageFile);
-      }
-=======
       if (imageFile) fd.append("image", imageFile);
->>>>>>> master
 
       const res = await fetch("/api/admin/produks", {
         method: "POST",
@@ -59,13 +42,8 @@ export default function ProdukTable({ initialproduks }: Props) {
         throw new Error(data.message || "Gagal menambahkan produk");
       }
 
-<<<<<<< HEAD
-      const newproduk: produk = await res.json();
-      setproduks((prev) => [newproduk, ...prev]);
-=======
       const newProduk: Produk = await res.json();
       setProduks((prev) => [newProduk, ...prev]);
->>>>>>> master
 
       // reset form
       setForm({
@@ -75,21 +53,13 @@ export default function ProdukTable({ initialproduks }: Props) {
         capacity: "1",
       });
       setImageFile(null);
-<<<<<<< HEAD
-      // reset nilai file input
-=======
 
->>>>>>> master
       const fileInput = document.getElementById(
         "produk-image-input"
       ) as HTMLInputElement | null;
       if (fileInput) fileInput.value = "";
     } catch (err: any) {
-<<<<<<< HEAD
-      setError(err.message || "Terjadi kesalahan");
-=======
       setError(err?.message || "Terjadi kesalahan");
->>>>>>> master
     } finally {
       setIsSubmitting(false);
     }
@@ -218,11 +188,7 @@ export default function ProdukTable({ initialproduks }: Props) {
                   </td>
                   <td className="px-4 py-2">{produk.capacity}</td>
                   <td className="px-4 py-2">
-<<<<<<< HEAD
-                    {produk.createdAt.toLocaleDateString("id-ID")}
-=======
                     {new Date(produk.createdAt).toLocaleDateString("id-ID")}
->>>>>>> master
                   </td>
                 </tr>
               ))}

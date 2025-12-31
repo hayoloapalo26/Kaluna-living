@@ -17,22 +17,6 @@ enum Role {
  * PRODUK (pakai tabel `room`)
  */
 model Produk {
-<<<<<<< HEAD
-  id          String           @id @default(cuid())
-  name        String
-  description String           @db.Text
-  image       String
-  price       Int
-  capacity    Int              @default(1)
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
-
-  amenities   ProdukAmenities[]
-  reservations Reservation[]
-  cartItems   CartItem[]
-
-  @@map("room") // ====== PENTING: pakai tabel `room`
-=======
   id          String   @id @default(cuid())
   name        String
   description String   @db.Text
@@ -45,30 +29,20 @@ model Produk {
   amenities    ProdukAmenities[]
   reservations Reservation[]
   cartItems    CartItem[]
-
-  // relasi untuk order item
-  orderItems OrderItem[]
+  orderItems   OrderItem[]
 
   @@map("room")
->>>>>>> master
 }
 
 /**
  * AMENITIES (pakai tabel `amenities`)
  */
 model Amenities {
-<<<<<<< HEAD
-  id              String            @id @default(cuid())
-  name            String
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-=======
   id        String   @id @default(cuid())
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
->>>>>>> master
   produkAmenities ProdukAmenities[]
 
   @@map("amenities")
@@ -78,15 +52,6 @@ model Amenities {
  * RELASI PRODUK ↔ AMENITIES (pakai tabel `roomamenities`)
  */
 model ProdukAmenities {
-<<<<<<< HEAD
-  id          String     @id @default(cuid())
-
-  produkId    String     @map("roomId")
-  produk      Produk     @relation(fields: [produkId], references: [id], onDelete: Cascade)
-
-  amenitiesId String
-  amenities   Amenities  @relation(fields: [amenitiesId], references: [id], onDelete: Cascade)
-=======
   id String @id @default(cuid())
 
   produkId String @map("roomId")
@@ -94,34 +59,12 @@ model ProdukAmenities {
 
   amenitiesId String
   amenities   Amenities @relation(fields: [amenitiesId], references: [id], onDelete: Cascade)
->>>>>>> master
 
   @@map("roomamenities")
 }
 
 /**
  * RESERVATION (pakai tabel `reservation`)
-<<<<<<< HEAD
- * kolom `roomId` di DB dipetakan ke field `produkId` di Prisma
- */
-model Reservation {
-  id        String    @id @default(cuid())
-  starDate  DateTime
-  endDate   DateTime
-  price     Int
-
-  userId    String
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  produkId  String    @map("roomId")
-  produk    Produk    @relation(fields: [produkId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  payment   Payment?
-
-=======
  * NOTE: aku BIARKAN `starDate` supaya tidak merusak sistem lama.
  */
 model Reservation {
@@ -143,7 +86,6 @@ model Reservation {
 
   @@index([userId])
   @@index([produkId])
->>>>>>> master
   @@map("reservation")
 }
 
@@ -151,17 +93,6 @@ model Reservation {
  * PAYMENT (pakai tabel `payment`)
  */
 model Payment {
-<<<<<<< HEAD
-  id            String       @id @default(cuid())
-  method        String?
-  amount        Int
-  status        String       @default("unpaid")
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-
-  reservationId String       @unique
-  reservation   Reservation  @relation(fields: [reservationId], references: [id], onDelete: Cascade)
-=======
   id     String  @id @default(cuid())
   method String?
   amount Int
@@ -172,7 +103,6 @@ model Payment {
 
   reservationId String      @unique
   reservation   Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
->>>>>>> master
 
   @@map("payment")
 }
@@ -181,40 +111,19 @@ model Payment {
  * USER (pakai tabel `user`)
  */
 model User {
-<<<<<<< HEAD
-  id            String               @id @default(cuid())
+  id            String   @id @default(cuid())
   name          String?
-  email         String?              @unique
-  username      String               @unique
+  email         String?  @unique
+  username      String   @unique
   password      String
   emailVerified DateTime?
   image         String?
-  role          Role                 @default(CUSTOMER)
-  phone         String?
-
-  accounts      Account[]
-  reservations  Reservation[]
-  carts         Cart[]
-
-  passwordResetTokens PasswordResetToken[]
-
-  createdAt     DateTime             @default(now())
-  updatedAt     DateTime             @updatedAt
-=======
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  username      String    @unique
-  password      String
-  emailVerified DateTime?
-  image         String?
-  role          Role      @default(CUSTOMER)
+  role          Role     @default(CUSTOMER)
   phone         String?
 
   accounts     Account[]
   reservations Reservation[]
   carts        Cart[]
-
   customOrders CustomOrder[]
   orders       Order[]
 
@@ -222,7 +131,6 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
->>>>>>> master
 
   @@map("user")
 }
@@ -242,14 +150,6 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-<<<<<<< HEAD
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
-
-  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@id([provider, providerAccountId])
-=======
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
@@ -257,7 +157,6 @@ model Account {
 
   @@id([provider, providerAccountId])
   @@index([userId])
->>>>>>> master
   @@map("account")
 }
 
@@ -265,17 +164,6 @@ model Account {
  * CART (pakai tabel `cart`)
  */
 model Cart {
-<<<<<<< HEAD
-  id        String    @id @default(cuid())
-  userId    String
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  items     CartItem[]
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-=======
   id     String @id @default(cuid())
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -286,24 +174,11 @@ model Cart {
   updatedAt DateTime @updatedAt
 
   @@index([userId])
->>>>>>> master
   @@map("cart")
 }
 
 /**
  * CART ITEM (pakai tabel `cartitem`)
-<<<<<<< HEAD
- * kolom `roomId` di DB dipetakan ke field `produkId`
- */
-model CartItem {
-  id        String   @id @default(cuid())
-
-  cartId    String
-  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
-
-  produkId  String   @map("roomId")
-  produk    Produk   @relation(fields: [produkId], references: [id], onDelete: Cascade)
-=======
  */
 model CartItem {
   id String @id @default(cuid())
@@ -313,7 +188,6 @@ model CartItem {
 
   produkId String @map("roomId")
   produk   Produk @relation(fields: [produkId], references: [id], onDelete: Cascade)
->>>>>>> master
 
   quantity  Int      @default(1)
   price     Int
@@ -321,10 +195,7 @@ model CartItem {
   updatedAt DateTime @updatedAt
 
   @@unique([cartId, produkId])
-<<<<<<< HEAD
-=======
   @@index([produkId])
->>>>>>> master
   @@map("cartitem")
 }
 
@@ -332,19 +203,11 @@ model CartItem {
  * PASSWORD RESET TOKEN (pakai tabel `passwordresettoken`)
  */
 model PasswordResetToken {
-<<<<<<< HEAD
-  id        String   @id @default(cuid())
-  token     String   @unique
-
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-=======
   id    String @id @default(cuid())
   token String @unique
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
->>>>>>> master
 
   expires   DateTime
   createdAt DateTime @default(now())
@@ -353,8 +216,6 @@ model PasswordResetToken {
   @@index([expires])
   @@map("passwordresettoken")
 }
-<<<<<<< HEAD
-=======
 
 /**
  * CUSTOM ORDER
@@ -503,4 +364,3 @@ model OrderPayment {
   @@index([transactionStatus])
   @@map("orderpayment")
 }
->>>>>>> master

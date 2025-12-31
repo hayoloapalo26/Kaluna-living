@@ -7,23 +7,15 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-<<<<<<< HEAD
-    "postinstall": "prisma generate"
-=======
     "postinstall": "prisma generate",
     "vercel-build": "prisma generate && prisma db push"
->>>>>>> master
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.2",
     "@prisma/client": "^6.5.0",
-<<<<<<< HEAD
     "@vercel/blob": "^0.27.3",
     "bcryptjs": "^3.0.3",
-=======
-    "bcryptjs": "^3.0.3",
     "cloudinary": "^2.6.0",
->>>>>>> master
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
@@ -37,10 +29,7 @@
     "react-icons": "^5.5.0",
     "react-spinners": "^0.15.0",
     "react-tailwindcss-datepicker": "^2.0.0",
-<<<<<<< HEAD
-=======
     "recharts": "^3.5.1",
->>>>>>> master
     "remixicon": "^4.7.0",
     "zod": "^3.24.2"
   },
@@ -48,27 +37,17 @@
     "@eslint/eslintrc": "^3.0.0",
     "@tailwindcss/postcss": "^4.0.0",
     "@types/node": "^20.0.0",
-<<<<<<< HEAD
-=======
     "@types/nodemailer": "^7.0.4",
->>>>>>> master
     "@types/react": "^19.2.4",
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.0.0",
     "eslint-config-next": "15.2.2",
     "prisma": "^6.5.0",
     "tailwindcss": "^4.0.0",
-<<<<<<< HEAD
-    "typescript": "^5.0.0"
-  },
-  "prisma": {
-    "seed": "node prisma/seed.js"
-=======
     "ts-node": "^10.9.2",
     "typescript": "^5.0.0"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
->>>>>>> master
   }
 }

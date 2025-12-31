@@ -1,24 +1,9 @@
-<<<<<<< HEAD
-// app/produk/[id]/page.tsx
-=======
 // app/room/[id]/page.tsx
->>>>>>> master
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getprodukById } from "@/lib/data";
 
-<<<<<<< HEAD
-interface produkPageProps {
-  params: { id: string };
-}
-
-export default async function produkDetailPage({ params }: produkPageProps) {
-  const produk = await getprodukById(params.id);
-
-  if (!produk) {
-    return notFound();
-=======
 export const dynamic = "force-dynamic";
 
 interface ProdukPageProps {
@@ -30,7 +15,6 @@ export default async function ProdukDetailPage({ params }: ProdukPageProps) {
 
   if (!produk) {
     notFound();
->>>>>>> master
   }
 
   return (
@@ -51,24 +35,14 @@ export default async function ProdukDetailPage({ params }: ProdukPageProps) {
         {/* Detail / info */}
         <div className="bg-white rounded-md shadow p-6 md:p-8 flex flex-col gap-4">
           <p className="text-xs uppercase tracking-[0.3em] text-gray-500">
-<<<<<<< HEAD
-            produk Detail
-=======
             Produk Detail
->>>>>>> master
           </p>
 
           <h1 className="text-3xl md:text-4xl font-semibold text-gray-900">
             {produk.name}
           </h1>
 
-<<<<<<< HEAD
-          <p className="text-gray-600 leading-relaxed">
-            {produk.description}
-          </p>
-=======
           <p className="text-gray-600 leading-relaxed">{produk.description}</p>
->>>>>>> master
 
           <div className="mt-3 flex flex-wrap gap-6 text-sm text-gray-600">
             <div>

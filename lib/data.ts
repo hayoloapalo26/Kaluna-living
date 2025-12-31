@@ -1,9 +1,6 @@
 import { prisma } from "@/lib/prisma";
 
-<<<<<<< HEAD
-=======
 // Ambil semua produk
->>>>>>> master
 export const getproduks = async () => {
   try {
     const result = await prisma.produk.findMany({
@@ -16,16 +13,11 @@ export const getproduks = async () => {
   }
 };
 
-<<<<<<< HEAD
-export const getprodukById = async (id: string) => {
-  try {
-=======
 // Ambil produk by id (AMAN: tidak query kalau id kosong)
 export const getprodukById = async (id?: string) => {
   try {
     if (!id) return null;
 
->>>>>>> master
     const produk = await prisma.produk.findUnique({
       where: { id },
     });
@@ -37,22 +29,16 @@ export const getprodukById = async (id?: string) => {
   }
 };
 
-<<<<<<< HEAD
-=======
 // Add to cart
->>>>>>> master
 export const addToCart = async (
   userId: string,
   produkId: string,
   quantity = 1
 ) => {
   try {
-<<<<<<< HEAD
-=======
     if (!userId) throw new Error("UserId wajib");
     if (!produkId) throw new Error("ProdukId wajib");
 
->>>>>>> master
     const produk = await prisma.produk.findUnique({
       where: { id: produkId },
     });
@@ -61,12 +47,6 @@ export const addToCart = async (
       throw new Error("Produk tidak ditemukan");
     }
 
-<<<<<<< HEAD
-    // Pakai cast any supaya TS nggak protes
-    const cartModel = (prisma as any).cart;
-    const cartItemModel = (prisma as any).cartItem;
-
-=======
     // Pakai cast any supaya TS nggak protes jika schema kamu tidak expose model secara typed
     const cartModel = (prisma as any).cart;
     const cartItemModel = (prisma as any).cartItem;
@@ -77,7 +57,6 @@ export const addToCart = async (
       );
     }
 
->>>>>>> master
     // Cari cart existing untuk user ini
     let cart = await cartModel.findFirst({
       where: { userId },
@@ -118,15 +97,6 @@ export const addToCart = async (
   }
 };
 
-<<<<<<< HEAD
-// === FUNCTION: getReservationByUserId ===
-export const getReservationByUserId = async (userId: string) => {
-  try {
-    const reservations = await prisma.reservation.findMany({
-      where: { userId },
-      include: {
-        // sesuai saran TypeScript: pakai 'produk' (R besar)
-=======
 // Ambil reservation milik user
 export const getReservationByUserId = async (userId: string) => {
   try {
@@ -135,7 +105,6 @@ export const getReservationByUserId = async (userId: string) => {
     const reservations = await prisma.reservation.findMany({
       where: { userId },
       include: {
->>>>>>> master
         produk: true,
       },
       orderBy: {
@@ -149,8 +118,6 @@ export const getReservationByUserId = async (userId: string) => {
     return [];
   }
 };
-<<<<<<< HEAD
-=======
 
 // Ambil reservation by id
 export const getReservationById = async (id?: string) => {
@@ -172,4 +139,3 @@ export const getReservationById = async (id?: string) => {
     return null;
   }
 };
->>>>>>> master

@@ -1,74 +1,22 @@
 // app/admin/products/page.tsx
 "use client";
 
-<<<<<<< HEAD
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-=======
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { resolveImageSrc } from "@/lib/image";
->>>>>>> master
 
 type ProdukItem = {
   id: string;
   name: string;
-<<<<<<< HEAD
-  price: number;
-  capacity: number;
-  image: string;
-  description: string;
-  createdAt: string;
-=======
   description: string;
   image: string;
   price: number;
   capacity: number;
->>>>>>> master
 };
 
 export default function AdminProductsPage() {
   const [produks, setProduks] = useState<ProdukItem[]>([]);
-<<<<<<< HEAD
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-
-  // Ambil data produk saat halaman load
-  useEffect(() => {
-    const fetchProduks = async () => {
-      try {
-        const res = await fetch("/api/admin/produks");
-
-        if (!res.ok) {
-          throw new Error("Gagal mengambil data produk");
-        }
-
-        const text = await res.text();
-        let data: unknown = [];
-
-        try {
-          data = text ? JSON.parse(text) : [];
-        } catch {
-          console.error("Response GET /api/admin/produks bukan JSON valid:", text);
-          throw new Error("Response server tidak valid (bukan JSON)");
-        }
-
-        if (Array.isArray(data)) {
-          setProduks(data as ProdukItem[]);
-        } else {
-          throw new Error("Format data produk tidak sesuai");
-        }
-      } catch (error) {
-        console.error(error);
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError("Terjadi kesalahan saat mengambil produk");
-        }
-=======
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -122,18 +70,13 @@ export default function AdminProductsPage() {
             ? err.message
             : "Terjadi kesalahan saat mengambil produk"
         );
->>>>>>> master
       }
     };
 
     fetchProduks();
   }, []);
 
-<<<<<<< HEAD
-  // Submit form tambah produk
-=======
   // POST: tambah produk baru
->>>>>>> master
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
@@ -149,25 +92,12 @@ export default function AdminProductsPage() {
         body: formData,
       });
 
-<<<<<<< HEAD
-      const text = await res.text();
-      let data: unknown = null;
-
-      try {
-        data = text ? JSON.parse(text) : null;
-      } catch {
-        console.error(
-          "Response POST /api/admin/produks bukan JSON valid:",
-          text
-        );
-=======
       let data: unknown = null;
 
       try {
         data = await res.json();
       } catch {
         console.error("Response POST /api/admin/produks bukan JSON valid");
->>>>>>> master
       }
 
       if (!res.ok) {
@@ -179,13 +109,9 @@ export default function AdminProductsPage() {
           typeof (data as any).message === "string"
             ? (data as any).message
             : "Gagal menyimpan produk";
-<<<<<<< HEAD
-        throw new Error(message);
-=======
 
         setError(message);
         return;
->>>>>>> master
       }
 
       if (data && typeof data === "object") {
@@ -194,15 +120,6 @@ export default function AdminProductsPage() {
 
       form.reset();
       setSuccess("Produk berhasil disimpan.");
-<<<<<<< HEAD
-    } catch (error) {
-      console.error(error);
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError("Terjadi kesalahan saat menyimpan produk");
-      }
-=======
     } catch (err) {
       console.error(err);
       setError(
@@ -210,7 +127,6 @@ export default function AdminProductsPage() {
           ? err.message
           : "Terjadi kesalahan saat menyimpan produk"
       );
->>>>>>> master
     } finally {
       setIsSubmitting(false);
     }
@@ -226,10 +142,7 @@ export default function AdminProductsPage() {
           {error}
         </div>
       )}
-<<<<<<< HEAD
-=======
 
->>>>>>> master
       {success && (
         <div className="mb-4 bg-emerald-50 text-emerald-700 border border-emerald-300 px-4 py-2 rounded text-sm">
           {success}
@@ -307,11 +220,7 @@ export default function AdminProductsPage() {
         </button>
       </form>
 
-<<<<<<< HEAD
-      {/* DAFTAR PRODUK */}
-=======
       {/* LIST PRODUK */}
->>>>>>> master
       <h2 className="text-lg font-semibold mb-2">Daftar Produk</h2>
 
       {produks.length === 0 ? (
@@ -319,22 +228,12 @@ export default function AdminProductsPage() {
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
           {produks.map((produk) => {
-<<<<<<< HEAD
-            const imageSrc = produk.image.startsWith("/")
-              ? produk.image
-              : `/${produk.image}`;
-=======
             const imageSrc = resolveImageSrc(produk.image);
->>>>>>> master
 
             return (
               <Link
                 key={produk.id}
-<<<<<<< HEAD
-                href={`/admin/produks/${produk.id}`}
-=======
                 href={`/admin/products/${produk.id}`}
->>>>>>> master
                 className="border rounded-lg overflow-hidden bg-white hover:shadow-sm transition-shadow"
               >
                 <div className="relative h-40 w-full">

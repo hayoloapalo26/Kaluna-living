@@ -1,14 +1,5 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-<<<<<<< HEAD
-
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const { id } = params;
-=======
 import { deleteCloudinaryImageByUrl } from "@/lib/cloudinary";
 
 export async function POST(
@@ -31,7 +22,6 @@ export async function POST(
     if (produk?.image) {
       await deleteCloudinaryImageByUrl(produk.image);
     }
->>>>>>> master
 
     await prisma.produk.delete({
       where: { id },
@@ -39,12 +29,6 @@ export async function POST(
 
     // Redirect ke daftar produk setelah berhasil hapus
     return NextResponse.redirect(new URL("/admin/products", req.url));
-<<<<<<< HEAD
-  } catch (err) {
-    console.error(err);
-    return NextResponse.json(
-      { message: "Gagal menghapus produk" },
-=======
   } catch (err: any) {
     console.error(err);
 
@@ -52,7 +36,6 @@ export async function POST(
     // Kita balikin 404 biar jelas
     return NextResponse.json(
       { message: "Gagal menghapus produk", error: err?.message },
->>>>>>> master
       { status: 500 }
     );
   }

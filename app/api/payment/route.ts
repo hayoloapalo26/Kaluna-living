@@ -14,14 +14,14 @@ export const POST = async (request: Request) => {
   const parameter = {
     transaction_details: {
       order_id: reservation.id,
-      gross_amount: reservation.Payment?.amount,
+      gross_amount: reservation.payment?.amount,
     },
     credit_card: {
       secure: true,
     },
     customer_details: {
-      first_name: reservation.User.name,
-      email: reservation.User.email,
+      first_name: reservation.user.name,
+      email: reservation.user.email,
     },
   };
 

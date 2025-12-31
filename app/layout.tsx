@@ -7,16 +7,10 @@ import { auth } from "@/auth";
 import WhatsAppPopup from "@/components/whatsapp-popup";
 import "./globals.css";
 
-<<<<<<< HEAD
-const josefinSans = Josefin_Sans({
-  variable: "--font-josefin-sans",
-  subsets: ["latin"],
-=======
 const josefin = Josefin_Sans({
   subsets: ["latin"],
   variable: "--font-body",
   weight: ["300", "400", "500", "600", "700"],
->>>>>>> master
 });
 
 export const metadata: Metadata = {
@@ -32,15 +26,6 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-<<<<<<< HEAD
-    <html lang="en">
-      <body className={`${josefinSans.className} antialiased`}>
-        <SessionProvider session={session}>
-          <Navbar />
-          
-          <main className="min-h-screen bg-gray-50">
-            {children}
-=======
     <html lang="en" className={josefin.variable}>
       <body className="min-h-screen text-kaluna-ink antialiased">
         <SessionProvider session={session}>
@@ -54,7 +39,6 @@ export default async function RootLayout({
                 <div className="px-4 md:px-8 py-8">{children}</div>
               </div>
             </div>
->>>>>>> master
           </main>
 
           <Footer />
