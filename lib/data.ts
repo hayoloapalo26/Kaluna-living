@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import type { DisabledDateProps, produkProps2 } from "@/types/room";
 
 // Ambil semua amenities
 export const getAmenities = async () => {
@@ -43,7 +44,9 @@ export const getprodukById = async (id?: string) => {
 };
 
 // Ambil detail produk + amenities
-export const getprodukDetailById = async (id?: string) => {
+export const getprodukDetailById = async (
+  id?: string
+): Promise<produkProps2 | null> => {
   try {
     if (!id) return null;
 
@@ -68,7 +71,9 @@ export const getprodukDetailById = async (id?: string) => {
 };
 
 // Ambil reservasi per produk (disabled date)
-export const getReservationByprodukId = async (produkId?: string) => {
+export const getReservationByprodukId = async (
+  produkId?: string
+): Promise<DisabledDateProps[]> => {
   try {
     if (!produkId) return [];
 
