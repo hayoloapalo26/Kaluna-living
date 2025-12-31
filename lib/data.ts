@@ -28,12 +28,19 @@ export const getproduks = async () => {
 };
 
 // Ambil produk by id (AMAN: tidak query kalau id kosong)
-export const getprodukById = async (id?: string) => {
+export const getprodukById = async (
+  id?: string
+): Promise<produkProps | null> => {
   try {
     if (!id) return null;
 
     const produk = await prisma.produk.findUnique({
       where: { id },
+      include: {
+        amenities: {
+          select: { amenitiesId: true },
+        },
+      },
     });
 
     return produk;
