@@ -5,6 +5,7 @@ import Footer from "@/components/footer";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import WhatsAppPopup from "@/components/whatsapp-popup";
+import ChatbotWidget from "@/components/chatbot-widget";
 import "./globals.css";
 
 const josefin = Josefin_Sans({
@@ -58,6 +59,7 @@ export default async function RootLayout({
 
           <Footer />
           <WhatsAppPopup />
+          <ChatbotWidget />
         </SessionProvider>
       </body>
     </html>
