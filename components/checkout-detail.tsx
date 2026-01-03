@@ -18,21 +18,21 @@ const CheckoutDetail = async ({ reservationId }: { reservationId: string }) => {
   return (
     <div className="grid md:grid-cols-2 gap-5">
       <div className="order-2">
-        <div className="flex flex-col mb-3 items-start bg-white border border-gray-200 rounded-sm md:flex-row md:w-full">
+        <div className="flex flex-col mb-3 items-start bg-white/90 ring-1 ring-white/70 rounded-3xl shadow-md md:flex-row md:w-full overflow-hidden">
           <div className="aspect-video relative">
             <Image
               src={reservation.produk.image}
               width={500}
               height={300}
-              className="object-cover w-full rounded-t-sm aspect-video md:rounded-none md:rounded-s-sm"
+              className="object-cover w-full aspect-video md:rounded-none"
               alt="image"
             />
           </div>
           <div className="flex flex-col justify-between p-4 leading-normal w-full">
-            <h5 className="mb-1 text-4xl font-bold tracking-tight text-gray-90">
+            <h5 className="mb-1 text-4xl font-bold tracking-tight text-[#111827]">
               {reservation.produk.name}
             </h5>
-            <div className="flex items-center gap-1 font-2xl text-gray-700">
+            <div className="flex items-center gap-1 font-2xl text-[#111827]/70">
               <div className="flex items-center justify-center gap-1">
                 <span className="text-2xl">
                   {formatCurrency(reservation.produk.price)}
@@ -45,7 +45,7 @@ const CheckoutDetail = async ({ reservationId }: { reservationId: string }) => {
         {/* Payment Button */}
         <PaymentButton reservation={reservation} />
       </div>
-      <div className="border border-gray-200 px-3 py-5 bg-white rounded-sm">
+      <div className="ring-1 ring-white/70 px-3 py-5 bg-white/90 rounded-3xl shadow-md backdrop-blur">
         <table className="w-full">
           <tbody>
             <tr className="">

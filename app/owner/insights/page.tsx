@@ -234,9 +234,9 @@ export default function OwnerInsightPage() {
                     <Line
                       type="monotone"
                       dataKey="revenue"
-                      stroke="#c86c4f"
+                      stroke="#f08c6a"
                       strokeWidth={3}
-                      dot={{ r: 3, fill: "#c86c4f" }}
+                      dot={{ r: 3, fill: "#f08c6a" }}
                       activeDot={{ r: 5 }}
                     />
                   </LineChart>
@@ -262,8 +262,8 @@ export default function OwnerInsightPage() {
                   <BarChart data={monthly} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
                     <defs>
                       <linearGradient id="orderBar" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#274760" stopOpacity={0.9} />
-                        <stop offset="100%" stopColor="#274760" stopOpacity={0.2} />
+                        <stop offset="0%" stopColor="#224670" stopOpacity={0.9} />
+                        <stop offset="100%" stopColor="#6cb4d9" stopOpacity={0.25} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#eadfd6" />
@@ -334,9 +334,10 @@ export default function OwnerInsightPage() {
           color: #1f1a17;
           font-family: var(--font-body);
           background:
-            radial-gradient(1100px 520px at 8% 8%, #f5e6d6 0%, rgba(245, 230, 214, 0) 60%),
-            radial-gradient(800px 520px at 92% 0%, #dfe7f4 0%, rgba(223, 231, 244, 0) 55%),
-            linear-gradient(180deg, #faf7f3 0%, #f3ede6 100%);
+            radial-gradient(1100px 520px at 8% 8%, rgba(246, 197, 110, 0.35) 0%, rgba(246, 197, 110, 0) 60%),
+            radial-gradient(800px 520px at 92% 0%, rgba(108, 180, 217, 0.28) 0%, rgba(108, 180, 217, 0) 55%),
+            radial-gradient(900px 520px at 55% 100%, rgba(240, 140, 106, 0.25) 0%, rgba(240, 140, 106, 0) 60%),
+            linear-gradient(180deg, #fff7ef 0%, #f6efe7 100%);
           position: relative;
           overflow: hidden;
         }
@@ -420,8 +421,8 @@ export default function OwnerInsightPage() {
           padding: 8px 14px;
           border-radius: 999px;
           font-size: 12px;
-          background: rgba(39, 71, 96, 0.12);
-          color: #274760;
+          background: rgba(108, 180, 217, 0.2);
+          color: #224670;
         }
 
         .hero-card {
@@ -442,7 +443,7 @@ export default function OwnerInsightPage() {
           width: 160px;
           height: 160px;
           border-radius: 50%;
-          background: radial-gradient(circle at 30% 30%, rgba(200, 108, 79, 0.45), transparent 70%);
+          background: radial-gradient(circle at 30% 30%, rgba(240, 140, 106, 0.45), transparent 70%);
           opacity: 0.8;
         }
 
@@ -516,8 +517,8 @@ export default function OwnerInsightPage() {
         }
 
         .alert {
-          background: rgba(200, 108, 79, 0.12);
-          border: 1px solid rgba(200, 108, 79, 0.22);
+          background: rgba(240, 140, 106, 0.14);
+          border: 1px solid rgba(240, 140, 106, 0.25);
           color: #8a4a36;
           padding: 12px 16px;
           border-radius: 14px;
@@ -589,8 +590,8 @@ export default function OwnerInsightPage() {
           padding: 6px 12px;
           border-radius: 999px;
           font-size: 11px;
-          background: rgba(39, 71, 96, 0.1);
-          color: #274760;
+          background: rgba(108, 180, 217, 0.18);
+          color: #224670;
           text-transform: uppercase;
           letter-spacing: 0.18em;
         }
@@ -645,7 +646,7 @@ export default function OwnerInsightPage() {
 
         .rank {
           font-weight: 600;
-          color: #274760;
+          color: #224670;
         }
 
         .prod-name {
@@ -656,7 +657,7 @@ export default function OwnerInsightPage() {
         .prod-bar {
           width: 100%;
           height: 6px;
-          background: rgba(39, 71, 96, 0.12);
+          background: rgba(108, 180, 217, 0.2);
           border-radius: 999px;
           overflow: hidden;
         }
@@ -664,7 +665,7 @@ export default function OwnerInsightPage() {
         .prod-bar span {
           display: block;
           height: 100%;
-          background: linear-gradient(90deg, #c86c4f 0%, #e4a47f 100%);
+          background: linear-gradient(90deg, #f08c6a 0%, #f6c56e 100%);
           border-radius: 999px;
         }
 

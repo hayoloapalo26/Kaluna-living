@@ -55,8 +55,12 @@ export default function VerifyEmailPage() {
     status === "success" ? "text-emerald-700" : status === "error" ? "text-red-700" : "text-[#111827]/70";
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2] px-4">
-      <div className="w-full max-w-md rounded-2xl bg-white ring-1 ring-black/5 shadow-md p-7">
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden px-4">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-24 left-[-10%] h-72 w-72 rounded-full bg-[#f6c56e]/30 blur-3xl" />
+        <div className="absolute top-10 right-[-8%] h-80 w-80 rounded-full bg-[#6cb4d9]/25 blur-3xl" />
+      </div>
+      <div className="relative w-full max-w-md rounded-3xl bg-white/90 ring-1 ring-white/70 shadow-md p-7 backdrop-blur">
         <p className="text-xs uppercase tracking-[0.32em] text-black/45">
           Kaluna Living
         </p>
@@ -69,7 +73,7 @@ export default function VerifyEmailPage() {
         <div className="mt-6 flex justify-center">
           <Link
             href="/signin"
-            className="rounded-2xl bg-[#224670] text-white px-4 py-2 text-sm font-semibold hover:opacity-90 transition"
+            className="rounded-2xl bg-gradient-to-r from-[#224670] via-[#6cb4d9] to-[#f08c6a] text-white px-4 py-2 text-sm font-semibold hover:opacity-90 transition"
           >
             Ke halaman login
           </Link>

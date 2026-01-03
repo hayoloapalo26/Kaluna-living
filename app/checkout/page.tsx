@@ -92,10 +92,14 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
   }
 
   return (
-    <div className="bg-gray-50">
-      <div className="max-w-screen-xl mx-auto px-4 py-10 md:py-16 grid gap-10 md:grid-cols-[2fr,1.3fr]">
+    <div className="min-h-screen relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-24 left-[-10%] h-72 w-72 rounded-full bg-[#f6c56e]/25 blur-3xl" />
+        <div className="absolute top-12 right-[-8%] h-80 w-80 rounded-full bg-[#6cb4d9]/22 blur-3xl" />
+      </div>
+      <div className="relative max-w-screen-xl mx-auto px-4 py-10 md:py-16 grid gap-10 md:grid-cols-[2fr,1.3fr]">
         {/* Ringkasan Produk */}
-        <div className="bg-white rounded-md shadow p-6 md:p-8 flex flex-col gap-4">
+        <div className="bg-white/90 rounded-3xl shadow-md ring-1 ring-white/70 p-6 md:p-8 flex flex-col gap-4 backdrop-blur">
           <p className="text-xs uppercase tracking-[0.3em] text-gray-500">
             Ringkasan Produk
           </p>
@@ -113,7 +117,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
               <p className="text-xs uppercase tracking-[0.2em] text-gray-400">
                 Harga
               </p>
-              <p className="text-lg font-semibold text-[#A7744B]">
+              <p className="text-lg font-semibold text-[#f08c6a]">
                 Rp {produk.price.toLocaleString("id-ID")}{" "}
                 <span className="text-xs text-gray-500">/ malam</span>
               </p>
@@ -131,7 +135,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
         </div>
 
         {/* Form reservasi */}
-        <div className="bg-white rounded-md shadow p-6 md:p-8">
+        <div className="bg-white/90 rounded-3xl shadow-md ring-1 ring-white/70 p-6 md:p-8 backdrop-blur">
           <p className="text-xs uppercase tracking-[0.3em] text-gray-500">
             Form Reservasi
           </p>
@@ -152,7 +156,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
                 <input
                   type="date"
                   name="startDate"
-                  className="mt-1 w-full rounded-sm border border-gray-300 px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#A7744B]"
+                  className="mt-1 w-full rounded-2xl ring-1 ring-black/10 px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60"
                   required
                 />
               </div>
@@ -164,7 +168,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
                 <input
                   type="date"
                   name="endDate"
-                  className="mt-1 w-full rounded-sm border border-gray-300 px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#A7744B]"
+                  className="mt-1 w-full rounded-2xl ring-1 ring-black/10 px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60"
                   required
                 />
               </div>
@@ -179,13 +183,13 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
                 name="guestCount"
                 min={1}
                 defaultValue={1}
-                className="mt-1 w-full rounded-sm border border-gray-300 px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#A7744B]"
+                className="mt-1 w-full rounded-2xl ring-1 ring-black/10 px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60"
               />
             </div>
 
             <button
               type="submit"
-              className="mt-4 w-full rounded-sm bg-[#A7744B] py-3 text-sm font-semibold text-white hover:bg-[#8f613e] transition"
+              className="mt-4 w-full rounded-2xl bg-gradient-to-r from-[#224670] via-[#6cb4d9] to-[#f08c6a] py-3 text-sm font-semibold text-white hover:opacity-90 transition"
             >
               Konfirmasi &amp; Simpan Reservasi
             </button>

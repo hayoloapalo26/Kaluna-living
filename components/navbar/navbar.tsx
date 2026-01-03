@@ -78,9 +78,9 @@ export default function Navbar() {
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_0%,rgba(255,255,255,0.9),transparent_55%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_0%,rgba(224,233,244,0.8),transparent_50%)]" />
-          <div className="absolute -bottom-px left-0 right-0 h-[2px] bg-gradient-to-r from-[#224670] via-[#DEA9B6] to-[#E4A47F]" />
+          <div className="absolute -bottom-px left-0 right-0 h-[2px] bg-gradient-to-r from-[#224670] via-[#6cb4d9] to-[#f08c6a]" />
         </div>
-        <div className="relative bg-[#faf7f2]/85 backdrop-blur-xl border-b border-black/5">
+        <div className="relative bg-[#fff7ef]/85 backdrop-blur-xl border-b border-black/5">
           <div className="mx-auto max-w-6xl px-4 md:px-6">
             <div className="h-16 flex items-center justify-between gap-4">
               <Link
@@ -100,8 +100,8 @@ export default function Navbar() {
 
               {!isAdminLike && (
                 <div className="hidden md:block">
-                  <div className="rounded-full bg-gradient-to-r from-[#224670] via-[#DEA9B6] to-[#E4A47F] p-[1.5px] shadow-sm">
-                    <nav className="flex items-center gap-1 rounded-full bg-[#faf7f2]/90 backdrop-blur px-1 py-1 ring-1 ring-white/40">
+                  <div className="rounded-full bg-gradient-to-r from-[#224670] via-[#6cb4d9] to-[#f08c6a] p-[1.5px] shadow-sm">
+                    <nav className="flex items-center gap-1 rounded-full bg-[#fff7ef]/90 backdrop-blur px-1 py-1 ring-1 ring-white/40">
                       {NAV.map((it) => {
                         const active = isActive(it.href);
                         return (
@@ -118,7 +118,7 @@ export default function Navbar() {
                               className={[
                                 "absolute inset-0 rounded-full transition",
                                 active
-                                  ? "bg-gradient-to-r from-[#224670] via-[#3b6aa0] to-[#DEA9B6] shadow-md"
+                                  ? "bg-gradient-to-r from-[#224670] via-[#6cb4d9] to-[#f08c6a] shadow-md"
                                   : "bg-transparent group-hover:bg-white/85",
                               ].join(" ")}
                             />
@@ -127,8 +127,8 @@ export default function Navbar() {
                               className={[
                                 "absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full transition",
                                 active
-                                  ? "bg-[#E4A47F]"
-                                  : "bg-[#E4A47F]/70 opacity-0 group-hover:opacity-80",
+                                  ? "bg-[#f6c56e]"
+                                  : "bg-[#f6c56e]/70 opacity-0 group-hover:opacity-80",
                               ].join(" ")}
                             />
                           </Link>
@@ -144,7 +144,7 @@ export default function Navbar() {
                 <button
                   type="button"
                   className="md:hidden inline-flex items-center justify-center rounded-full w-10 h-10
-                             bg-white/80 ring-1 ring-black/10 hover:bg-white transition"
+                             bg-white/85 ring-1 ring-black/10 hover:bg-white transition"
                   onClick={() => setMobileOpen((v) => !v)}
                   aria-label="Toggle menu"
                   aria-expanded={mobileOpen}
@@ -192,12 +192,12 @@ export default function Navbar() {
                     inline-flex items-center justify-center
                     w-11 h-11
                     rounded-full
-                    bg-gradient-to-br from-white to-[#f6ede6]
-                    ring-1 ring-[#e4a47f]/40
+                    bg-gradient-to-br from-white to-[#fbe6d6]
+                    ring-1 ring-[#f08c6a]/40
                     shadow-sm
                     hover:shadow-md
-                    hover:ring-[#e4a47f]/70
-                    hover:from-white hover:to-[#fbe7dc]
+                    hover:ring-[#f08c6a]/70
+                    hover:from-white hover:to-[#ffe6d6]
                     transition-all
                     duration-200
                   "
@@ -241,7 +241,7 @@ export default function Navbar() {
                         px-[5px]
                         flex items-center justify-center
                         rounded-full
-                        bg-gradient-to-br from-[#c86c4f] to-[#e4a47f]
+                        bg-gradient-to-br from-[#f08c6a] to-[#f6c56e]
                         text-white
                         text-[10px]
                         font-bold
@@ -286,7 +286,7 @@ export default function Navbar() {
                 <Link
                   href="/signin"
                   className="inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-semibold
-                             bg-gradient-to-r from-[#224670] via-[#3b6aa0] to-[#DEA9B6] text-white hover:opacity-90 transition shadow-sm"
+                             bg-gradient-to-r from-[#224670] via-[#6cb4d9] to-[#f08c6a] text-white hover:opacity-90 transition shadow-sm"
                 >
                   Sign In
                 </Link>
@@ -297,9 +297,9 @@ export default function Navbar() {
       </div>
 
       {!isAdminLike && mobileOpen && (
-        <div className="md:hidden bg-[#faf7f2]/95 backdrop-blur border-b border-black/5">
+        <div className="md:hidden bg-[#fff7ef]/95 backdrop-blur border-b border-black/5">
           <div className="mx-auto max-w-6xl px-4 py-4">
-            <div className="rounded-3xl bg-gradient-to-br from-white/90 to-[#f7ebe3] ring-1 ring-black/5 p-2 shadow-sm space-y-2">
+            <div className="rounded-3xl bg-gradient-to-br from-white/90 to-[#fbe7dc] ring-1 ring-black/5 p-2 shadow-sm space-y-2">
               {NAV.map((it) => (
                 <Link
                   key={it.href}

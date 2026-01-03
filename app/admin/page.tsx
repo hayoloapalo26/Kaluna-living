@@ -217,7 +217,7 @@ export default function AdminOverviewPage() {
           gap: 20px;
           padding: 24px;
           border-radius: 24px;
-          background: linear-gradient(135deg, #1f3a4a 0%, #284e63 55%, #c86c4f 100%);
+          background: linear-gradient(135deg, #224670 0%, #3f7db5 55%, #f08c6a 100%);
           color: #fff;
           position: relative;
           overflow: hidden;
@@ -275,8 +275,8 @@ export default function AdminOverviewPage() {
         }
 
         .hero-btn.primary {
-          background: #f6d2c5;
-          color: #2c1f19;
+          background: #f6c56e;
+          color: #1b2d44;
           box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
         }
 
@@ -355,8 +355,8 @@ export default function AdminOverviewPage() {
         .alert {
           padding: 12px 16px;
           border-radius: 14px;
-          background: rgba(200, 108, 79, 0.12);
-          border: 1px solid rgba(200, 108, 79, 0.2);
+          background: rgba(240, 140, 106, 0.14);
+          border: 1px solid rgba(240, 140, 106, 0.25);
           color: #8a4a36;
           font-size: 13px;
         }

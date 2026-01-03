@@ -10,15 +10,15 @@ type Props = {
 
 const Card = ({ produk }: Props) => {
   return (
-    <div className="bg-white shadow-lg rounded-sm transition duration-100 hover:shadow-sm">
+    <div className="bg-white/90 shadow-lg rounded-2xl ring-1 ring-white/60 transition duration-100 hover:shadow-xl">
       {/* image wrapper */}
-      <div className="h-[260px] w-auto rounded-t-sm relative">
+      <div className="h-[260px] w-auto rounded-t-2xl relative overflow-hidden">
         <Image
           src={produk.image}
           width={384}
           height={256}
           alt={produk.name}
-          className="w-full h-full object-cover rounded-t-sm"
+          className="w-full h-full object-cover"
         />
       </div>
 
@@ -26,17 +26,17 @@ const Card = ({ produk }: Props) => {
         <h4 className="text-2xl font-medium">
           <Link
             href={`/produk/${produk.id}`}
-            className="hover:text-gray-800 transition duration-150"
+            className="hover:text-[#1a1c24] transition duration-150"
           >
             {produk.name}
           </Link>
         </h4>
 
         <h4 className="text-xl mb-7">
-          <span className="font-semibold text-gray-600">
+          <span className="font-semibold text-[#224670]">
             {formatCurrency(produk.price)}
           </span>
-          <span className="text-gray-400 text-sm">/Night</span>
+          <span className="text-[#1a1c24]/45 text-sm">/Night</span>
         </h4>
 
         <div className="flex items-center justify-between">
@@ -49,7 +49,9 @@ const Card = ({ produk }: Props) => {
 
           <Link
             href={`/produk/${produk.id}`}
-            className="px-6 py-2.5 md:px-10 md:py-3 font-semibold text-white bg-orange-400 rounded-sm hover:bg-orange-500 transition duration-150"
+            className="px-6 py-2.5 md:px-10 md:py-3 font-semibold text-white rounded-2xl
+                       bg-gradient-to-r from-[#224670] via-[#6cb4d9] to-[#f08c6a]
+                       hover:opacity-90 transition duration-150"
           >
             Book Now
           </Link>

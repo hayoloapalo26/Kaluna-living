@@ -76,9 +76,10 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           font-family: var(--font-body);
           color: #1f1a17;
           background:
-            radial-gradient(900px 520px at 12% 6%, rgba(245, 228, 210, 0.9) 0%, rgba(245, 228, 210, 0) 60%),
-            radial-gradient(700px 520px at 95% 0%, rgba(214, 232, 241, 0.9) 0%, rgba(214, 232, 241, 0) 55%),
-            linear-gradient(180deg, #fbf7f2 0%, #f2ece4 100%);
+            radial-gradient(900px 520px at 12% 6%, rgba(246, 197, 110, 0.35) 0%, rgba(246, 197, 110, 0) 60%),
+            radial-gradient(760px 520px at 95% 0%, rgba(108, 180, 217, 0.28) 0%, rgba(108, 180, 217, 0) 55%),
+            radial-gradient(900px 520px at 60% 100%, rgba(240, 140, 106, 0.25) 0%, rgba(240, 140, 106, 0) 60%),
+            linear-gradient(180deg, #fff7ef 0%, #f6efe7 100%);
           position: relative;
           overflow: hidden;
         }
@@ -152,8 +153,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           font-size: 11px;
           padding: 6px 12px;
           border-radius: 999px;
-          background: rgba(39, 71, 96, 0.12);
-          color: #274760;
+          background: rgba(108, 180, 217, 0.2);
+          color: #224670;
           letter-spacing: 0.16em;
           text-transform: uppercase;
         }

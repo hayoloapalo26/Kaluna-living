@@ -112,17 +112,21 @@ export default function CustomOrderCustomerPage() {
     const s = status.toUpperCase();
     // soft badge (premium)
     if (s === "NEW") return "bg-[#224670]/10 text-[#224670] ring-1 ring-[#224670]/20";
-    if (s === "CONTACTED") return "bg-[#DEA9B6]/20 text-[#111827] ring-1 ring-[#DEA9B6]/30";
-    if (s === "IN_PROGRESS") return "bg-purple-500/10 text-purple-700 ring-1 ring-purple-500/20";
-    if (s === "DONE") return "bg-[#427949]/10 text-[#427949] ring-1 ring-[#427949]/20";
+    if (s === "CONTACTED") return "bg-[#e6a2b6]/20 text-[#1a1c24] ring-1 ring-[#e6a2b6]/30";
+    if (s === "IN_PROGRESS") return "bg-[#6cb4d9]/15 text-[#224670] ring-1 ring-[#6cb4d9]/25";
+    if (s === "DONE") return "bg-[#3f7d55]/10 text-[#3f7d55] ring-1 ring-[#3f7d55]/20";
     if (s === "CANCELLED") return "bg-red-500/10 text-red-700 ring-1 ring-red-500/20";
     return "bg-black/[0.04] text-black/70 ring-1 ring-black/10";
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-24 left-[-10%] h-72 w-72 rounded-full bg-[#f6c56e]/25 blur-3xl" />
+        <div className="absolute top-12 right-[-8%] h-80 w-80 rounded-full bg-[#6cb4d9]/25 blur-3xl" />
+      </div>
       {/* OPSI B container */}
-      <div className="mx-auto w-full max-w-6xl px-4 md:px-6 py-10">
+      <div className="relative mx-auto w-full max-w-6xl px-4 md:px-6 py-10">
         {/* Header */}
         <div className="flex flex-col gap-2">
           <p className="text-xs uppercase tracking-[0.32em] text-black/45">
@@ -142,14 +146,14 @@ export default function CustomOrderCustomerPage() {
 
         {/* Alerts */}
         {error && (
-          <div className="mt-6 rounded-2xl bg-white p-4 ring-1 ring-red-500/20 text-red-700 shadow-md">
+          <div className="mt-6 rounded-2xl bg-white/90 p-4 ring-1 ring-red-500/20 text-red-700 shadow-md backdrop-blur">
             <p className="text-sm font-semibold">Warning</p>
             <p className="text-sm mt-1 text-red-700/90">{error}</p>
           </div>
         )}
 
         {success && (
-          <div className="mt-6 rounded-2xl bg-white p-4 ring-1 ring-emerald-500/20 text-emerald-700 shadow-md">
+          <div className="mt-6 rounded-2xl bg-white/90 p-4 ring-1 ring-emerald-500/20 text-emerald-700 shadow-md backdrop-blur">
             <p className="text-sm font-semibold">Succesfull</p>
             <p className="text-sm mt-1 text-emerald-700/90">{success}</p>
           </div>
@@ -157,7 +161,7 @@ export default function CustomOrderCustomerPage() {
 
         <div className="mt-8 grid gap-6 lg:grid-cols-[1fr,0.85fr] items-start">
           {/* FORM */}
-          <div className="rounded-2xl bg-white ring-1 ring-black/5 shadow-md p-5 md:p-7">
+          <div className="rounded-3xl bg-white/90 ring-1 ring-white/70 shadow-md p-5 md:p-7 backdrop-blur">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <h2 className="text-base md:text-lg font-semibold tracking-tight text-[#111827]">
@@ -182,7 +186,7 @@ export default function CustomOrderCustomerPage() {
                   <input
                     name="customerName"
                     className="w-full rounded-2xl px-4 py-3 text-sm text-[#111827]
-                               ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#DEA9B6]/70"
+                               ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60"
                     required
                     placeholder="Nama lengkap"
                   />
@@ -196,7 +200,7 @@ export default function CustomOrderCustomerPage() {
                     type="email"
                     name="email"
                     className="w-full rounded-2xl px-4 py-3 text-sm text-[#111827]
-                               ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#DEA9B6]/70"
+                               ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60"
                     required
                     placeholder="email@example.com"
                   />
@@ -209,7 +213,7 @@ export default function CustomOrderCustomerPage() {
                   <input
                     name="phone"
                     className="w-full rounded-2xl px-4 py-3 text-sm text-[#111827]
-                               ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#DEA9B6]/70"
+                               ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60"
                     placeholder="Contoh: 08123456789"
                     required
                   />
@@ -223,7 +227,7 @@ export default function CustomOrderCustomerPage() {
                 <input
                   name="orderName"
                   className="w-full rounded-2xl px-4 py-3 text-sm text-[#111827]
-                             ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#DEA9B6]/70"
+                             ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60"
                   required
                   placeholder="Contoh: Mug couple warna cream"
                 />
@@ -236,7 +240,7 @@ export default function CustomOrderCustomerPage() {
                 <select
                   name="orderType"
                   className="w-full rounded-2xl px-4 py-3 text-sm text-[#111827]
-                             ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#DEA9B6]/70 bg-white"
+                             ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60 bg-white"
                   required
                   defaultValue=""
                 >
@@ -259,7 +263,7 @@ export default function CustomOrderCustomerPage() {
                   name="description"
                   rows={4}
                   className="w-full rounded-2xl px-4 py-3 text-sm text-[#111827]
-                             ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#DEA9B6]/70"
+                             ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60"
                   required
                   placeholder="Tell us the size, color, quantity and design inspiration..."
                 />
@@ -283,13 +287,13 @@ export default function CustomOrderCustomerPage() {
 
               <button
                 disabled={submitting}
-                className="w-full rounded-2xl bg-[#224670] text-white px-4 py-3 text-sm font-semibold
+                className="w-full rounded-2xl bg-gradient-to-r from-[#224670] via-[#6cb4d9] to-[#f08c6a] text-white px-4 py-3 text-sm font-semibold
                            hover:opacity-90 transition shadow-md disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {submitting ? "Mengirim..." : "Send Custom Order Request"}
               </button>
 
-              <div className="rounded-2xl bg-[#EFE7DD] p-4 ring-1 ring-black/5">
+              <div className="rounded-2xl bg-white/80 p-4 ring-1 ring-white/70">
                 <p className="text-sm font-semibold text-[#111827]">
                   After submitting
                 </p>
@@ -303,7 +307,7 @@ export default function CustomOrderCustomerPage() {
           </div>
 
           {/* RIWAYAT */}
-          <div className="rounded-2xl bg-white ring-1 ring-black/5 shadow-md p-5 md:p-7">
+          <div className="rounded-3xl bg-white/90 ring-1 ring-white/70 shadow-md p-5 md:p-7 backdrop-blur">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <h2 className="text-base md:text-lg font-semibold tracking-tight text-[#111827]">
@@ -317,7 +321,7 @@ export default function CustomOrderCustomerPage() {
               <button
                 onClick={loadHistory}
                 className="shrink-0 inline-flex items-center justify-center rounded-2xl px-4 py-2 text-sm font-semibold
-                           bg-white text-[#224670] ring-1 ring-black/10 hover:bg-black/[0.03] transition"
+                           bg-white/90 text-[#224670] ring-1 ring-black/10 hover:bg-white transition"
                 type="button"
               >
                 Refresh
@@ -325,11 +329,11 @@ export default function CustomOrderCustomerPage() {
             </div>
 
             {loadingHistory ? (
-              <div className="mt-5 rounded-2xl bg-black/[0.03] p-4 ring-1 ring-black/5">
+              <div className="mt-5 rounded-2xl bg-white/80 p-4 ring-1 ring-white/70">
                 <p className="text-sm text-black/60">Loading history...</p>
               </div>
             ) : history.length === 0 ? (
-              <div className="mt-5 rounded-2xl bg-black/[0.03] p-6 ring-1 ring-black/5">
+              <div className="mt-5 rounded-2xl bg-white/80 p-6 ring-1 ring-white/70">
                 <p className="text-xs uppercase tracking-[0.32em] text-black/40">
                   Empty state
                 </p>
@@ -342,7 +346,7 @@ export default function CustomOrderCustomerPage() {
                 {history.map((h) => (
                   <div
                     key={h.id}
-                    className="rounded-2xl ring-1 ring-black/5 bg-white p-4 hover:shadow-md transition"
+                    className="rounded-2xl ring-1 ring-white/70 bg-white/90 p-4 hover:shadow-md transition"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
@@ -373,7 +377,7 @@ export default function CustomOrderCustomerPage() {
                         href={h.image}
                         target="_blank"
                         rel="noreferrer"
-                        className="mt-3 inline-flex text-sm font-semibold text-[#224670] hover:opacity-80 transition"
+                        className="mt-3 inline-flex text-sm font-semibold text-[#224670] hover:text-[#f08c6a] transition"
                       >
                         See picture →
                       </a>

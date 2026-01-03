@@ -110,10 +110,10 @@ export default function CartPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] relative overflow-hidden">
+      <div className="min-h-screen relative overflow-hidden">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-24 left-0 h-64 w-64 rounded-full bg-[#e8d9cb]/60 blur-3xl" />
-          <div className="absolute top-10 right-0 h-80 w-80 rounded-full bg-[#d9e6f4]/60 blur-3xl" />
+          <div className="absolute -top-24 left-0 h-64 w-64 rounded-full bg-[#f6c56e]/25 blur-3xl" />
+          <div className="absolute top-10 right-0 h-80 w-80 rounded-full bg-[#6cb4d9]/25 blur-3xl" />
           <div className="absolute inset-0 bg-[radial-gradient(rgba(31,26,23,0.08)_1px,transparent_1px)] [background-size:26px_26px] opacity-40" />
         </div>
         <div className="relative mx-auto w-full max-w-6xl px-4 md:px-6 py-10">
@@ -126,10 +126,10 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-24 left-0 h-64 w-64 rounded-full bg-[#e8d9cb]/60 blur-3xl" />
-        <div className="absolute top-10 right-0 h-80 w-80 rounded-full bg-[#d9e6f4]/60 blur-3xl" />
+        <div className="absolute -top-24 left-0 h-64 w-64 rounded-full bg-[#f6c56e]/25 blur-3xl" />
+        <div className="absolute top-10 right-0 h-80 w-80 rounded-full bg-[#6cb4d9]/25 blur-3xl" />
         <div className="absolute inset-0 bg-[radial-gradient(rgba(31,26,23,0.08)_1px,transparent_1px)] [background-size:26px_26px] opacity-40" />
       </div>
 
@@ -182,7 +182,7 @@ export default function CartPage() {
               <Link
                 href="/produk"
                 className="inline-flex items-center justify-center rounded-2xl px-6 py-3 text-sm font-semibold
-                           bg-[#224670] text-white hover:opacity-90 transition shadow-md"
+                           bg-gradient-to-r from-[#224670] via-[#6cb4d9] to-[#f08c6a] text-white hover:opacity-90 transition shadow-md"
               >
                 Mulai Belanja
               </Link>
@@ -314,7 +314,7 @@ export default function CartPage() {
 
               <Link href="/cart/checkout" className="block mt-5">
                 <button
-                  className="w-full rounded-2xl bg-gradient-to-r from-[#224670] to-[#2f5e93] text-white px-4 py-3 text-sm font-semibold
+                  className="w-full rounded-2xl bg-gradient-to-r from-[#224670] via-[#6cb4d9] to-[#f08c6a] text-white px-4 py-3 text-sm font-semibold
                              hover:opacity-90 transition shadow-md"
                   type="button"
                 >
@@ -328,7 +328,7 @@ export default function CartPage() {
 
               <Link
                 href="/produk"
-                className="mt-4 inline-flex text-sm font-semibold text-[#224670] hover:opacity-80 transition"
+                className="mt-4 inline-flex text-sm font-semibold text-[#224670] hover:text-[#f08c6a] transition"
               >
                 Tambah item lainnya
               </Link>

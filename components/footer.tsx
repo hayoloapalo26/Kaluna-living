@@ -9,8 +9,13 @@ import {
 
 const Footer = () => {
   return (
-    <footer className="bg-[#224670] text-white">
-      <div className="mx-auto w-full max-w-6xl px-4 md:px-6 py-12 md:py-16">
+    <footer className="relative overflow-hidden bg-[#1b2d44] text-white">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-24 left-0 h-64 w-64 rounded-full bg-[#f08c6a]/20 blur-3xl" />
+        <div className="absolute top-10 right-0 h-72 w-72 rounded-full bg-[#6cb4d9]/20 blur-3xl" />
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(27,45,68,0.92),rgba(34,70,112,0.96),rgba(47,94,147,0.9))]" />
+      </div>
+      <div className="relative mx-auto w-full max-w-6xl px-4 md:px-6 py-12 md:py-16">
         <div className="grid gap-10 md:grid-cols-3">
           {/* Brand */}
           <div>
@@ -37,7 +42,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10
-                           hover:bg-white/15 transition"
+                           hover:bg-white/20 transition ring-1 ring-white/15"
                 aria-label="Instagram"
               >
                 <RiInstagramLine className="text-xl text-white" />
@@ -48,7 +53,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10
-                           hover:bg-white/15 transition"
+                           hover:bg-white/20 transition ring-1 ring-white/15"
                 aria-label="Facebook"
               >
                 <RiFacebookCircleLine className="text-xl text-white" />
@@ -59,7 +64,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10
-                           hover:bg-white/15 transition"
+                           hover:bg-white/20 transition ring-1 ring-white/15"
                 aria-label="TikTok"
               >
                 <RiTiktokLine className="text-xl text-white" />
@@ -70,7 +75,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10
-                           hover:bg-white/15 transition"
+                           hover:bg-white/20 transition ring-1 ring-white/15"
                 aria-label="WhatsApp"
               >
                 <RiWhatsappLine className="text-xl text-white" />
@@ -160,7 +165,8 @@ const Footer = () => {
                 <button
                   type="button"
                   className="inline-flex items-center justify-center rounded-2xl px-4 py-3 text-sm font-semibold
-                             bg-white text-[#224670] hover:opacity-90 transition shadow-md"
+                             bg-gradient-to-r from-white via-white to-[#f6c56e] text-[#1b2d44]
+                             hover:opacity-90 transition shadow-md"
                 >
                   Subscribe
                 </button>
@@ -175,7 +181,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-white/10">
+      <div className="relative border-t border-white/10">
         <div className="mx-auto max-w-6xl px-4 md:px-6 py-6 text-center text-sm text-white/65">
           &copy; Copyright 2025 | Maulana-fti-unmer
         </div>

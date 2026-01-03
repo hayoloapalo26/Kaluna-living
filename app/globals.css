@@ -7,9 +7,23 @@
   --font-head: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial,
     "Noto Sans", "Liberation Sans", sans-serif;
 
-  /* Brand base tokens (soft warm) */
-  --kaluna-cream: #faf7f2;
-  --kaluna-ink: #111827;
+  /* Brand base tokens (warm + colorful) */
+  --kaluna-cream: #fff7ef;
+  --kaluna-sand: #f2e6d8;
+  --kaluna-ink: #1a1c24;
+  --kaluna-navy: #224670;
+  --kaluna-rose: #e6a2b6;
+  --kaluna-coral: #f08c6a;
+  --kaluna-sun: #f6c56e;
+  --kaluna-leaf: #3f7d55;
+  --kaluna-sky: #6cb4d9;
+  --kaluna-gradient: linear-gradient(
+    120deg,
+    #224670 0%,
+    #6cb4d9 45%,
+    #f08c6a 75%,
+    #f6c56e 100%
+  );
 }
 
 /* Base styling (tanpa @apply md:... supaya aman di Tailwind v4) */
@@ -24,10 +38,10 @@ body {
 
   /* ✅ Soft premium background supaya sisi kiri-kanan tidak kosong */
   background:
-    radial-gradient(900px 600px at 15% 10%, rgba(34, 70, 112, 0.08), transparent 60%),
-    radial-gradient(900px 600px at 85% 20%, rgba(222, 169, 182, 0.10), transparent 60%),
-    radial-gradient(1200px 800px at 50% 95%, rgba(167, 116, 75, 0.08), transparent 55%),
-    linear-gradient(to bottom, var(--kaluna-cream), var(--kaluna-cream));
+    radial-gradient(900px 600px at 12% 6%, rgba(246, 197, 110, 0.25), transparent 60%),
+    radial-gradient(900px 650px at 88% 8%, rgba(108, 180, 217, 0.22), transparent 55%),
+    radial-gradient(1000px 700px at 50% 100%, rgba(230, 162, 182, 0.25), transparent 60%),
+    linear-gradient(180deg, #fff7ef 0%, #f6efe7 60%, #fff7ef 100%);
 }
 
 @media (max-width: 640px) {
@@ -101,6 +115,6 @@ a {
 
 /* Brand selection */
 ::selection {
-  background: #DEA9B6;
-  color: #111827;
+  background: #f6c56e;
+  color: #1a1c24;
 }

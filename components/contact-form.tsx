@@ -7,7 +7,7 @@ import clsx from "clsx";
 const ContactForm = () => {
   //   const [state, formAction] = useFormState(ContactMessage, null);
   return (
-    <div className="bg-white p-8 rounded-sm shadow-sm">
+    <div className="bg-white/90 p-8 rounded-3xl ring-1 ring-white/70 shadow-md backdrop-blur">
       {/* Alert */}
       {/* {state?.message ? (
         <div
@@ -24,7 +24,7 @@ const ContactForm = () => {
             <input
               type="text"
               name="name"
-              className="bg-gray-50 p-3 border border-gray-200 rounded-sm w-full font-light"
+              className="bg-white/80 p-3 ring-1 ring-black/10 rounded-2xl w-full font-light focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60"
               placeholder="Name*"
             />
             <div aria-live="polite" aria-atomic="true">
@@ -35,7 +35,7 @@ const ContactForm = () => {
             <input
               type="email"
               name="email"
-              className="bg-gray-50 p-3 border border-gray-200 rounded-sm w-full font-light"
+              className="bg-white/80 p-3 ring-1 ring-black/10 rounded-2xl w-full font-light focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60"
               placeholder="johndoe@example.com*"
             />
             <div aria-live="polite" aria-atomic="true">
@@ -46,7 +46,7 @@ const ContactForm = () => {
             <input
               type="text"
               name="subject"
-              className="bg-gray-50 p-3 border border-gray-200 rounded-sm w-full font-light"
+              className="bg-white/80 p-3 ring-1 ring-black/10 rounded-2xl w-full font-light focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60"
               placeholder="Subject*"
             />
             <div aria-live="polite" aria-atomic="true">
@@ -59,7 +59,7 @@ const ContactForm = () => {
             <textarea
               name="message"
               rows={5}
-              className="bg-gray-50 p-3 border border-gray-200 rounded-sm w-full font-light"
+              className="bg-white/80 p-3 ring-1 ring-black/10 rounded-2xl w-full font-light focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60"
               placeholder="Your message*"
             ></textarea>
             <div aria-live="polite" aria-atomic="true">
@@ -73,7 +73,7 @@ const ContactForm = () => {
         <button
           type="submit"
           className={clsx(
-            "px-10 py-4 text-center font-semibold text-white w-full bg-orange-400 rounded-sm hover:bg-orange-500 cursor-pointer"
+            "px-10 py-4 text-center font-semibold text-white w-full bg-gradient-to-r from-[#224670] via-[#6cb4d9] to-[#f08c6a] rounded-2xl hover:opacity-90 cursor-pointer"
             // {
             //   "opacity-50 cursor-progress animate-pulse": pending,
             // }

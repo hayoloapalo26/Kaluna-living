@@ -58,7 +58,7 @@ const ReserveForm = ({
             onChange={handleDateChange}
             excludeDateIntervals={excludeDates}
             wrapperClassName="w-full"
-            className="py-2 px-4 rounded-md border border-gray-300 w-full"
+            className="py-2 px-4 rounded-2xl ring-1 ring-black/10 w-full focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60"
           />
 
           <div aria-live="polite" aria-atomic="true">
@@ -76,7 +76,7 @@ const ReserveForm = ({
           <input
             type="text"
             name="name"
-            className="py-2 px-4 rounded-md border border-gray-300 w-full"
+            className="py-2 px-4 rounded-2xl ring-1 ring-black/10 w-full focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60"
             placeholder="Full Name..."
           />
           <div aria-live="polite" aria-atomic="true">
@@ -94,7 +94,7 @@ const ReserveForm = ({
           <input
             type="text"
             name="phone"
-            className="py-2 px-4 rounded-md border border-gray-300 w-full"
+            className="py-2 px-4 rounded-2xl ring-1 ring-black/10 w-full focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60"
             placeholder="Phone Number..."
           />
           <div aria-live="polite" aria-atomic="true">
@@ -105,7 +105,7 @@ const ReserveForm = ({
         <button
           type="submit"
           className={clsx(
-            "px-10 py-3 mt-2 text-center font-semibold text-white w-full bg-orange-400 rounded-sm cursor-pointer",
+            "px-10 py-3 mt-2 text-center font-semibold text-white w-full rounded-2xl cursor-pointer bg-gradient-to-r from-[#224670] via-[#6cb4d9] to-[#f08c6a]",
             {
               "opacity-50 cursor-progress": isPending,
             }

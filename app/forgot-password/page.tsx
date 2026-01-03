@@ -30,10 +30,14 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
-      <div className="mx-auto w-full max-w-6xl px-4 md:px-6 py-10">
+    <div className="min-h-screen relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-24 left-[-10%] h-72 w-72 rounded-full bg-[#f6c56e]/30 blur-3xl" />
+        <div className="absolute top-10 right-[-8%] h-80 w-80 rounded-full bg-[#6cb4d9]/25 blur-3xl" />
+      </div>
+      <div className="relative mx-auto w-full max-w-6xl px-4 md:px-6 py-10">
         <div className="flex justify-center">
-          <div className="w-full max-w-md rounded-2xl bg-white ring-1 ring-black/5 shadow-md p-7 md:p-8">
+          <div className="w-full max-w-md rounded-3xl bg-white/90 ring-1 ring-white/70 shadow-md p-7 md:p-8 backdrop-blur">
             {/* Header */}
             <div className="text-center">
               <p className="text-xs uppercase tracking-[0.32em] text-black/45">
@@ -50,7 +54,7 @@ export default function ForgotPasswordPage() {
 
             {/* Message */}
             {message && (
-              <div className="mt-5 rounded-2xl bg-white ring-1 ring-black/10 p-4 text-center">
+              <div className="mt-5 rounded-2xl bg-white/95 ring-1 ring-black/10 p-4 text-center">
                 <p className="text-sm text-[#111827]/80">{message}</p>
               </div>
             )}
@@ -66,7 +70,7 @@ export default function ForgotPasswordPage() {
                   placeholder="email@example.com"
                   className="w-full rounded-2xl px-4 py-3 text-sm text-[#111827]
                              ring-1 ring-black/10 focus:outline-none
-                             focus:ring-2 focus:ring-[#DEA9B6]/70"
+                             focus:ring-2 focus:ring-[#f08c6a]/60"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -77,7 +81,7 @@ export default function ForgotPasswordPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full rounded-2xl bg-[#224670] text-white px-4 py-3
+                className="w-full rounded-2xl bg-gradient-to-r from-[#224670] via-[#6cb4d9] to-[#f08c6a] text-white px-4 py-3
                            text-sm font-semibold hover:opacity-90 transition
                            shadow-md disabled:opacity-60 disabled:cursor-not-allowed"
               >
@@ -89,7 +93,7 @@ export default function ForgotPasswordPage() {
             <div className="mt-6 text-center">
               <Link
                 href="/signin"
-                className="text-sm font-semibold text-[#224670] hover:opacity-80 transition"
+                className="text-sm font-semibold text-[#224670] hover:text-[#f08c6a] transition"
               >
                 ← Kembali ke Sign In
               </Link>

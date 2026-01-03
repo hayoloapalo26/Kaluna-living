@@ -22,9 +22,9 @@ const produkDetail = async ({ produkId }: { produkId: string }) => {
           width={770}
           height={430}
           priority
-          className="w-full rounded-sm mb-8"
+          className="w-full rounded-3xl mb-8"
         />
-        <h1 className="text-5xl font-semibold text-gray-900 mb-8">
+        <h1 className="text-5xl font-semibold text-[#111827] mb-8">
           {produk.name}
         </h1>
         <p>{produk.description}</p>
@@ -41,7 +41,7 @@ const produkDetail = async ({ produkId }: { produkId: string }) => {
       </div>
       {/* Right Grid */}
       <div className="md:col-span-4">
-        <div className="border-2 border-gray-300 border-dashed px-3 py-5 bg-slate-50 rounded-md">
+        <div className="px-4 py-6 bg-white/90 rounded-3xl ring-1 ring-white/70 shadow-md backdrop-blur">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center space-x-2">
               <IoPeopleOutline className="size-4" />
@@ -50,10 +50,10 @@ const produkDetail = async ({ produkId }: { produkId: string }) => {
               </span>
             </div>
             <h1 className="flex items-center">
-              <span className="text-2xl font-semibold text-gray-600">
+              <span className="text-2xl font-semibold text-[#224670]">
                 {formatCurrency(produk.price)}
               </span>
-              <span className="text-gray-400 text-sm">/Night</span>
+              <span className="text-[#111827]/45 text-sm">/Night</span>
             </h1>
           </div>
           {/* <BookForm

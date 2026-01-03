@@ -10,16 +10,20 @@ export const metadata: Metadata = {
 
 const About = () => {
   return (
-    <div>
+    <div className="relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-24 left-[-10%] h-72 w-72 rounded-full bg-[#f6c56e]/25 blur-3xl" />
+        <div className="absolute top-12 right-[-8%] h-80 w-80 rounded-full bg-[#6cb4d9]/22 blur-3xl" />
+      </div>
       <TitleSection title="About Us" subTitle="Kaluna Living." />
-      <div className="max-w-screen-xl mx-auto py-20 px-4">
-        <div className="grid md:grid-cols-2 gap-8">
+      <div className="relative max-w-screen-xl mx-auto py-20 px-4">
+        <div className="grid md:grid-cols-2 gap-8 rounded-3xl bg-white/85 p-8 md:p-10 ring-1 ring-white/70 shadow-md backdrop-blur">
           <Image src="/about-image.jpg" width={650} height={579} alt="about" />
           <div>
-            <h1 className="text-5xl font-semibold text-gray-900 mb-4">
+            <h1 className="text-5xl font-semibold text-[#111827] mb-4">
               Who We Are – Kaluna Living
             </h1>
-            <p className="text-gray-700 py-5 text-justify">
+            <p className="text-[#111827]/70 py-5 text-justify">
               Kaluna Living began its journey in 2016 with a simple vision: to create home living goods that bring joy. Our path started with textiles cushion covers, aprons, cutlery pouches, and wall hangings where we welcomed custom requests and discovered the beauty of personal touches in everyday objects.
               As our community grew, we expanded into wooden and rattan creations, from plates and trays to spoons, forks, and vases. These pieces carried the warmth of natural materials into daily rituals, adding depth and character to the homes they belonged to.
               In recent years, our heart has found its home in ceramics. The process of shaping clay and bringing it to life with color and form became more than a craft; it became the soul of Kaluna Living. This focus allows us to explore design in a way that is both authentic and timeless, staying true to our commitment to warmth, connection, and joyful living.
@@ -28,22 +32,22 @@ const About = () => {
             <ul className="list-item space-y-6 pt-8">
               <li className="flex gap-5">
                 <div className="flex-none mt-1">
-                  <IoEyeOutline className="h-7 w-7" />
+                  <IoEyeOutline className="h-7 w-7 text-[#224670]" />
                 </div>
                 <div className="flex-1">
                   <h4 className="text-lg font-semibold mb-1">Vision :</h4>
-                  <p className="text-gray-600 text-justify">
+                  <p className="text-[#111827]/65 text-justify">
                     To become a home living brand that brings warmth, beauty, and meaning into everyday spaces through authentic, timeless designs that inspire joyful living.
                   </p>
                 </div>
               </li>
               <li className="flex gap-5">
                 <div className="flex-none mt-1">
-                  <IoLocateOutline className="h-7 w-7" />
+                  <IoLocateOutline className="h-7 w-7 text-[#f08c6a]" />
                 </div>
                 <div className="flex-1">
                   <h4 className="text-lg font-semibold mb-1">Mission :</h4>
-                  <p className="text-gray-600">
+                  <p className="text-[#111827]/65">
                   * To create home living goods that bring joy through vibrant colors, thoughtful patterns, and meaningful details.
                   * To celebrate natural materials textiles, wood, rattan, and ceramics by transforming them into objects that enrich daily rituals and living spaces.
                   * To honor craftsmanship and mindful creation, ensuring every piece reflects quality, authenticity, and lasting value beyond trends.
