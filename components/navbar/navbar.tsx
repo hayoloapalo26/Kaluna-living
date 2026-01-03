@@ -99,37 +99,44 @@ export default function Navbar() {
               </Link>
 
               {!isAdminLike && (
-                <nav className="hidden md:flex items-center gap-1 rounded-full bg-white/70 ring-1 ring-black/5 p-1 shadow-sm">
-                  {NAV.map((it) => {
-                    const active = isActive(it.href);
-                    return (
-                      <Link
-                        key={it.href}
-                        href={it.href}
-                        prefetch={it.href === "/history-order" ? false : undefined}
-                        className="group relative px-4 py-2 text-sm font-semibold text-[#2b2520]"
-                      >
-                        <span
-                          className={[
-                            "absolute inset-0 rounded-full transition",
-                            active
-                              ? "bg-white shadow-sm ring-1 ring-black/10"
-                              : "bg-transparent group-hover:bg-white/80",
-                          ].join(" ")}
-                        />
-                        <span className="relative z-10">{it.label}</span>
-                        <span
-                          className={[
-                            "absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full transition",
-                            active
-                              ? "bg-[#224670]"
-                              : "bg-[#224670]/50 opacity-0 group-hover:opacity-70",
-                          ].join(" ")}
-                        />
-                      </Link>
-                    );
-                  })}
-                </nav>
+                <div className="hidden md:block">
+                  <div className="rounded-full bg-gradient-to-r from-[#224670] via-[#DEA9B6] to-[#E4A47F] p-[1.5px] shadow-sm">
+                    <nav className="flex items-center gap-1 rounded-full bg-[#faf7f2]/90 backdrop-blur px-1 py-1 ring-1 ring-white/40">
+                      {NAV.map((it) => {
+                        const active = isActive(it.href);
+                        return (
+                          <Link
+                            key={it.href}
+                            href={it.href}
+                            prefetch={it.href === "/history-order" ? false : undefined}
+                            className={[
+                              "group relative px-4 py-2 text-sm font-semibold transition",
+                              active ? "text-white" : "text-[#2b2520]",
+                            ].join(" ")}
+                          >
+                            <span
+                              className={[
+                                "absolute inset-0 rounded-full transition",
+                                active
+                                  ? "bg-gradient-to-r from-[#224670] via-[#3b6aa0] to-[#DEA9B6] shadow-md"
+                                  : "bg-transparent group-hover:bg-white/85",
+                              ].join(" ")}
+                            />
+                            <span className="relative z-10">{it.label}</span>
+                            <span
+                              className={[
+                                "absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full transition",
+                                active
+                                  ? "bg-[#E4A47F]"
+                                  : "bg-[#E4A47F]/70 opacity-0 group-hover:opacity-80",
+                              ].join(" ")}
+                            />
+                          </Link>
+                        );
+                      })}
+                    </nav>
+                  </div>
+                </div>
               )}
 
               <div className="flex items-center gap-2">
@@ -185,12 +192,12 @@ export default function Navbar() {
                     inline-flex items-center justify-center
                     w-11 h-11
                     rounded-full
-                    bg-white/85
-                    ring-1 ring-black/10
+                    bg-gradient-to-br from-white to-[#f6ede6]
+                    ring-1 ring-[#e4a47f]/40
                     shadow-sm
                     hover:shadow-md
-                    hover:ring-black/20
-                    hover:bg-white
+                    hover:ring-[#e4a47f]/70
+                    hover:from-white hover:to-[#fbe7dc]
                     transition-all
                     duration-200
                   "
@@ -204,7 +211,7 @@ export default function Navbar() {
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                     className="
-                      text-[#111827]
+                      text-[#224670]
                       transition-transform
                       duration-200
                       group-hover:scale-110
@@ -271,7 +278,7 @@ export default function Navbar() {
                 <button
                   onClick={() => signOut({ callbackUrl: "/signin" })}
                   className="inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-semibold
-                             bg-white/80 ring-1 ring-black/10 hover:bg-white transition shadow-sm"
+                             bg-white/85 ring-1 ring-black/10 hover:bg-white transition shadow-sm"
                 >
                   Sign Out
                 </button>
@@ -279,7 +286,7 @@ export default function Navbar() {
                 <Link
                   href="/signin"
                   className="inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-semibold
-                             bg-gradient-to-r from-[#224670] to-[#2f5e93] text-white hover:opacity-90 transition shadow-sm"
+                             bg-gradient-to-r from-[#224670] via-[#3b6aa0] to-[#DEA9B6] text-white hover:opacity-90 transition shadow-sm"
                 >
                   Sign In
                 </Link>
@@ -292,7 +299,7 @@ export default function Navbar() {
       {!isAdminLike && mobileOpen && (
         <div className="md:hidden bg-[#faf7f2]/95 backdrop-blur border-b border-black/5">
           <div className="mx-auto max-w-6xl px-4 py-4">
-            <div className="rounded-3xl bg-white/80 ring-1 ring-black/5 p-2 shadow-sm space-y-2">
+            <div className="rounded-3xl bg-gradient-to-br from-white/90 to-[#f7ebe3] ring-1 ring-black/5 p-2 shadow-sm space-y-2">
               {NAV.map((it) => (
                 <Link
                   key={it.href}
