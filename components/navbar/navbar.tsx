@@ -132,7 +132,7 @@ export default function Navbar() {
                 </nav>
               )}
 
-            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
               {!isAdminLike && (
                 <button
                   type="button"
@@ -284,7 +284,7 @@ export default function Navbar() {
                   Sign In
                 </Link>
               )}
-            </div>
+              </div>
           </div>
         </div>
       </div>
@@ -313,6 +313,7 @@ export default function Navbar() {
           </div>
         </div>
       )}
+      </div>
     </header>
   );
 }
