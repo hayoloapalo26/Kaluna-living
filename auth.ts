@@ -41,6 +41,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           throw new Error("Username atau password salah");
         }
 
+        if (user.role === "CUSTOMER" && !user.emailVerified) {
+          throw new Error(
+            "Akun belum diaktivasi. Silakan cek email untuk verifikasi."
+          );
+        }
+
         const role = user.role as Role;
 
         return {

@@ -2,12 +2,9 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function SignUpPage() {
-  const router = useRouter();
-
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -42,10 +39,9 @@ export default function SignUpPage() {
       if (!res.ok) {
         setError(data.message || "Registrasi gagal");
       } else {
-        setSuccess("Registrasi berhasil. Mengalihkan ke halaman login...");
-        setTimeout(() => {
-          router.push("/signin");
-        }, 1500);
+        setSuccess(
+          "Registrasi berhasil. Silakan cek email untuk aktivasi akun."
+        );
       }
     } catch {
       setError("Terjadi kesalahan jaringan");
