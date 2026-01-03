@@ -29,6 +29,7 @@
 /* Base styling (tanpa @apply md:... supaya aman di Tailwind v4) */
 html {
   font-family: var(--font-body);
+  color-scheme: light;
 }
 
 body {
@@ -117,4 +118,62 @@ a {
 ::selection {
   background: #f6c56e;
   color: #1a1c24;
+}
+
+/* =========================
+   Theme toggle (Light/Dark)
+   ========================= */
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+html[data-theme="dark"] body {
+  color: #e8edf4;
+  background:
+    radial-gradient(900px 600px at 12% 6%, rgba(108, 180, 217, 0.18), transparent 60%),
+    radial-gradient(900px 650px at 88% 8%, rgba(246, 197, 110, 0.12), transparent 55%),
+    radial-gradient(1000px 700px at 50% 100%, rgba(240, 140, 106, 0.18), transparent 60%),
+    linear-gradient(180deg, #0b1118 0%, #101722 60%, #0b1118 100%);
+}
+
+html[data-theme="dark"] .theme-toggle {
+  background: rgba(15, 19, 27, 0.9);
+  color: #f6c56e;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+html[data-theme="dark"] [class*="bg-white"] {
+  background-color: rgba(15, 19, 27, 0.92) !important;
+}
+
+html[data-theme="dark"] [class*="bg-[#fff7ef]"],
+html[data-theme="dark"] [class*="bg-[#FAF7F2]"],
+html[data-theme="dark"] [class*="bg-[#faf7f2]"] {
+  background-color: rgba(12, 16, 22, 0.95) !important;
+}
+
+html[data-theme="dark"] [class*="text-[#111827]"],
+html[data-theme="dark"] [class*="text-[#1a1c24]"] {
+  color: #e8edf4 !important;
+}
+
+html[data-theme="dark"] [class*="text-[#111827]/"],
+html[data-theme="dark"] [class*="text-[#1a1c24]/"] {
+  color: rgba(232, 237, 244, 0.7) !important;
+}
+
+html[data-theme="dark"] [class~="text-black"] {
+  color: #e8edf4 !important;
+}
+
+html[data-theme="dark"] [class*="text-black/"] {
+  color: rgba(232, 237, 244, 0.7) !important;
+}
+
+html[data-theme="dark"] [class*="ring-black"] {
+  --tw-ring-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+html[data-theme="dark"] [class*="border-black"] {
+  border-color: rgba(255, 255, 255, 0.12) !important;
 }

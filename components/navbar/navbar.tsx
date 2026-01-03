@@ -33,6 +33,8 @@ export default function Navbar() {
 
   const [cartCount, setCartCount] = useState<number>(0);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [mounted, setMounted] = useState(false);
 
   const initials = useMemo(() => {
     const name =
@@ -66,6 +68,31 @@ export default function Navbar() {
 
     loadCartCount();
   }, [status, isAdminLike]);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("kaluna-theme");
+      const preferred =
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+      const nextTheme =
+        stored === "light" || stored === "dark" ? stored : preferred;
+      setTheme(nextTheme);
+      setMounted(true);
+    } catch {
+      setMounted(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    document.documentElement.dataset.theme = theme;
+    try {
+      localStorage.setItem("kaluna-theme", theme);
+    } catch {}
+  }, [theme, mounted]);
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -182,6 +209,50 @@ export default function Navbar() {
                   )}
                 </button>
               )}
+
+              <button
+                type="button"
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className="theme-toggle inline-flex items-center justify-center rounded-full w-10 h-10
+                           bg-white/85 ring-1 ring-black/10 hover:bg-white transition"
+                aria-label="Toggle tema"
+                aria-pressed={theme === "dark"}
+                title={theme === "dark" ? "Mode terang" : "Mode gelap"}
+              >
+                {mounted && theme === "dark" ? (
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 4V2M12 22v-2M4 12H2m20 0h-2M5.6 5.6 4.2 4.2m15.6 15.6-1.4-1.4M5.6 18.4l-1.4 1.4m15.6-15.6 1.4-1.4M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10Z"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                )}
+              </button>
 
               {!isAdminLike && session && (
                 <Link

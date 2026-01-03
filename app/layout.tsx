@@ -24,9 +24,22 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
+  const themeScript = `
+    (function () {
+      try {
+        var stored = localStorage.getItem("kaluna-theme");
+        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var theme = stored === "light" || stored === "dark" ? stored : (prefersDark ? "dark" : "light");
+        document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    })();
+  `;
 
   return (
     <html lang="en" className={josefin.variable}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="min-h-screen text-kaluna-ink antialiased">
         <SessionProvider session={session}>
           <Navbar />
