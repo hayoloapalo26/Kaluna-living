@@ -74,11 +74,9 @@ export default function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
-      {/* Bar */}
       <div className="bg-[#faf7f2]/90 backdrop-blur border-b border-black/5">
         <div className="mx-auto max-w-6xl px-4 md:px-6">
           <div className="h-16 flex items-center justify-between gap-4">
-            {/* Left: Logo */}
             <Link
               href={isAdminLike ? "/admin" : "/"}
               className="flex items-center gap-3"
@@ -94,13 +92,13 @@ export default function Navbar() {
               />
             </Link>
 
-            {/* Center: Nav (desktop customer only) */}
             {!isAdminLike && (
               <nav className="hidden md:flex items-center gap-2">
                 {NAV.map((it) => (
                   <Link
                     key={it.href}
                     href={it.href}
+                    prefetch={it.href === "/history-order" ? false : undefined}
                     className={[
                       "px-4 py-2 rounded-full text-sm font-semibold transition",
                       isActive(it.href)
@@ -114,9 +112,7 @@ export default function Navbar() {
               </nav>
             )}
 
-            {/* Right: Actions */}
             <div className="flex items-center gap-2">
-              {/* Mobile menu button (customer only) */}
               {!isAdminLike && (
                 <button
                   type="button"
@@ -142,7 +138,6 @@ export default function Navbar() {
                 </button>
               )}
 
-              {/* ✅ Cart icon – PREMIUM */}
               {!isAdminLike && session && (
                 <Link
                   href="/cart"
@@ -164,7 +159,6 @@ export default function Navbar() {
                   aria-label="Keranjang"
                   title="Keranjang"
                 >
-                  {/* Cart icon */}
                   <svg
                     width="22"
                     height="22"
@@ -194,7 +188,6 @@ export default function Navbar() {
                     <circle cx="18" cy="20" r="1.5" fill="currentColor" />
                   </svg>
 
-                  {/* Badge */}
                   {cartCount > 0 && (
                     <span
                       className="
@@ -218,7 +211,6 @@ export default function Navbar() {
                 </Link>
               )}
 
-              {/* Profile chip (when logged in) */}
               {session && (
                 <div className="hidden sm:flex items-center gap-2 rounded-full bg-white ring-1 ring-black/10 px-2 py-1">
                   <div className="w-9 h-9 rounded-full bg-[#224670] text-white flex items-center justify-center font-bold">
@@ -237,7 +229,6 @@ export default function Navbar() {
                 </div>
               )}
 
-              {/* Sign in/out */}
               {session ? (
                 <button
                   onClick={() => signOut({ callbackUrl: "/signin" })}
@@ -260,7 +251,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile drawer (customer only) */}
       {!isAdminLike && mobileOpen && (
         <div className="md:hidden bg-[#faf7f2]/95 backdrop-blur border-b border-black/5">
           <div className="mx-auto max-w-6xl px-4 py-3 space-y-2">
@@ -269,6 +259,7 @@ export default function Navbar() {
                 key={it.href}
                 href={it.href}
                 onClick={() => setMobileOpen(false)}
+                prefetch={it.href === "/history-order" ? false : undefined}
                 className={[
                   "block px-4 py-3 rounded-2xl text-sm font-semibold transition",
                   isActive(it.href)

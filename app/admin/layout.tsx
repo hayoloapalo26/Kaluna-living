@@ -22,9 +22,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               {/* Menu */}
               <nav className="px-3 py-4 text-sm space-y-1">
                 <SidebarLink href="/admin">Overview</SidebarLink>
-                <SidebarLink href="/admin/products">
-                  Produk / Produk
-                </SidebarLink>
+                <SidebarLink href="/admin/products">Produk / Produk</SidebarLink>
                 <SidebarLink href="/admin/orders">Pesanan</SidebarLink>
                 <SidebarLink href="/admin/custom-orders">
                   Custom Order

@@ -4,7 +4,7 @@ import Link from "next/link";
 const Hero = () => {
   return (
     <section className="relative overflow-hidden rounded-3xl ring-1 ring-black/5 bg-white shadow-md">
-      <div className="relative h-[520px] sm:h-[600px]">
+      <div className="relative h-[420px] sm:h-[520px] md:h-[600px]">
         <Image
           src="/hero.jpg"
           alt="Kaluna Living"
@@ -18,7 +18,7 @@ const Hero = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/45 to-black/15" />
 
         <div className="absolute inset-0 flex items-end">
-          <div className="w-full px-6 sm:px-10 pb-12">
+          <div className="w-full px-5 sm:px-8 md:px-10 pb-10 md:pb-12">
             <div className="max-w-3xl">
               {/* Brand label */}
               <span className="inline-flex items-center rounded-full px-3 py-1 text-[11px] font-semibold tracking-[0.35em] bg-white/15 !text-white ring-1 ring-white/20">

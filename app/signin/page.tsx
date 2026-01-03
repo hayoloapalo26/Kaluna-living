@@ -36,7 +36,7 @@ export default function SignInPage() {
       }
 
       const targetUrl = res?.url ?? callbackUrl;
-      router.push(targetUrl);
+      window.location.href = targetUrl;
     } catch (err: any) {
       setError(err.message || "Terjadi kesalahan");
     } finally {

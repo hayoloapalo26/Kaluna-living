@@ -1,4 +1,18 @@
 import { prisma } from "@/lib/prisma";
+import type { DisabledDateProps, produkProps, produkProps2 } from "@/types/room";
+
+// Ambil semua amenities
+export const getAmenities = async () => {
+  try {
+    const result = await prisma.amenities.findMany({
+      orderBy: { name: "asc" },
+    });
+    return result;
+  } catch (err) {
+    console.error("Error getAmenities:", err);
+    return [];
+  }
+};
 
 // Ambil semua produk
 export const getproduks = async () => {
@@ -14,18 +28,74 @@ export const getproduks = async () => {
 };
 
 // Ambil produk by id (AMAN: tidak query kalau id kosong)
-export const getprodukById = async (id?: string) => {
+export const getprodukById = async (
+  id?: string
+): Promise<produkProps | null> => {
   try {
     if (!id) return null;
 
     const produk = await prisma.produk.findUnique({
       where: { id },
+      include: {
+        amenities: {
+          select: { amenitiesId: true },
+        },
+      },
     });
 
     return produk;
   } catch (err) {
     console.error("Error getprodukById:", err);
     return null;
+  }
+};
+
+// Ambil detail produk + amenities
+export const getprodukDetailById = async (
+  id?: string
+): Promise<produkProps2 | null> => {
+  try {
+    if (!id) return null;
+
+    const produk = await prisma.produk.findUnique({
+      where: { id },
+      include: {
+        amenities: {
+          include: {
+            amenities: {
+              select: { name: true },
+            },
+          },
+        },
+      },
+    });
+
+    return produk;
+  } catch (err) {
+    console.error("Error getprodukDetailById:", err);
+    return null;
+  }
+};
+
+// Ambil reservasi per produk (disabled date)
+export const getReservationByprodukId = async (
+  produkId?: string
+): Promise<DisabledDateProps[]> => {
+  try {
+    if (!produkId) return [];
+
+    const reservations = await prisma.reservation.findMany({
+      where: { produkId },
+      select: {
+        starDate: true,
+        endDate: true,
+      },
+    });
+
+    return reservations;
+  } catch (err) {
+    console.error("Error getReservationByprodukId:", err);
+    return [];
   }
 };
 
