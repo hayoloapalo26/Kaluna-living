@@ -1,4 +1,7 @@
+"use client";
+
 // app/admin/layout.tsx
+
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { Playfair_Display, Work_Sans } from "next/font/google";
