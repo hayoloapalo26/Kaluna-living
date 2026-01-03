@@ -74,67 +74,105 @@ export default function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
-      <div className="bg-[#faf7f2]/90 backdrop-blur border-b border-black/5">
-        <div className="mx-auto max-w-6xl px-4 md:px-6">
-          <div className="h-16 flex items-center justify-between gap-4">
-            <Link
-              href={isAdminLike ? "/admin" : "/"}
-              className="flex items-center gap-3"
-              aria-label="Kaluna Living"
-            >
-              <Image
-                src="/logo.png"
-                alt="Kaluna Living"
-                width={140}
-                height={40}
-                className="h-10 w-auto"
-                priority
-              />
-            </Link>
+      <div className="relative">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_0%,rgba(255,255,255,0.9),transparent_55%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_0%,rgba(224,233,244,0.8),transparent_50%)]" />
+          <div className="absolute -bottom-px left-0 right-0 h-[2px] bg-gradient-to-r from-[#224670] via-[#DEA9B6] to-[#E4A47F]" />
+        </div>
+        <div className="relative bg-[#faf7f2]/85 backdrop-blur-xl border-b border-black/5">
+          <div className="mx-auto max-w-6xl px-4 md:px-6">
+            <div className="h-16 flex items-center justify-between gap-4">
+              <Link
+                href={isAdminLike ? "/admin" : "/"}
+                className="flex items-center gap-3"
+                aria-label="Kaluna Living"
+              >
+                <Image
+                  src="/logo.png"
+                  alt="Kaluna Living"
+                  width={140}
+                  height={40}
+                  className="h-10 w-auto"
+                  priority
+                />
+              </Link>
 
-            {!isAdminLike && (
-              <nav className="hidden md:flex items-center gap-2">
-                {NAV.map((it) => (
-                  <Link
-                    key={it.href}
-                    href={it.href}
-                    prefetch={it.href === "/history-order" ? false : undefined}
-                    className={[
-                      "px-4 py-2 rounded-full text-sm font-semibold transition",
-                      isActive(it.href)
-                        ? "bg-white ring-1 ring-black/10 text-[#111827]"
-                        : "text-[#111827]/70 hover:text-[#111827] hover:bg-black/[0.03]",
-                    ].join(" ")}
-                  >
-                    {it.label}
-                  </Link>
-                ))}
-              </nav>
-            )}
+              {!isAdminLike && (
+                <nav className="hidden md:flex items-center gap-1 rounded-full bg-white/70 ring-1 ring-black/5 p-1 shadow-sm">
+                  {NAV.map((it) => {
+                    const active = isActive(it.href);
+                    return (
+                      <Link
+                        key={it.href}
+                        href={it.href}
+                        prefetch={it.href === "/history-order" ? false : undefined}
+                        className="group relative px-4 py-2 text-sm font-semibold text-[#2b2520]"
+                      >
+                        <span
+                          className={[
+                            "absolute inset-0 rounded-full transition",
+                            active
+                              ? "bg-white shadow-sm ring-1 ring-black/10"
+                              : "bg-transparent group-hover:bg-white/80",
+                          ].join(" ")}
+                        />
+                        <span className="relative z-10">{it.label}</span>
+                        <span
+                          className={[
+                            "absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full transition",
+                            active
+                              ? "bg-[#224670]"
+                              : "bg-[#224670]/50 opacity-0 group-hover:opacity-70",
+                          ].join(" ")}
+                        />
+                      </Link>
+                    );
+                  })}
+                </nav>
+              )}
 
             <div className="flex items-center gap-2">
               {!isAdminLike && (
                 <button
                   type="button"
                   className="md:hidden inline-flex items-center justify-center rounded-full w-10 h-10
-                             bg-white ring-1 ring-black/10 hover:bg-black/[0.03] transition"
+                             bg-white/80 ring-1 ring-black/10 hover:bg-white transition"
                   onClick={() => setMobileOpen((v) => !v)}
                   aria-label="Toggle menu"
+                  aria-expanded={mobileOpen}
                 >
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M4 7h16M4 12h16M4 17h16"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
+                  {mobileOpen ? (
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M6 6l12 12M18 6l-12 12"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M4 7h16M4 12h16M4 17h16"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  )}
                 </button>
               )}
 
@@ -147,12 +185,12 @@ export default function Navbar() {
                     inline-flex items-center justify-center
                     w-11 h-11
                     rounded-full
-                    bg-white/90
+                    bg-white/85
                     ring-1 ring-black/10
                     shadow-sm
                     hover:shadow-md
                     hover:ring-black/20
-                    hover:bg-black/[0.03]
+                    hover:bg-white
                     transition-all
                     duration-200
                   "
@@ -196,7 +234,7 @@ export default function Navbar() {
                         px-[5px]
                         flex items-center justify-center
                         rounded-full
-                        bg-gradient-to-br from-red-500 to-red-600
+                        bg-gradient-to-br from-[#c86c4f] to-[#e4a47f]
                         text-white
                         text-[10px]
                         font-bold
@@ -212,8 +250,8 @@ export default function Navbar() {
               )}
 
               {session && (
-                <div className="hidden sm:flex items-center gap-2 rounded-full bg-white ring-1 ring-black/10 px-2 py-1">
-                  <div className="w-9 h-9 rounded-full bg-[#224670] text-white flex items-center justify-center font-bold">
+                <div className="hidden sm:flex items-center gap-2 rounded-full bg-white/80 ring-1 ring-black/10 px-2 py-1 shadow-sm">
+                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#224670] to-[#3b6aa0] text-white flex items-center justify-center font-bold">
                     {initials}
                   </div>
                   <div className="pr-2">
@@ -233,7 +271,7 @@ export default function Navbar() {
                 <button
                   onClick={() => signOut({ callbackUrl: "/signin" })}
                   className="inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-semibold
-                             bg-white ring-1 ring-black/10 hover:bg-black/[0.03] transition"
+                             bg-white/80 ring-1 ring-black/10 hover:bg-white transition shadow-sm"
                 >
                   Sign Out
                 </button>
@@ -241,7 +279,7 @@ export default function Navbar() {
                 <Link
                   href="/signin"
                   className="inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-semibold
-                             bg-[#224670] text-white hover:opacity-90 transition shadow-sm"
+                             bg-gradient-to-r from-[#224670] to-[#2f5e93] text-white hover:opacity-90 transition shadow-sm"
                 >
                   Sign In
                 </Link>
@@ -253,23 +291,25 @@ export default function Navbar() {
 
       {!isAdminLike && mobileOpen && (
         <div className="md:hidden bg-[#faf7f2]/95 backdrop-blur border-b border-black/5">
-          <div className="mx-auto max-w-6xl px-4 py-3 space-y-2">
-            {NAV.map((it) => (
-              <Link
-                key={it.href}
-                href={it.href}
-                onClick={() => setMobileOpen(false)}
-                prefetch={it.href === "/history-order" ? false : undefined}
-                className={[
-                  "block px-4 py-3 rounded-2xl text-sm font-semibold transition",
-                  isActive(it.href)
-                    ? "bg-white ring-1 ring-black/10 text-[#111827]"
-                    : "text-[#111827]/70 hover:text-[#111827] hover:bg-black/[0.03]",
-                ].join(" ")}
-              >
-                {it.label}
-              </Link>
-            ))}
+          <div className="mx-auto max-w-6xl px-4 py-4">
+            <div className="rounded-3xl bg-white/80 ring-1 ring-black/5 p-2 shadow-sm space-y-2">
+              {NAV.map((it) => (
+                <Link
+                  key={it.href}
+                  href={it.href}
+                  onClick={() => setMobileOpen(false)}
+                  prefetch={it.href === "/history-order" ? false : undefined}
+                  className={[
+                    "block px-4 py-3 rounded-2xl text-sm font-semibold transition",
+                    isActive(it.href)
+                      ? "bg-white ring-1 ring-black/10 text-[#111827]"
+                      : "text-[#111827]/70 hover:text-[#111827] hover:bg-black/[0.03]",
+                  ].join(" ")}
+                >
+                  {it.label}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       )}
