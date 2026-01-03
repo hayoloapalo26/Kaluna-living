@@ -18,11 +18,11 @@ export async function GET() {
       );
     }
 
-    const orders = await prisma.reservation.findMany({
+    const orders = await prisma.order.findMany({
       orderBy: { createdAt: "desc" },
       include: {
         user: true,
-        produk: true,
+        items: true,
         payment: true,
       },
     });

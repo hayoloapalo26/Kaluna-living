@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 
 export const runtime = "nodejs";
 
-// GET /api/admin/insight/sales → data penjualan per bulan (status: received)
+// GET /api/admin/insight/sales → data penjualan per bulan (status: PAID)
 export async function GET() {
   try {
     const session = await auth();
@@ -18,10 +18,10 @@ export async function GET() {
       );
     }
 
-    // Ambil semua payment dengan status 'received' (pesanan selesai)
-    const payments = await prisma.payment.findMany({
+    // Ambil semua order yang sudah dibayar
+    const orders = await prisma.order.findMany({
       where: {
-        status: "received",
+        paymentStatus: "PAID",
       },
       orderBy: {
         createdAt: "asc",
@@ -37,8 +37,8 @@ export async function GET() {
       }
     > = {};
 
-    for (const p of payments) {
-      const d = new Date(p.createdAt);
+    for (const o of orders) {
+      const d = new Date(o.createdAt);
       const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
         2,
         "0"
@@ -51,7 +51,7 @@ export async function GET() {
         };
       }
 
-      monthly[key].totalAmount += p.amount;
+      monthly[key].totalAmount += o.grossAmount || 0;
       monthly[key].totalOrders += 1;
     }
 

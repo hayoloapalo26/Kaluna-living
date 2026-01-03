@@ -12,29 +12,34 @@ type UserInfo = {
   phone: string | null;
 };
 
-type ProdukInfo = {
+type OrderItem = {
   id: string;
   name: string;
-  image: string;
+  quantity: number;
   price: number;
 };
 
 type PaymentInfo = {
-  id: string;
-  amount: number;
-  status: string;
-  method: string | null;
+  transactionStatus: string | null;
+  fraudStatus: string | null;
 } | null;
 
 type OrderDetail = {
   id: string;
-  starDate: string;
-  endDate: string;
-  price: number;
+  orderCode: string;
   createdAt: string;
   user: UserInfo;
-  produk: ProdukInfo;
+  grossAmount: number;
+  paymentStatus: string;
+  shippingStatus: string;
+  items: OrderItem[];
   payment: PaymentInfo;
+  recipientName: string | null;
+  recipientPhone: string | null;
+  addressLine: string | null;
+  city: string | null;
+  province: string | null;
+  postalCode: string | null;
 };
 
 export default function AdminOrderDetailPage() {
@@ -46,7 +51,7 @@ export default function AdminOrderDetailPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
-  const [statusValue, setStatusValue] = useState<string>("pending");
+  const [statusValue, setStatusValue] = useState<string>("PENDING");
 
   const fetchDetail = async () => {
     if (!id) return;
@@ -85,7 +90,7 @@ export default function AdminOrderDetailPage() {
 
       const detail = data as OrderDetail;
       setOrder(detail);
-      setStatusValue(detail.payment?.status ?? "pending");
+      setStatusValue(detail.shippingStatus ?? "PENDING");
     } catch (err) {
       console.error(err);
       setError(
@@ -106,16 +111,16 @@ export default function AdminOrderDetailPage() {
   const formatTanggal = (value: string) =>
     new Date(value).toLocaleString("id-ID");
 
-  const translateStatus = (value: string) => {
+  const translateShippingStatus = (value: string) => {
     switch (value) {
-      case "processed":
-        return "Diproses";
-      case "shipped":
+      case "PACKED":
+        return "Dikemas";
+      case "SHIPPED":
         return "Dikirim";
-      case "received":
+      case "DELIVERED":
         return "Diterima";
       default:
-        return "Pending";
+        return "Menunggu";
     }
   };
 
@@ -215,8 +220,7 @@ export default function AdminOrderDetailPage() {
     );
   }
 
-  const total =
-    order.payment?.amount != null ? order.payment.amount : order.price;
+  const total = order.grossAmount || 0;
 
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-4">
@@ -250,6 +254,9 @@ export default function AdminOrderDetailPage() {
             <span className="font-medium">ID Pesanan:</span> {order.id}
           </div>
           <div>
+            <span className="font-medium">Order Code:</span> {order.orderCode}
+          </div>
+          <div>
             <span className="font-medium">Tanggal dibuat:</span>{" "}
             {formatTanggal(order.createdAt)}
           </div>
@@ -269,18 +276,51 @@ export default function AdminOrderDetailPage() {
           )}
         </div>
 
-        <div className="border-t pt-3 text-sm text-gray-700 space-y-1">
-          <div>
-            <span className="font-medium">Produk:</span>{" "}
-            {order.produk?.name ?? "-"}
-          </div>
-          <div>
+        <div className="border-t pt-3 text-sm text-gray-700 space-y-2">
+          <div className="font-medium">Item:</div>
+          <ul className="space-y-1">
+            {order.items.map((it) => (
+              <li key={it.id} className="flex items-center justify-between">
+                <span>
+                  {it.name} x {it.quantity}
+                </span>
+                <span>
+                  Rp {(it.price * it.quantity).toLocaleString("id-ID")}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <div className="pt-2">
             <span className="font-medium">Total harga:</span> Rp{" "}
             {total.toLocaleString("id-ID")}
           </div>
           <div>
-            <span className="font-medium">Status saat ini:</span>{" "}
-            {translateStatus(order.payment?.status ?? "pending")}
+            <span className="font-medium">Status pembayaran:</span>{" "}
+            {order.paymentStatus}
+          </div>
+          <div>
+            <span className="font-medium">Status pengiriman:</span>{" "}
+            {translateShippingStatus(order.shippingStatus)}
+          </div>
+          <div>
+            <span className="font-medium">Transaksi:</span>{" "}
+            {order.payment?.transactionStatus ?? "-"}
+          </div>
+          <div>
+            <span className="font-medium">Fraud:</span>{" "}
+            {order.payment?.fraudStatus ?? "-"}
+          </div>
+        </div>
+
+        <div className="border-t pt-3 text-sm text-gray-700 space-y-1">
+          <div className="font-medium">Alamat Pengiriman:</div>
+          <div>{order.recipientName || "-"}</div>
+          <div>{order.recipientPhone || "-"}</div>
+          <div>
+            {(order.addressLine || "-") +
+              (order.city ? `, ${order.city}` : "") +
+              (order.province ? `, ${order.province}` : "") +
+              (order.postalCode ? `, ${order.postalCode}` : "")}
           </div>
         </div>
       </div>
@@ -299,10 +339,10 @@ export default function AdminOrderDetailPage() {
               onChange={(e) => setStatusValue(e.target.value)}
               className="border rounded px-3 py-2 text-sm"
             >
-              <option value="pending">Pending</option>
-              <option value="processed">Diproses</option>
-              <option value="shipped">Dikirim</option>
-              <option value="received">Diterima</option>
+              <option value="PENDING">Menunggu</option>
+              <option value="PACKED">Dikemas</option>
+              <option value="SHIPPED">Dikirim</option>
+              <option value="DELIVERED">Diterima</option>
             </select>
           </div>
 
