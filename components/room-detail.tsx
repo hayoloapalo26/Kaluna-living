@@ -24,7 +24,7 @@ const produkDetail = async ({ produkId }: { produkId: string }) => {
           priority
           className="w-full rounded-3xl mb-8"
         />
-        <h1 className="text-5xl font-semibold text-[#111827] mb-8">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#111827] mb-8">
           {produk.name}
         </h1>
         <p>{produk.description}</p>

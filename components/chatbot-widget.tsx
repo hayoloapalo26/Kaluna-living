@@ -84,7 +84,7 @@ export default function ChatbotWidget() {
   return (
     <>
       {showHint && (
-        <div className="fixed bottom-[132px] right-4 sm:right-6 z-50 max-w-[240px] rounded-2xl bg-white/90 px-4 py-3 shadow-md ring-1 ring-black/10 backdrop-blur">
+        <div className="fixed bottom-[132px] right-4 sm:right-6 z-50 max-w-[70vw] sm:max-w-[240px] rounded-2xl bg-white/90 px-4 py-3 shadow-md ring-1 ring-black/10 backdrop-blur">
           <div className="flex items-start justify-between gap-2">
             <div>
               <p className="text-xs font-semibold text-[#111827]">Chatbot Kaluna</p>
@@ -122,7 +122,7 @@ export default function ChatbotWidget() {
       </div>
 
       {open && (
-        <div className="fixed bottom-[148px] right-4 sm:right-6 z-50 w-[320px] max-w-[92vw] rounded-3xl bg-white/95 shadow-xl ring-1 ring-black/10 backdrop-blur">
+        <div className="fixed bottom-[148px] right-4 sm:right-6 z-50 w-[300px] sm:w-[360px] max-w-[92vw] rounded-3xl bg-white/95 shadow-xl ring-1 ring-black/10 backdrop-blur">
           <div className="flex items-start justify-between gap-3 p-4 border-b border-black/10">
             <div>
               <p className="text-xs uppercase tracking-[0.28em] text-black/45">
@@ -147,7 +147,7 @@ export default function ChatbotWidget() {
 
           <div
             ref={listRef}
-            className="max-h-[320px] overflow-y-auto p-4 space-y-3"
+            className="max-h-[55vh] sm:max-h-[360px] overflow-y-auto p-4 space-y-3"
           >
             {messages.map((m, idx) => (
               <div
@@ -155,7 +155,7 @@ export default function ChatbotWidget() {
                 className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-relaxed ${
+                  className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-relaxed break-words whitespace-pre-wrap ${
                     m.role === "user"
                       ? "bg-[#224670] text-white"
                       : "bg-black/[0.04] text-[#111827]"

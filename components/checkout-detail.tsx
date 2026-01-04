@@ -29,7 +29,7 @@ const CheckoutDetail = async ({ reservationId }: { reservationId: string }) => {
             />
           </div>
           <div className="flex flex-col justify-between p-4 leading-normal w-full">
-            <h5 className="mb-1 text-4xl font-bold tracking-tight text-[#111827]">
+            <h5 className="mb-1 text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-[#111827]">
               {reservation.produk.name}
             </h5>
             <div className="flex items-center gap-1 font-2xl text-[#111827]/70">

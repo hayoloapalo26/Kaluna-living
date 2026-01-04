@@ -12,7 +12,7 @@ const WhatsAppPopup = () => {
   return (
     <>
       {isOpen && (
-        <div className="fixed bottom-24 right-4 sm:right-6 max-w-xs w-64 bg-white shadow-lg border rounded-lg p-4 text-sm z-40">
+        <div className="fixed bottom-24 right-4 sm:right-6 max-w-[86vw] w-[240px] sm:w-64 bg-white shadow-lg border rounded-2xl p-4 text-sm z-40">
           <div className="flex items-center justify-between mb-2">
             <span className="font-semibold text-gray-800">Chat via WhatsApp</span>
             <button

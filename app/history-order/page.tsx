@@ -100,7 +100,10 @@ export default async function HistoryOrderPage() {
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
                       <div className="text-sm font-semibold text-[#111827]">
-                        Order <span className="text-[#224670]">{o.orderCode}</span>
+                        Order{" "}
+                        <span className="text-[#224670] break-all">
+                          {o.orderCode}
+                        </span>
                       </div>
                       <div className="mt-1 text-xs text-black/50">
                         {new Date(o.createdAt).toLocaleString("id-ID")}
@@ -242,7 +245,8 @@ export default async function HistoryOrderPage() {
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
                       <div className="text-sm font-semibold text-[#111827]">
-                        Reservasi <span className="text-[#224670]">{r.id}</span>
+                        Reservasi{" "}
+                        <span className="text-[#224670] break-all">{r.id}</span>
                       </div>
                       <div className="mt-1 text-xs text-black/50">
                         {new Date(r.createdAt).toLocaleString("id-ID")}

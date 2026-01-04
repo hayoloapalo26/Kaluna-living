@@ -23,7 +23,7 @@ const Contact = () => {
         <div className="grid md:grid-cols-2 gap-8 rounded-3xl bg-white/85 p-8 md:p-10 ring-1 ring-white/70 shadow-md backdrop-blur">
           <div>
             <h1 className="text-lg text-[#111827]/60 mb-3">Contact Us</h1>
-            <h1 className="text-5xl font-semibold text-[#111827] mb-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#111827] mb-4">
               Get In Touch Today
             </h1>
             <p className="text-[#111827]/70 py-5">

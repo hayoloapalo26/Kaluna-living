@@ -17,25 +17,29 @@ const PaymentSuccess = async ({
   if (paymentStatus === "failure") redirect("/payment/failure");
 
   return (
-    <div className="max-w-screen-xl px-4 mx-auto py-20 mt-12">
-      <div className="bg-white p-6  md:mx-auto">
-        <HiCheckCircle className="text-green-600 w-20 h-20 mx-auto my-6" />
-        <div className="text-center">
-          <h3 className="md:text-2xl text-base text-gray-900 font-semibold text-center">
-            Payment Done!
-          </h3>
-          <p className="text-gray-600 my-2">
-            Thank you for completing your secure online payment.
-          </p>
-          <p> Have a great day! </p>
-          <div className="py-10 text-center">
-            <Link
-              href="/history-order"
-              className="px-12 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3"
-            >
-              GO TO ORDER HISTORY
-            </Link>
-          </div>
+    <div className="min-h-screen relative overflow-hidden flex items-center justify-center px-4 py-16">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-24 left-[-10%] h-72 w-72 rounded-full bg-[#f6c56e]/25 blur-3xl" />
+        <div className="absolute top-12 right-[-8%] h-80 w-80 rounded-full bg-[#6cb4d9]/22 blur-3xl" />
+      </div>
+      <div className="relative w-full max-w-lg rounded-3xl bg-white/90 p-8 shadow-md ring-1 ring-white/70 backdrop-blur text-center">
+        <HiCheckCircle className="text-emerald-600 w-16 h-16 mx-auto my-4" />
+        <h3 className="text-lg sm:text-2xl text-[#111827] font-semibold">
+          Payment Done!
+        </h3>
+        <p className="text-[#111827]/70 my-2">
+          Terima kasih, pembayaran kamu berhasil.
+        </p>
+        <p className="text-[#111827]/60">Have a great day!</p>
+        <div className="pt-8">
+          <Link
+            href="/history-order"
+            className="inline-flex w-full sm:w-auto justify-center rounded-2xl px-6 py-3
+                       bg-gradient-to-r from-[#224670] via-[#6cb4d9] to-[#f08c6a]
+                       text-white font-semibold hover:opacity-90 transition"
+          >
+            GO TO ORDER HISTORY
+          </Link>
         </div>
       </div>
     </div>
