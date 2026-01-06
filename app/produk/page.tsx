@@ -230,7 +230,9 @@ export default function ProdukPage() {
                           <p className="text-base md:text-lg font-semibold text-[#224670]">
                             Rp {produk.price.toLocaleString("id-ID")}
                           </p>
-                          <p className="text-xs text-black/45">Ready stock</p>
+                          <p className="text-xs text-black/45">
+                            Stok tersedia: {produk.capacity}
+                          </p>
                         </div>
 
                         <button

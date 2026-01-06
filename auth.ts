@@ -33,12 +33,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         });
 
         if (!user) {
-          throw new Error("Username atau password salah");
+          throw new Error("Akun belum terdaftar");
         }
 
         const isValid = await bcrypt.compare(password, user.password);
         if (!isValid) {
-          throw new Error("Username atau password salah");
+          throw new Error("Password salah");
         }
 
         if (user.role === "CUSTOMER" && !user.emailVerified) {

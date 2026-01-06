@@ -14,6 +14,21 @@ export default function SignInPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const resolveErrorMessage = (value: string) => {
+    const trimmed = value.trim();
+    if (!trimmed) return "Login gagal";
+    if (trimmed === "CredentialsSignin") {
+      return "Username atau password salah.";
+    }
+    if (trimmed === "AccessDenied") {
+      return "Akses ditolak. Silakan hubungi admin.";
+    }
+    if (trimmed === "Configuration") {
+      return "Konfigurasi login bermasalah. Coba lagi nanti.";
+    }
+    return trimmed;
+  };
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
@@ -31,14 +46,14 @@ export default function SignInPage() {
       });
 
       if (res?.error) {
-        setError(res.error || "Login gagal");
+        setError(resolveErrorMessage(res.error || "Login gagal"));
         return;
       }
 
       const targetUrl = res?.url ?? callbackUrl;
       window.location.href = targetUrl;
     } catch (err: any) {
-      setError(err.message || "Terjadi kesalahan");
+      setError(resolveErrorMessage(err.message || "Terjadi kesalahan"));
     } finally {
       setLoading(false);
     }

@@ -17,7 +17,7 @@ export default function produkCard({ produk }: { produk: Produk }) {
       <div className="p-4">
         <h3 className="font-semibold text-[#111827]">{produk.name}</h3>
         <p className="text-[#111827]/60 text-sm mt-1">
-          Kapasitas: {produk.capacity}
+          Stok tersedia: {produk.capacity}
         </p>
         <p className="text-[#224670] font-semibold mt-1">
           Rp {produk.price.toLocaleString("id-ID")}

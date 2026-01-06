@@ -241,7 +241,7 @@ export default function OwnerProductDetailPage() {
                 <span>Harga:</span> Rp {produk.price.toLocaleString("id-ID")}
               </div>
               <div>
-                <span>Kapasitas:</span> {produk.capacity}
+                <span>Stok:</span> {produk.capacity}
               </div>
               <div>
                 <span>ID Produk:</span> {produk.id}
@@ -303,7 +303,7 @@ export default function OwnerProductDetailPage() {
                   <input type="number" name="price" defaultValue={produk.price} required />
                 </div>
                 <div className="field">
-                  <label>Kapasitas</label>
+                  <label>Stok</label>
                   <input type="number" name="capacity" defaultValue={produk.capacity} required />
                 </div>
               </div>

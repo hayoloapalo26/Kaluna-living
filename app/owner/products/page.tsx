@@ -200,8 +200,8 @@ export default function OwnerProductsPage() {
                   <input name="price" type="number" min={0} required />
                 </div>
                 <div className="field">
-                  <label>Kapasitas</label>
-                  <input name="capacity" type="number" min={1} defaultValue={1} required />
+                <label>Stok</label>
+                <input name="capacity" type="number" min={1} defaultValue={1} required />
                 </div>
               </div>
 
@@ -255,7 +255,7 @@ export default function OwnerProductsPage() {
                       <div className="product-body">
                         <div className="product-name">{produk.name}</div>
                         <div className="product-meta">
-                          Rp {produk.price.toLocaleString("id-ID")} • Kapasitas{" "}
+                          Rp {produk.price.toLocaleString("id-ID")} • Stok{" "}
                           {produk.capacity}
                         </div>
                         <p className="product-desc">{produk.description}</p>

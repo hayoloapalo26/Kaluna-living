@@ -61,10 +61,10 @@ export default async function ProdukDetailPage({ params }: ProdukPageProps) {
 
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-gray-400">
-                Kapasitas
+                Stok tersedia
               </p>
               <p className="text-lg font-semibold text-[#111827]">
-                {produk.capacity} orang
+                {produk.capacity} item
               </p>
             </div>
           </div>

@@ -288,8 +288,7 @@ export default function ProductDetailPage() {
               Rp {produk.price.toLocaleString("id-ID")}
             </div>
             <div>
-              <span className="font-medium">Kapasitas:</span>{" "}
-              {produk.capacity}
+              <span className="font-medium">Stok:</span> {produk.capacity}
             </div>
             <div>
               <span className="font-medium">ID Produk:</span> {produk.id}
@@ -364,9 +363,7 @@ export default function ProductDetailPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">
-                  Kapasitas
-                </label>
+                <label className="block text-sm font-medium mb-1">Stok</label>
                 <input
                   type="number"
                   name="capacity"
