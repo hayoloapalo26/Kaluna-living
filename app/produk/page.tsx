@@ -119,6 +119,9 @@ export default function ProdukPage() {
       }
 
       setInfo("Produk berhasil ditambahkan ke keranjang.");
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("cart:updated"));
+      }
     } catch (err) {
       console.error(err);
       setError(

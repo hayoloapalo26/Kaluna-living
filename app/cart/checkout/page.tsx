@@ -164,6 +164,10 @@ export default function CartCheckoutPage() {
         return;
       }
 
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("cart:updated"));
+      }
+
       const resSnap = await fetch("/api/payments/midtrans/snap", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

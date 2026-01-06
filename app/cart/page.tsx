@@ -48,10 +48,16 @@ export default function CartPage() {
       if (!res.ok) {
         setError(data?.message || "Gagal mengambil cart");
         setCart({ id: null, items: [] });
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new CustomEvent("cart:updated"));
+        }
         return;
       }
 
       setCart(data);
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("cart:updated"));
+      }
     } catch (e) {
       console.error(e);
       setError("Terjadi kesalahan saat mengambil cart");

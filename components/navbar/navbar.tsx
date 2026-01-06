@@ -47,9 +47,12 @@ export default function Navbar() {
   }, [session]);
 
   useEffect(() => {
-    const loadCartCount = async () => {
-      if (status !== "authenticated" || isAdminLike) return;
+    if (status !== "authenticated" || isAdminLike) {
+      setCartCount(0);
+      return;
+    }
 
+    const loadCartCount = async () => {
       try {
         const res = await fetch("/api/cart", { cache: "no-store" });
         if (!res.ok) {
@@ -67,6 +70,13 @@ export default function Navbar() {
     };
 
     loadCartCount();
+
+    const handleUpdated = () => {
+      loadCartCount();
+    };
+
+    window.addEventListener("cart:updated", handleUpdated);
+    return () => window.removeEventListener("cart:updated", handleUpdated);
   }, [status, isAdminLike]);
 
   useEffect(() => {

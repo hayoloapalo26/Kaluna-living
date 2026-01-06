@@ -1,6 +1,7 @@
 import { getprodukById } from "@/lib/data";
 import Image from "next/image";
 import Link from "next/link";
+import AddToCartButton from "@/components/add-to-cart-button";
 
 export default async function produkDetailPage({ params }: { params: { id: string } }) {
   const produk = await getprodukById(params.id);
@@ -69,9 +70,11 @@ export default async function produkDetailPage({ params }: { params: { id: strin
           </div>
 
           {/* Tombol Aksi */}
-          <button className="w-full py-3 bg-gradient-to-r from-[#224670] via-[#6cb4d9] to-[#f08c6a] text-white font-semibold rounded-2xl hover:opacity-90 transition mb-3">
-            Add to cart
-          </button>
+          <AddToCartButton
+            produkId={produk.id}
+            className="w-full py-3 bg-gradient-to-r from-[#224670] via-[#6cb4d9] to-[#f08c6a] text-white font-semibold rounded-2xl hover:opacity-90 transition"
+            label="Add to cart"
+          />
 
           <Link
             href="/"
