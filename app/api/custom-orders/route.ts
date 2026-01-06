@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import { requireCloudinaryConfig, uploadImageBuffer } from "@/lib/cloudinary";
+import { put } from "@vercel/blob";
 
 export const runtime = "nodejs";
 
@@ -69,11 +69,22 @@ export async function POST(req: NextRequest) {
         );
       }
 
+      if (!process.env.BLOB_READ_WRITE_TOKEN) {
+        return NextResponse.json(
+          {
+            message:
+              "Upload gambar belum dikonfigurasi. Silakan kirim tanpa gambar atau set BLOB_READ_WRITE_TOKEN.",
+          },
+          { status: 400 }
+        );
+      }
+
       try {
-        requireCloudinaryConfig();
-        const buffer = Buffer.from(await file.arrayBuffer());
-        const uploadResult = (await uploadImageBuffer(buffer, file.name)) as any;
-        imagePath = uploadResult.secure_url as string;
+        const blob = await put(file.name, file, {
+          access: "public",
+          multipart: true,
+        });
+        imagePath = blob.url;
       } catch (uploadError) {
         console.error("CUSTOM ORDER upload error:", uploadError);
         return NextResponse.json(
