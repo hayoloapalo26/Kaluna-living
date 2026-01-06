@@ -24,6 +24,38 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const item = await prisma.cartItem.findUnique({
+      where: { id: body.itemId },
+      include: { produk: true },
+    });
+
+    if (!item) {
+      return NextResponse.json(
+        { message: "Item tidak ditemukan." },
+        { status: 404 }
+      );
+    }
+
+    const stock = Number(item.produk?.capacity || 0);
+    if (stock <= 0) {
+      return NextResponse.json(
+        {
+          message:
+            "Stok produk habis. Silakan hubungi admin untuk ketersediaan.",
+        },
+        { status: 400 }
+      );
+    }
+
+    if (body.quantity > stock) {
+      return NextResponse.json(
+        {
+          message: `Stok produk hanya tersedia ${stock}. Silakan kurangi jumlah atau hubungi admin.`,
+        },
+        { status: 400 }
+      );
+    }
+
     const updated = await prisma.cartItem.update({
       where: { id: body.itemId },
       data: { quantity: body.quantity },

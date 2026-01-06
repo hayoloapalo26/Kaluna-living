@@ -65,33 +65,91 @@ export async function POST(req: NextRequest) {
       payload.fraud_status
     );
 
-    // 1) update order status
-    const order = await prisma.order.update({
-      where: { orderCode },
-      data: { paymentStatus: nextStatus as any },
+    const result = await prisma.$transaction(async (tx) => {
+      const order = await tx.order.findUnique({
+        where: { orderCode },
+        include: { items: true },
+      });
+
+      if (!order) {
+        throw new Error("ORDER_NOT_FOUND");
+      }
+
+      const shouldDeduct =
+        nextStatus === "PAID" && order.paymentStatus !== "PAID";
+      const finalStatus =
+        order.paymentStatus === "PAID" ? "PAID" : nextStatus;
+
+      const insufficient: string[] = [];
+
+      if (shouldDeduct && order.items.length > 0) {
+        const produkList = await tx.produk.findMany({
+          where: { id: { in: order.items.map((it) => it.produkId) } },
+          select: { id: true, name: true, capacity: true },
+        });
+
+        const produkMap = new Map(
+          produkList.map((p) => [p.id, { name: p.name, capacity: p.capacity }])
+        );
+
+        for (const item of order.items) {
+          const produk = produkMap.get(item.produkId);
+          const stock = Number(produk?.capacity || 0);
+          const nextStock = Math.max(0, stock - item.quantity);
+
+          if (stock < item.quantity) {
+            insufficient.push(
+              `${produk?.name || "Produk"} (stok ${stock})`
+            );
+          }
+
+          await tx.produk.update({
+            where: { id: item.produkId },
+            data: { capacity: nextStock },
+          });
+        }
+      }
+
+      const updatedOrder = await tx.order.update({
+        where: { orderCode },
+        data: { paymentStatus: finalStatus as any },
+      });
+
+      await tx.orderPayment.upsert({
+        where: { orderId: updatedOrder.id },
+        update: {
+          transactionStatus: String(payload.transaction_status ?? ""),
+          fraudStatus: String(payload.fraud_status ?? ""),
+          rawNotification: payload,
+        },
+        create: {
+          orderId: updatedOrder.id,
+          provider: "MIDTRANS",
+          transactionStatus: String(payload.transaction_status ?? ""),
+          fraudStatus: String(payload.fraud_status ?? ""),
+          rawNotification: payload,
+        },
+      });
+
+      return { orderId: updatedOrder.id, insufficient };
     });
 
-    // 2) upsert order payment record (simpan raw notification)
-    await prisma.orderPayment.upsert({
-      where: { orderId: order.id },
-      update: {
-        transactionStatus: String(payload.transaction_status ?? ""),
-        fraudStatus: String(payload.fraud_status ?? ""),
-        rawNotification: payload,
-      },
-      create: {
-        orderId: order.id,
-        provider: "MIDTRANS",
-        transactionStatus: String(payload.transaction_status ?? ""),
-        fraudStatus: String(payload.fraud_status ?? ""),
-        rawNotification: payload,
-      },
-    });
+    if (result.insufficient.length > 0) {
+      console.warn(
+        "STOCK WARNING for order",
+        orderCode,
+        "items:",
+        result.insufficient.join(", ")
+      );
+    }
 
     // Midtrans expects 200 OK
     return NextResponse.json({ received: true }, { status: 200 });
   } catch (error) {
     console.error("POST /api/payments/midtrans/notification error:", error);
+    if (error instanceof Error && error.message === "ORDER_NOT_FOUND") {
+      return NextResponse.json({ message: "Order tidak ditemukan" }, { status: 404 });
+    }
     return NextResponse.json(
       { message: "Gagal memproses notifikasi Midtrans" },
       { status: 500 }

@@ -40,6 +40,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const stock = Number(produk.capacity || 0);
+    if (stock <= 0) {
+      return NextResponse.json(
+        {
+          message:
+            "Stok produk habis. Silakan hubungi admin untuk ketersediaan.",
+        },
+        { status: 400 }
+      );
+    }
+
     // Cari cart milik user
     let cart = await prisma.cart.findFirst({
       where: { userId },
@@ -57,6 +68,16 @@ export async function POST(req: NextRequest) {
     });
 
     if (existingItem) {
+      const nextQty = existingItem.quantity + quantity;
+      if (nextQty > stock) {
+        return NextResponse.json(
+          {
+            message: `Stok produk hanya tersedia ${stock}. Silakan kurangi jumlah atau hubungi admin.`,
+          },
+          { status: 400 }
+        );
+      }
+
       const updated = await prisma.cartItem.update({
         where: { id: existingItem.id },
         data: {
@@ -65,6 +86,15 @@ export async function POST(req: NextRequest) {
       });
 
       return NextResponse.json(updated);
+    }
+
+    if (quantity > stock) {
+      return NextResponse.json(
+        {
+          message: `Stok produk hanya tersedia ${stock}. Silakan kurangi jumlah atau hubungi admin.`,
+        },
+        { status: 400 }
+      );
     }
 
     const newItem = await prisma.cartItem.create({
