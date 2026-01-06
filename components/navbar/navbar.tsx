@@ -30,6 +30,8 @@ export default function Navbar() {
     | undefined;
 
   const isAdminLike = role === "ADMIN" || role === "OWNER";
+  const homeHref =
+    role === "OWNER" ? "/owner/insights" : role === "ADMIN" ? "/admin" : "/";
 
   const [cartCount, setCartCount] = useState<number>(0);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -121,7 +123,7 @@ export default function Navbar() {
           <div className="mx-auto max-w-6xl px-4 md:px-6">
             <div className="h-16 flex items-center justify-between gap-4">
               <Link
-                href={isAdminLike ? "/admin" : "/"}
+                href={homeHref}
                 className="flex items-center gap-3"
                 aria-label="Kaluna Living"
               >

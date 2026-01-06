@@ -14,6 +14,7 @@ import {
   BarChart,
   Bar,
 } from "recharts";
+import OwnerMenu from "@/components/owner-menu";
 
 const display = Playfair_Display({
   subsets: ["latin"],
@@ -111,6 +112,10 @@ export default function OwnerInsightPage() {
   return (
     <div className={`${display.variable} ${body.variable} insight-page`}>
       <div className="insight-container">
+        <div className="owner-nav">
+          <OwnerMenu />
+        </div>
+
         <header className="hero">
           <div className="hero-copy">
             <p className="eyebrow">Kaluna Living</p>
@@ -358,6 +363,12 @@ export default function OwnerInsightPage() {
           margin: 0 auto;
           padding: 96px 20px 72px;
           z-index: 1;
+        }
+
+        .owner-nav {
+          display: flex;
+          justify-content: flex-end;
+          margin-bottom: 18px;
         }
 
         .hero {
@@ -706,6 +717,10 @@ export default function OwnerInsightPage() {
         }
 
         @media (max-width: 640px) {
+          .owner-nav {
+            justify-content: center;
+          }
+
           .top-head {
             display: none;
           }
