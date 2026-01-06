@@ -96,8 +96,14 @@ export default function CustomOrderCustomerPage() {
       }
 
       form.reset();
+      const warning =
+        data && typeof data === "object" && data !== null && "warning" in data
+          ? String((data as any).warning)
+          : null;
       setSuccess(
-        "Custom order berhasil dikirim. Admin akan menghubungi Anda via WhatsApp."
+        warning
+          ? `Custom order berhasil dikirim. ${warning}`
+          : "Custom order berhasil dikirim. Admin akan menghubungi Anda via WhatsApp."
       );
       await loadHistory();
     } catch (err) {

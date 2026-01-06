@@ -53,6 +53,7 @@ export async function POST(req: NextRequest) {
     }
 
     let imagePath: string | null = null;
+    let warningMessage: string | null = null;
 
     if (file && file.size > 0) {
       if (!file.type.startsWith("image/")) {
@@ -70,30 +71,20 @@ export async function POST(req: NextRequest) {
       }
 
       if (!process.env.BLOB_READ_WRITE_TOKEN) {
-        return NextResponse.json(
-          {
-            message:
-              "Upload gambar belum dikonfigurasi. Silakan kirim tanpa gambar atau set BLOB_READ_WRITE_TOKEN.",
-          },
-          { status: 400 }
-        );
-      }
-
-      try {
-        const blob = await put(file.name, file, {
-          access: "public",
-          multipart: true,
-        });
-        imagePath = blob.url;
-      } catch (uploadError) {
-        console.error("CUSTOM ORDER upload error:", uploadError);
-        return NextResponse.json(
-          {
-            message:
-              "Upload gambar gagal. Silakan kirim tanpa gambar atau hubungi admin.",
-          },
-          { status: 500 }
-        );
+        warningMessage =
+          "Gambar tidak disimpan karena konfigurasi upload belum aktif. Order tetap tersimpan.";
+      } else {
+        try {
+          const blob = await put(file.name, file, {
+            access: "public",
+            multipart: true,
+          });
+          imagePath = blob.url;
+        } catch (uploadError) {
+          console.error("CUSTOM ORDER upload error:", uploadError);
+          warningMessage =
+            "Gambar gagal diupload. Order tetap tersimpan, silakan hubungi admin.";
+        }
       }
     }
 
@@ -112,7 +103,13 @@ export async function POST(req: NextRequest) {
       } as any,
     });
 
-    return NextResponse.json(created, { status: 201 });
+    return NextResponse.json(
+      {
+        ...created,
+        warning: warningMessage,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("POST /api/custom-orders error:", error);
     return NextResponse.json(
