@@ -14,19 +14,36 @@ export default function SignInPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const resolveErrorMessage = (value: string) => {
-    const trimmed = value.trim();
-    if (!trimmed) return "Login gagal";
-    if (trimmed === "CredentialsSignin") {
+  const resolveErrorMessage = (error?: string, code?: string) => {
+    const normalized = (error || "").trim();
+
+    if (code === "missing_credentials") {
+      return "Username dan password wajib diisi.";
+    }
+    if (code === "user_not_found") {
+      return "Akun belum terdaftar.";
+    }
+    if (code === "wrong_password") {
+      return "Password salah.";
+    }
+    if (code === "email_not_verified") {
+      return "Akun belum diaktivasi. Silakan cek email untuk verifikasi.";
+    }
+
+    if (!normalized) return "Login gagal";
+    if (normalized === "CredentialsSignin") {
       return "Username atau password salah.";
     }
-    if (trimmed === "AccessDenied") {
+    if (normalized === "AccessDenied") {
       return "Akses ditolak. Silakan hubungi admin.";
     }
-    if (trimmed === "Configuration") {
+    if (normalized === "Configuration") {
       return "Konfigurasi login bermasalah. Coba lagi nanti.";
     }
-    return trimmed;
+    if (normalized === "Verification") {
+      return "Verifikasi gagal. Silakan coba lagi.";
+    }
+    return normalized;
   };
 
   async function handleSubmit(e: React.FormEvent) {
@@ -46,7 +63,7 @@ export default function SignInPage() {
       });
 
       if (res?.error) {
-        setError(resolveErrorMessage(res.error || "Login gagal"));
+        setError(resolveErrorMessage(res.error, res.code));
         return;
       }
 

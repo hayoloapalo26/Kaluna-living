@@ -1,10 +1,26 @@
 // auth.ts
-import NextAuth from "next-auth";
+import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
 
 type Role = "ADMIN" | "OWNER" | "CUSTOMER";
+
+class MissingCredentialsError extends CredentialsSignin {
+  code = "missing_credentials";
+}
+
+class UserNotFoundError extends CredentialsSignin {
+  code = "user_not_found";
+}
+
+class InvalidPasswordError extends CredentialsSignin {
+  code = "wrong_password";
+}
+
+class EmailNotVerifiedError extends CredentialsSignin {
+  code = "email_not_verified";
+}
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
@@ -25,7 +41,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           typeof credentials?.password === "string" ? credentials.password : "";
 
         if (!username || !password) {
-          throw new Error("Username dan password wajib diisi");
+          throw new MissingCredentialsError();
         }
 
         const user = await prisma.user.findUnique({
@@ -33,18 +49,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         });
 
         if (!user) {
-          throw new Error("Akun belum terdaftar");
+          throw new UserNotFoundError();
         }
 
         const isValid = await bcrypt.compare(password, user.password);
         if (!isValid) {
-          throw new Error("Password salah");
+          throw new InvalidPasswordError();
         }
 
         if (user.role === "CUSTOMER" && !user.emailVerified) {
-          throw new Error(
-            "Akun belum diaktivasi. Silakan cek email untuk verifikasi."
-          );
+          throw new EmailNotVerifiedError();
         }
 
         const role = user.role as Role;
