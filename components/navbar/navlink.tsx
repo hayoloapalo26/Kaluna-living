@@ -82,36 +82,24 @@ const Navlink = () => {
             </Link>
           </li>
           {/* Show` menu base on session */}`
-          {session && (
+          {session && session.user.role === "admin" && (
             <>
               <li>
                 <Link
                   className="block py-2 px-3 text-gray-800 hover:bg-gray-100 rounded-sm md:hover:bg-transparent md:p-0"
-                  href={`/myreservation`}
+                  href={`/admin/dashboard`}
                 >
-                  My Reservation
+                  Dashboard
                 </Link>
               </li>
-              {session.user.role === "admin" && (
-                <>
-                  <li>
-                    <Link
-                      className="block py-2 px-3 text-gray-800 hover:bg-gray-100 rounded-sm md:hover:bg-transparent md:p-0"
-                      href={`/admin/dashboard`}
-                    >
-                      Dashboard
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="block py-2 px-3 text-gray-800 hover:bg-gray-100 rounded-sm md:hover:bg-transparent md:p-0"
-                      href={`/admin/produk`}
-                    >
-                      Manage produk
-                    </Link>
-                  </li>
-                </>
-              )}
+              <li>
+                <Link
+                  className="block py-2 px-3 text-gray-800 hover:bg-gray-100 rounded-sm md:hover:bg-transparent md:p-0"
+                  href={`/admin/produk`}
+                >
+                  Manage produk
+                </Link>
+              </li>
             </>
           )}
           {session ? (

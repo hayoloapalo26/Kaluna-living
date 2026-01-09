@@ -119,6 +119,9 @@ export default function ProdukPage() {
       }
 
       setInfo("Produk berhasil ditambahkan ke keranjang.");
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("cart:updated"));
+      }
     } catch (err) {
       console.error(err);
       setError(
@@ -132,9 +135,13 @@ export default function ProdukPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-28 left-[-10%] h-72 w-72 rounded-full bg-[#f6c56e]/30 blur-3xl" />
+        <div className="absolute top-6 right-[-8%] h-80 w-80 rounded-full bg-[#6cb4d9]/25 blur-3xl" />
+      </div>
       {/* OPSI B: container per page */}
-      <div className="mx-auto w-full max-w-6xl px-4 md:px-6 py-10">
+      <div className="relative mx-auto w-full max-w-6xl px-4 md:px-6 py-10">
         <div className="flex flex-col gap-2">
           <p className="text-xs uppercase tracking-[0.32em] text-black/45">
             Katalog
@@ -150,14 +157,14 @@ export default function ProdukPage() {
 
         {/* Alerts */}
         {error && (
-          <div className="mt-6 rounded-2xl bg-white p-4 ring-1 ring-red-500/20 text-red-700 shadow-md">
+          <div className="mt-6 rounded-2xl bg-white/90 p-4 ring-1 ring-red-500/20 text-red-700 shadow-md backdrop-blur">
             <p className="text-sm font-semibold">Terjadi kesalahan</p>
             <p className="text-sm mt-1 text-red-700/90">{error}</p>
           </div>
         )}
 
         {info && (
-          <div className="mt-6 rounded-2xl bg-white p-4 ring-1 ring-emerald-500/20 text-emerald-700 shadow-md">
+          <div className="mt-6 rounded-2xl bg-white/90 p-4 ring-1 ring-emerald-500/20 text-emerald-700 shadow-md backdrop-blur">
             <p className="text-sm font-semibold">Berhasil</p>
             <p className="text-sm mt-1 text-emerald-700/90">{info}</p>
           </div>
@@ -166,11 +173,11 @@ export default function ProdukPage() {
         {/* Content */}
         <div className="mt-8">
           {loading ? (
-            <div className="rounded-2xl bg-white p-6 ring-1 ring-black/5 shadow-md">
+            <div className="rounded-2xl bg-white/90 p-6 ring-1 ring-white/60 shadow-md backdrop-blur">
               <p className="text-sm text-black/60">Memuat produk...</p>
             </div>
           ) : produks.length === 0 ? (
-            <div className="rounded-2xl bg-white p-8 text-center ring-1 ring-black/5 shadow-md">
+            <div className="rounded-3xl bg-white/90 p-8 text-center ring-1 ring-white/60 shadow-md backdrop-blur">
               <p className="text-sm uppercase tracking-[0.32em] text-black/40">
                 Empty state
               </p>
@@ -189,53 +196,57 @@ export default function ProdukPage() {
                 return (
                   <article
                     key={produk.id}
-                    className="group overflow-hidden rounded-2xl bg-white ring-1 ring-black/5 shadow-md
-                               transition hover:-translate-y-1 hover:shadow-lg flex flex-col"
+                    className="group rounded-3xl bg-[linear-gradient(135deg,rgba(108,180,217,0.4),rgba(255,255,255,0.9),rgba(240,140,106,0.35))] p-[1px]
+                               shadow-lg transition hover:-translate-y-1 flex flex-col"
                   >
-                    <div className="relative h-52 w-full overflow-hidden">
-                      <Image
-                        src={imageSrc}
-                        alt={produk.name}
-                        fill
-                        className="object-cover transition duration-500 group-hover:scale-[1.03]"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-70" />
-                    </div>
-
-                    <div className="p-5 md:p-6 flex-1 flex flex-col gap-2">
-                      <div className="flex items-start justify-between gap-3">
-                        <h3 className="text-base md:text-lg font-semibold tracking-tight text-[#111827] line-clamp-1">
-                          {produk.name}
-                        </h3>
-
-                        <span className="shrink-0 rounded-full bg-black/[0.04] px-3 py-1 text-xs text-black/60">
-                          Stok {produk.capacity}
-                        </span>
+                    <div className="rounded-3xl bg-white/90 ring-1 ring-white/60 overflow-hidden flex flex-col h-full">
+                      <div className="relative h-52 w-full overflow-hidden">
+                        <Image
+                          src={imageSrc}
+                          alt={produk.name}
+                          fill
+                          className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-70" />
                       </div>
 
-                      <p className="text-sm text-[#111827]/70 line-clamp-3 leading-relaxed">
-                        {produk.description}
-                      </p>
+                      <div className="p-5 md:p-6 flex-1 flex flex-col gap-2">
+                        <div className="flex items-start justify-between gap-3">
+                          <h3 className="text-base md:text-lg font-semibold tracking-tight text-[#111827] line-clamp-1">
+                            {produk.name}
+                          </h3>
 
-                      <div className="mt-2 flex items-center justify-between">
-                        <p className="text-base md:text-lg font-semibold text-[#224670]">
-                          Rp {produk.price.toLocaleString("id-ID")}
+                          <span className="shrink-0 rounded-full bg-[#f6c56e]/25 px-3 py-1 text-xs text-[#1a1c24]">
+                            Stok {produk.capacity}
+                          </span>
+                        </div>
+
+                        <p className="text-sm text-[#111827]/70 line-clamp-3 leading-relaxed">
+                          {produk.description}
                         </p>
-                        <p className="text-xs text-black/45">Ready stock</p>
-                      </div>
 
-                      <button
-                        onClick={() => handleAddToCart(produk.id)}
-                        disabled={addingId === produk.id}
-                        className="mt-3 inline-flex items-center justify-center rounded-2xl px-4 py-2.5
-                                   text-sm font-semibold bg-[#224670] text-white transition hover:opacity-90
-                                   disabled:opacity-60 disabled:cursor-not-allowed"
-                      >
-                        {addingId === produk.id
-                          ? "Add..."
-                          : "Add to cart"}
-                      </button>
+                        <div className="mt-2 flex items-center justify-between">
+                          <p className="text-base md:text-lg font-semibold text-[#224670]">
+                            Rp {produk.price.toLocaleString("id-ID")}
+                          </p>
+                          <p className="text-xs text-black/45">
+                            Stok tersedia: {produk.capacity}
+                          </p>
+                        </div>
+
+                        <button
+                          onClick={() => handleAddToCart(produk.id)}
+                          disabled={addingId === produk.id}
+                          className="mt-3 inline-flex items-center justify-center rounded-2xl px-4 py-2.5
+                                     text-sm font-semibold bg-gradient-to-r from-[#224670] via-[#6cb4d9] to-[#f08c6a]
+                                     text-white transition hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
+                        >
+                          {addingId === produk.id
+                            ? "Add..."
+                            : "Add to cart"}
+                        </button>
+                      </div>
                     </div>
                   </article>
                 );

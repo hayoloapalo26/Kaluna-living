@@ -104,7 +104,7 @@ export default function AdminInsightPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div className="border rounded-lg bg-white p-4">
               <div className="text-xs uppercase text-gray-500 mb-1">
-                Total Pendapatan (pesanan diterima)
+                Total Pendapatan (pesanan dibayar)
               </div>
               <div className="text-xl font-semibold">
                 {formatRupiah(data.grandTotal)}
@@ -127,7 +127,7 @@ export default function AdminInsightPage() {
 
             {data.months.length === 0 ? (
               <p className="text-sm text-gray-500">
-                Belum ada pesanan dengan status &quot;received&quot;.
+                Belum ada pesanan dengan status &quot;PAID&quot;.
               </p>
             ) : (
               <div className="space-y-3">
@@ -177,7 +177,7 @@ export default function AdminInsightPage() {
 
           {data.months.length === 0 ? (
             <p className="text-sm text-gray-500">
-              Belum ada pesanan dengan status &quot;received&quot;.
+              Belum ada pesanan dengan status &quot;PAID&quot;.
             </p>
           ) : (
             <div className="overflow-x-auto border rounded-lg bg-white">

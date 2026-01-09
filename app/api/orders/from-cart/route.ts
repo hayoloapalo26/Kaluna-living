@@ -42,6 +42,28 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: "Keranjang kosong" }, { status: 400 });
     }
 
+    const outOfStock = cart.items.filter((it) => {
+      const stock = Number(it.produk?.capacity || 0);
+      return stock <= 0 || it.quantity > stock;
+    });
+
+    if (outOfStock.length > 0) {
+      const detail = outOfStock
+        .map((it) => {
+          const stock = Number(it.produk?.capacity || 0);
+          const name = it.produk?.name || "Produk";
+          return `${name} (stok ${stock})`;
+        })
+        .join(", ");
+
+      return NextResponse.json(
+        {
+          message: `Stok tidak cukup untuk: ${detail}. Silakan kurangi jumlah atau hubungi admin.`,
+        },
+        { status: 400 }
+      );
+    }
+
     const grossAmount = cart.items.reduce(
       (sum, it) => sum + it.quantity * it.price,
       0

@@ -8,15 +8,18 @@ export default {
       colors: {
         kaluna: {
           // Brand core (dari guideline)
-          pink: "#DEA9B6", // :contentReference[oaicite:3]{index=3}
-          green: "#427949", // :contentReference[oaicite:4]{index=4}
-          navy: "#224670", // :contentReference[oaicite:5]{index=5}
+          pink: "#e6a2b6",
+          green: "#3f7d55",
+          navy: "#224670",
+          coral: "#f08c6a",
+          sun: "#f6c56e",
+          sky: "#6cb4d9",
 
           // Neutral tambahan (untuk “warm minimalist”)
-          cream: "#FAF7F2",
-          sand: "#EFE7DD",
-          ink: "#111827",
-          muted: "#6B7280",
+          cream: "#fff7ef",
+          sand: "#f2e6d8",
+          ink: "#1a1c24",
+          muted: "#6b7280",
           line: "rgba(17,24,39,0.10)",
         },
       },

@@ -33,11 +33,11 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const order = await prisma.reservation.findUnique({
+    const order = await prisma.order.findUnique({
       where: { id },
       include: {
         user: true,
-        produk: true,
+        items: true,
         payment: true,
       },
     });
@@ -59,7 +59,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// PATCH /api/admin/orders/:id → update status pesanan (payment.status)
+// PATCH /api/admin/orders/:id → update status pengiriman
 export async function PATCH(req: NextRequest) {
   try {
     const session = await auth();
@@ -92,7 +92,7 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
-    const order = await prisma.reservation.findUnique({
+    const order = await prisma.order.findUnique({
       where: { id },
       include: { payment: true },
     });
@@ -104,30 +104,21 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
-    // Jika belum ada Payment, buat dulu
-    if (!order.payment) {
-      await prisma.payment.create({
-        data: {
-          method: null,
-          amount: order.price,
-          status,
-          reservation: {
-            connect: { id: order.id },
-          },
-        },
-      });
-    } else {
-      await prisma.payment.update({
-        where: { id: order.payment.id },
-        data: { status },
-      });
+    const nextStatus = status.toUpperCase();
+    const allowed = new Set(["PENDING", "PACKED", "SHIPPED", "DELIVERED"]);
+    if (!allowed.has(nextStatus)) {
+      return NextResponse.json(
+        { message: "Status pengiriman tidak valid" },
+        { status: 400 }
+      );
     }
 
-    const updated = await prisma.reservation.findUnique({
+    const updated = await prisma.order.update({
       where: { id },
+      data: { shippingStatus: nextStatus as any },
       include: {
         user: true,
-        produk: true,
+        items: true,
         payment: true,
       },
     });

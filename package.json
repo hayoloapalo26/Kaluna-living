@@ -8,11 +8,12 @@
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",
-    "vercel-build": "prisma generate && prisma db push"
+    "vercel-build": "prisma generate && prisma db push && next build"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.2",
     "@prisma/client": "^6.5.0",
+    "@vercel/blob": "^0.27.3",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.6.0",
     "clsx": "^2.1.1",

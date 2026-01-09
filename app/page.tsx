@@ -7,14 +7,18 @@ import HomeSkeleton from "@/components/skeletons/home-skeleton";
 
 export default function Home() {
   return (
-    <div className="bg-[#FAF7F2]">
-      <div className="mx-auto w-full max-w-6xl px-4 md:px-6 py-10 space-y-14">
+    <div className="relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-24 left-[-10%] h-72 w-72 rounded-full bg-[#f6c56e]/30 blur-3xl" />
+        <div className="absolute top-8 right-[-8%] h-80 w-80 rounded-full bg-[#6cb4d9]/25 blur-3xl" />
+      </div>
+      <div className="relative mx-auto w-full max-w-6xl px-4 md:px-6 py-10 space-y-14">
         {/* HERO */}
         <Hero />
 
         {/* ABOUT */}
         <section className="grid gap-6 lg:grid-cols-2">
-          <div className="rounded-2xl bg-white p-7 ring-1 ring-black/5 shadow-md">
+          <div className="rounded-3xl bg-white/85 p-7 ring-1 ring-white/60 shadow-md backdrop-blur">
             <p className="text-xs uppercase tracking-[0.32em] text-black/45">
               About Kaluna
             </p>
@@ -31,21 +35,22 @@ export default function Home() {
               <Link
                 href="/produk"
                 className="inline-flex items-center justify-center rounded-2xl px-6 py-3 text-sm font-semibold
-                           bg-[#224670] text-white hover:opacity-90 transition shadow-md"
+                           bg-gradient-to-r from-[#224670] via-[#6cb4d9] to-[#f08c6a]
+                           text-white hover:opacity-90 transition shadow-md"
               >
                 View Catalog
               </Link>
               <Link
                 href="/custom-order"
                 className="inline-flex items-center justify-center rounded-2xl px-6 py-3 text-sm font-semibold
-                           bg-white text-[#224670] ring-1 ring-black/10 hover:bg-black/[0.03] transition"
+                           bg-white/90 text-[#224670] ring-1 ring-black/10 hover:bg-white transition"
               >
                 Submit Custom Order
               </Link>
             </div>
           </div>
 
-          <div className="rounded-2xl bg-white p-7 ring-1 ring-black/5 shadow-md">
+          <div className="rounded-3xl bg-gradient-to-br from-white/90 to-[#fbe7dc] p-7 ring-1 ring-white/60 shadow-md backdrop-blur">
             <h3 className="text-lg font-semibold tracking-tight text-[#111827]">
               Why Kaluna??
             </h3>
@@ -55,7 +60,7 @@ export default function Home() {
               <li>• Transparent order history & payment status.</li>
             </ul>
 
-            <div className="mt-6 rounded-2xl bg-[#EFE7DD] p-4 ring-1 ring-black/5">
+            <div className="mt-6 rounded-2xl bg-white/80 p-4 ring-1 ring-white/70">
               <p className="text-sm font-semibold text-[#111827]">
                 Short story
               </p>
@@ -89,7 +94,7 @@ export default function Home() {
             <Link
               href="/produk"
               className="inline-flex items-center justify-center rounded-2xl px-7 py-3 text-sm font-semibold
-                         bg-white text-[#224670] ring-1 ring-black/10 hover:bg-black/[0.03] transition"
+                         bg-white/90 text-[#224670] ring-1 ring-black/10 hover:bg-white transition"
             >
               View All Product
             </Link>
@@ -97,7 +102,7 @@ export default function Home() {
         </section>
 
         {/* CTA */}
-        <section className="rounded-3xl bg-[#224670] text-white p-7 md:p-10 shadow-md ring-1 ring-black/10">
+        <section className="rounded-3xl bg-gradient-to-r from-[#224670] via-[#6cb4d9] to-[#f08c6a] text-white p-7 md:p-10 shadow-md ring-1 ring-black/10">
           <div className="grid gap-6 md:grid-cols-[1fr,auto] items-center">
             <div>
               <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">

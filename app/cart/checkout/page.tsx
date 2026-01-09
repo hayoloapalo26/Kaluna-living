@@ -164,6 +164,10 @@ export default function CartCheckoutPage() {
         return;
       }
 
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("cart:updated"));
+      }
+
       const resSnap = await fetch("/api/payments/midtrans/snap", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -362,7 +366,7 @@ export default function CartCheckoutPage() {
           </form>
 
           {/* Summary */}
-          <aside className="rounded-2xl bg-white p-5 md:p-6 ring-1 ring-black/5 shadow-md sticky top-24">
+          <aside className="rounded-2xl bg-white p-5 md:p-6 ring-1 ring-black/5 shadow-md lg:sticky lg:top-24">
             <h2 className="text-base md:text-lg font-semibold tracking-tight text-[#111827]">
               Ringkasan
             </h2>

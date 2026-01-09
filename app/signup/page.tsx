@@ -2,12 +2,9 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function SignUpPage() {
-  const router = useRouter();
-
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -42,10 +39,9 @@ export default function SignUpPage() {
       if (!res.ok) {
         setError(data.message || "Registrasi gagal");
       } else {
-        setSuccess("Registrasi berhasil. Mengalihkan ke halaman login...");
-        setTimeout(() => {
-          router.push("/signin");
-        }, 1500);
+        setSuccess(
+          "Registrasi berhasil. Silakan cek email untuk aktivasi akun."
+        );
       }
     } catch {
       setError("Terjadi kesalahan jaringan");
@@ -55,8 +51,12 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
-      <div className="mx-auto w-full max-w-6xl px-4 md:px-6 py-10">
+    <div className="min-h-screen relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-24 left-[-10%] h-72 w-72 rounded-full bg-[#f6c56e]/30 blur-3xl" />
+        <div className="absolute top-10 right-[-8%] h-80 w-80 rounded-full bg-[#6cb4d9]/25 blur-3xl" />
+      </div>
+      <div className="relative mx-auto w-full max-w-6xl px-4 md:px-6 py-10">
         <div className="grid lg:grid-cols-2 gap-8 items-center">
           {/* Left copy */}
           <div className="hidden lg:block">
@@ -71,7 +71,7 @@ export default function SignUpPage() {
               melihat riwayat pesanan.
             </p>
 
-            <div className="mt-6 rounded-2xl bg-white ring-1 ring-black/5 p-5 shadow-md max-w-md">
+            <div className="mt-6 rounded-2xl bg-gradient-to-br from-white/90 to-[#fbe7dc] ring-1 ring-white/70 p-5 shadow-md max-w-md backdrop-blur">
               <p className="text-sm font-semibold text-[#111827]">Aman & rapi</p>
               <p className="mt-1 text-sm text-[#111827]/70">
                 Data kamu akan digunakan untuk pengiriman dan update transaksi.
@@ -81,7 +81,7 @@ export default function SignUpPage() {
 
           {/* Form card */}
           <div className="flex justify-center lg:justify-end">
-            <div className="w-full max-w-lg rounded-2xl bg-white ring-1 ring-black/5 shadow-md p-7 md:p-8">
+            <div className="w-full max-w-lg rounded-3xl bg-white/90 ring-1 ring-white/70 shadow-md p-7 md:p-8 backdrop-blur">
               <div className="text-center">
                 <p className="text-xs uppercase tracking-[0.32em] text-black/45">
                   Sign Up
@@ -96,14 +96,14 @@ export default function SignUpPage() {
 
               {/* Alerts */}
               {error && (
-                <div className="mt-5 rounded-2xl bg-white ring-1 ring-red-500/20 p-4 text-red-700">
+                <div className="mt-5 rounded-2xl bg-white/95 ring-1 ring-red-500/20 p-4 text-red-700">
                   <p className="text-sm font-semibold">Registrasi gagal</p>
                   <p className="text-sm mt-1 text-red-700/90">{error}</p>
                 </div>
               )}
 
               {success && (
-                <div className="mt-5 rounded-2xl bg-white ring-1 ring-emerald-500/20 p-4 text-emerald-700">
+                <div className="mt-5 rounded-2xl bg-white/95 ring-1 ring-emerald-500/20 p-4 text-emerald-700">
                   <p className="text-sm font-semibold">Berhasil</p>
                   <p className="text-sm mt-1 text-emerald-700/90">{success}</p>
                 </div>
@@ -118,7 +118,7 @@ export default function SignUpPage() {
                   <input
                     type="text"
                     className="w-full rounded-2xl px-4 py-3 text-sm text-[#111827]
-                               ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#DEA9B6]/70"
+                               ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
@@ -135,7 +135,7 @@ export default function SignUpPage() {
                   <input
                     type="text"
                     className="w-full rounded-2xl px-4 py-3 text-sm text-[#111827]
-                               ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#DEA9B6]/70"
+                               ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
@@ -152,7 +152,7 @@ export default function SignUpPage() {
                   <input
                     type="email"
                     className="w-full rounded-2xl px-4 py-3 text-sm text-[#111827]
-                               ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#DEA9B6]/70"
+                               ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -169,7 +169,7 @@ export default function SignUpPage() {
                   <input
                     type="tel"
                     className="w-full rounded-2xl px-4 py-3 text-sm text-[#111827]
-                               ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#DEA9B6]/70"
+                               ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     required
@@ -186,7 +186,7 @@ export default function SignUpPage() {
                   <input
                     type="password"
                     className="w-full rounded-2xl px-4 py-3 text-sm text-[#111827]
-                               ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#DEA9B6]/70"
+                               ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -201,7 +201,8 @@ export default function SignUpPage() {
                 {/* Submit */}
                 <button
                   type="submit"
-                  className="w-full rounded-2xl bg-[#224670] hover:opacity-90 text-white px-4 py-3 text-sm font-semibold
+                  className="w-full rounded-2xl bg-gradient-to-r from-[#224670] via-[#6cb4d9] to-[#f08c6a]
+                             hover:opacity-90 text-white px-4 py-3 text-sm font-semibold
                              transition shadow-md disabled:opacity-60 disabled:cursor-not-allowed"
                   disabled={isSubmitting}
                 >
@@ -213,7 +214,7 @@ export default function SignUpPage() {
                 Sudah punya akun?{" "}
                 <Link
                   href="/signin"
-                  className="font-semibold text-[#224670] hover:opacity-80 transition"
+                  className="font-semibold text-[#224670] hover:text-[#f08c6a] transition"
                 >
                   Sign In
                 </Link>

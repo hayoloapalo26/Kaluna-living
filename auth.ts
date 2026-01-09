@@ -1,16 +1,30 @@
 // auth.ts
-import NextAuth from "next-auth";
+import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import prisma from "@/lib/prisma"; // ✅ pastikan default export prisma (bukan { prisma })
+import prisma from "@/lib/prisma";
 
 type Role = "ADMIN" | "OWNER" | "CUSTOMER";
 
+class MissingCredentialsError extends CredentialsSignin {
+  code = "missing_credentials";
+}
+
+class UserNotFoundError extends CredentialsSignin {
+  code = "user_not_found";
+}
+
+class InvalidPasswordError extends CredentialsSignin {
+  code = "wrong_password";
+}
+
+class EmailNotVerifiedError extends CredentialsSignin {
+  code = "email_not_verified";
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
-
   pages: { signIn: "/signin" },
-
   providers: [
     Credentials({
       name: "Credentials",
@@ -18,29 +32,33 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         username: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
       },
-
       async authorize(credentials) {
-        // ✅ NORMALIZE supaya TS yakin string (fix error {} is not assignable to string)
         const username =
-          typeof credentials?.username === "string" ? credentials.username.trim() : "";
+          typeof credentials?.username === "string"
+            ? credentials.username.trim()
+            : "";
         const password =
           typeof credentials?.password === "string" ? credentials.password : "";
 
         if (!username || !password) {
-          throw new Error("Username dan password wajib diisi");
+          throw new MissingCredentialsError();
         }
 
         const user = await prisma.user.findUnique({
-          where: { username }, // ✅ sekarang pasti string
+          where: { username },
         });
 
         if (!user) {
-          throw new Error("Username atau password salah");
+          throw new UserNotFoundError();
         }
 
-        const isValid = await bcrypt.compare(password, user.password); // ✅ password pasti string
+        const isValid = await bcrypt.compare(password, user.password);
         if (!isValid) {
-          throw new Error("Username atau password salah");
+          throw new InvalidPasswordError();
+        }
+
+        if (user.role === "CUSTOMER" && !user.emailVerified) {
+          throw new EmailNotVerifiedError();
         }
 
         const role = user.role as Role;
@@ -55,7 +73,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
@@ -65,7 +82,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return token;
     },
-
     async session({ session, token }) {
       if (session.user) {
         (session.user as any).id = token.id as string;

@@ -8,7 +8,7 @@ function monthKey(d: Date) {
   return `${y}-${m}`;
 }
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
     const session = await auth();
     const role = (session?.user as any)?.role as "ADMIN" | "OWNER" | "CUSTOMER" | undefined;
@@ -26,8 +26,20 @@ export async function GET() {
       );
     }
 
+    const url = new URL(req.url);
+    const monthsParam = Number(url.searchParams.get("months") || "12");
+    const topParam = Number(url.searchParams.get("top") || "10");
+    const months = Number.isFinite(monthsParam) && monthsParam > 0 ? Math.min(monthsParam, 60) : 12;
+    const top = Number.isFinite(topParam) && topParam > 0 ? Math.min(topParam, 50) : 10;
+
+    const now = new Date();
+    const startDate = new Date(now.getFullYear(), now.getMonth() - (months - 1), 1);
+
     const orders = await prisma.order.findMany({
-      where: { paymentStatus: "PAID" },
+      where: {
+        paymentStatus: "PAID",
+        createdAt: { gte: startDate },
+      },
       include: { items: true },
       orderBy: { createdAt: "asc" },
     });
@@ -43,28 +55,40 @@ export async function GET() {
       monthlyMap.set(k, { revenue: prev.revenue + (o.grossAmount || 0), orders: prev.orders + 1 });
     }
 
-    const monthly = Array.from(monthlyMap.entries()).map(([month, v]) => ({
-      month,
+    const monthly = Array.from(monthlyMap.entries()).map(([ym, v]) => ({
+      ym,
       revenue: v.revenue,
       orders: v.orders,
     }));
 
-    const productMap = new Map<string, { sold: number; revenue: number }>();
+    const productMap = new Map<string, { produkId: string; name: string; qty: number; revenue: number }>();
     for (const o of orders) {
       for (const it of o.items) {
-        const key = it.name;
-        const prev = productMap.get(key) ?? { sold: 0, revenue: 0 };
+        const key = it.produkId || it.name;
+        const prev = productMap.get(key) ?? {
+          produkId: it.produkId,
+          name: it.name,
+          qty: 0,
+          revenue: 0,
+        };
         productMap.set(key, {
-          sold: prev.sold + (it.quantity || 0),
+          produkId: prev.produkId,
+          name: prev.name,
+          qty: prev.qty + (it.quantity || 0),
           revenue: prev.revenue + (it.price || 0) * (it.quantity || 0),
         });
       }
     }
 
     const topProducts = Array.from(productMap.entries())
-      .map(([name, v]) => ({ name, sold: v.sold, revenue: v.revenue }))
-      .sort((a, b) => b.sold - a.sold)
-      .slice(0, 10);
+      .map(([, v]) => ({
+        produkId: v.produkId,
+        name: v.name,
+        qty: v.qty,
+        revenue: v.revenue,
+      }))
+      .sort((a, b) => b.qty - a.qty)
+      .slice(0, top);
 
     return NextResponse.json({
       summary: { totalRevenue, totalOrders, avgOrderValue },

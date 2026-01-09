@@ -176,7 +176,7 @@ export default function AdminProductsPage() {
           </div>
 
           <div>
-            <label className="block mb-1 text-sm font-medium">Kapasitas</label>
+            <label className="block mb-1 text-sm font-medium">Stok</label>
             <input
               name="capacity"
               type="number"
@@ -247,7 +247,7 @@ export default function AdminProductsPage() {
                 <div className="p-3 space-y-1">
                   <div className="text-sm font-semibold">{produk.name}</div>
                   <div className="text-xs text-gray-600">
-                    Rp {produk.price.toLocaleString("id-ID")} • Kapasitas{" "}
+                    Rp {produk.price.toLocaleString("id-ID")} • Stok{" "}
                     {produk.capacity}
                   </div>
                   <p className="text-xs text-gray-500 line-clamp-2">

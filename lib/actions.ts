@@ -3,7 +3,7 @@
 import { produkSchema, ReserveSchema } from "@/lib/zod";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { deleteCloudinaryImageByUrl } from "@/lib/cloudinary";
+import { del } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
 import { differenceInCalendarDays } from "date-fns";
@@ -34,7 +34,6 @@ export const saveproduk = async (
   const { name, description, price, capacity, amenities } = validatedFields.data;
 
   try {
-    // Buat produk dulu
     const produk = await prisma.produk.create({
       data: {
         name,
@@ -45,7 +44,6 @@ export const saveproduk = async (
       },
     });
 
-    // Kalau ada amenities, isi ke tabel join
     if (amenities?.length) {
       await prisma.produkAmenities.createMany({
         data: amenities.map((item) => ({
@@ -91,7 +89,6 @@ export const updateproduk = async (
 
   try {
     await prisma.$transaction(async (tx) => {
-      // Update data produk
       await tx.produk.update({
         where: { id: produkId },
         data: {
@@ -103,12 +100,10 @@ export const updateproduk = async (
         },
       });
 
-      // Reset join amenities
       await tx.produkAmenities.deleteMany({
         where: { produkId },
       });
 
-      // Insert join amenities baru
       if (amenities?.length) {
         await tx.produkAmenities.createMany({
           data: amenities.map((item) => ({
@@ -133,15 +128,12 @@ export const updateproduk = async (
 // =========================
 export const deleteproduk = async (id: string, image: string) => {
   try {
-    // Hapus file image di Cloudinary (kalau image berupa URL Cloudinary)
-    await deleteCloudinaryImageByUrl(image);
+    await del(image);
 
-    // Hapus join amenities dulu (untuk hindari constraint)
     await prisma.produkAmenities.deleteMany({
       where: { produkId: id },
     });
 
-    // Hapus produk
     await prisma.produk.delete({
       where: { id },
     });
@@ -186,21 +178,18 @@ export const createReserve = async (
   if (night <= 0) return { messageDate: "Date must be at least 1 night" };
 
   const total = night * price;
-
   let reservationId: string | null = null;
 
   try {
     await prisma.$transaction(async (tx) => {
-      // Update user
       await tx.user.update({
         data: { name, phone },
         where: { id: session.user.id as string },
       });
 
-      // Create reservation + payment (FIX: payment lowercase)
       const reservation = await tx.reservation.create({
         data: {
-          starDate: startDate, // pastikan schema kamu memang "starDate"
+          starDate: startDate,
           endDate,
           price,
           produkId,
@@ -208,7 +197,6 @@ export const createReserve = async (
           payment: {
             create: {
               amount: total,
-              // status: "pending", // isi kalau field status ada di model Payment
             },
           },
         },

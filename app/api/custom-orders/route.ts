@@ -2,15 +2,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import { mkdir, writeFile } from "fs/promises";
-import path from "path";
+import { put } from "@vercel/blob";
 
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
   try {
     const session = await auth();
-    const userId = (session?.user as any)?.id as string | undefined;
+    let userId = (session?.user as any)?.id as string | undefined;
+
+    if (!userId && session?.user?.email) {
+      const user = await prisma.user.findUnique({
+        where: { email: session.user.email },
+        select: { id: true },
+      });
+      userId = user?.id;
+    }
 
     if (!userId) {
       return NextResponse.json(
@@ -46,20 +53,39 @@ export async function POST(req: NextRequest) {
     }
 
     let imagePath: string | null = null;
+    let warningMessage: string | null = null;
 
     if (file && file.size > 0) {
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
+      if (!file.type.startsWith("image/")) {
+        return NextResponse.json(
+          { message: "File gambar tidak valid." },
+          { status: 400 }
+        );
+      }
 
-      const uploadsDir = path.join(process.cwd(), "public", "uploads", "custom-orders");
-      await mkdir(uploadsDir, { recursive: true });
+      if (file.size > 4_000_000) {
+        return NextResponse.json(
+          { message: "Ukuran gambar maksimal 4MB." },
+          { status: 400 }
+        );
+      }
 
-      const safeName = file.name.replace(/\s+/g, "-").toLowerCase();
-      const fileName = `${Date.now()}-${safeName}`;
-      const fullPath = path.join(uploadsDir, fileName);
-
-      await writeFile(fullPath, buffer);
-      imagePath = `/uploads/custom-orders/${fileName}`;
+      if (!process.env.BLOB_READ_WRITE_TOKEN) {
+        warningMessage =
+          "Gambar tidak disimpan karena konfigurasi upload belum aktif. Order tetap tersimpan.";
+      } else {
+        try {
+          const blob = await put(file.name, file, {
+            access: "public",
+            multipart: true,
+          });
+          imagePath = blob.url;
+        } catch (uploadError) {
+          console.error("CUSTOM ORDER upload error:", uploadError);
+          warningMessage =
+            "Gambar gagal diupload. Order tetap tersimpan, silakan hubungi admin.";
+        }
+      }
     }
 
     // ✅ Pakai userId langsung (dan cast any untuk menghindari typings cache Prisma)
@@ -77,7 +103,13 @@ export async function POST(req: NextRequest) {
       } as any,
     });
 
-    return NextResponse.json(created, { status: 201 });
+    return NextResponse.json(
+      {
+        ...created,
+        warning: warningMessage,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("POST /api/custom-orders error:", error);
     return NextResponse.json(
@@ -90,7 +122,15 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   try {
     const session = await auth();
-    const userId = (session?.user as any)?.id as string | undefined;
+    let userId = (session?.user as any)?.id as string | undefined;
+
+    if (!userId && session?.user?.email) {
+      const user = await prisma.user.findUnique({
+        where: { email: session.user.email },
+        select: { id: true },
+      });
+      userId = user?.id;
+    }
 
     if (!userId) {
       return NextResponse.json(

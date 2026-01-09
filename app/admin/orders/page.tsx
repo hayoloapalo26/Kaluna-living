@@ -11,33 +11,32 @@ type UserInfo = {
   phone: string | null;
 };
 
-type ProdukInfo = {
-  id: string;
-  name: string;
-  image: string;
-  price: number;
-};
-
 type PaymentInfo = {
-  id: string;
-  amount: number;
-  status: string;
-  method: string | null;
+  transactionStatus: string | null;
+  fraudStatus: string | null;
 } | null;
 
 type OrderItem = {
   id: string;
-  starDate: string;
-  endDate: string;
+  name: string;
+  quantity: number;
   price: number;
+};
+
+type OrderRow = {
+  id: string;
+  orderCode: string;
   createdAt: string;
   user: UserInfo;
-  produk: ProdukInfo;
+  grossAmount: number;
+  paymentStatus: string;
+  shippingStatus: string;
+  items: OrderItem[];
   payment: PaymentInfo;
 };
 
 export default function AdminOrdersPage() {
-  const [orders, setOrders] = useState<OrderItem[]>([]);
+  const [orders, setOrders] = useState<OrderRow[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -81,7 +80,7 @@ export default function AdminOrdersPage() {
           return;
         }
 
-        setOrders(data as OrderItem[]);
+        setOrders(data as OrderRow[]);
       } catch (err) {
         console.error(err);
         setError(
@@ -100,14 +99,34 @@ export default function AdminOrdersPage() {
   const formatTanggal = (value: string) =>
     new Date(value).toLocaleString("id-ID");
 
-  const translateStatus = (status: string | undefined | null) => {
+  const translatePaymentStatus = (status: string | undefined | null) => {
     if (!status) return "pending";
     switch (status) {
-      case "processed":
-        return "Diproses";
-      case "shipped":
+      case "PENDING":
+        return "Menunggu";
+      case "PAID":
+        return "Dibayar";
+      case "FAILED":
+        return "Gagal";
+      case "EXPIRED":
+        return "Kedaluwarsa";
+      case "CANCELLED":
+        return "Dibatalkan";
+      default:
+        return status;
+    }
+  };
+
+  const translateShippingStatus = (status: string | undefined | null) => {
+    if (!status) return "pending";
+    switch (status) {
+      case "PENDING":
+        return "Menunggu";
+      case "PACKED":
+        return "Dikemas";
+      case "SHIPPED":
         return "Dikirim";
-      case "received":
+      case "DELIVERED":
         return "Diterima";
       default:
         return status;
@@ -145,7 +164,7 @@ export default function AdminOrdersPage() {
                   <tr>
                     <th className="px-3 py-2 text-left">Tanggal</th>
                     <th className="px-3 py-2 text-left">Customer</th>
-                    <th className="px-3 py-2 text-left">Produk</th>
+                    <th className="px-3 py-2 text-left">Item</th>
                     <th className="px-3 py-2 text-left">Total</th>
                     <th className="px-3 py-2 text-left">Status</th>
                     <th className="px-3 py-2 text-left">Aksi</th>
@@ -153,8 +172,12 @@ export default function AdminOrdersPage() {
                 </thead>
                 <tbody>
                   {orders.map((order) => {
-                    const status =
-                      order.payment?.status ?? "pending";
+                    const itemCount = order.items?.length ?? 0;
+                    const firstItem = order.items?.[0];
+                    const itemLabel =
+                      itemCount > 1 && firstItem
+                        ? `${firstItem.name} +${itemCount - 1} item`
+                        : firstItem?.name || "-";
 
                     return (
                       <tr
@@ -179,19 +202,22 @@ export default function AdminOrdersPage() {
                         </td>
                         <td className="px-3 py-2">
                           <div className="font-medium">
-                            {order.produk?.name ?? "-"}
+                            {itemLabel}
                           </div>
                         </td>
                         <td className="px-3 py-2 whitespace-nowrap">
                           Rp{" "}
-                          {(order.payment?.amount ?? order.price).toLocaleString(
-                            "id-ID"
-                          )}
+                          {Number(order.grossAmount || 0).toLocaleString("id-ID")}
                         </td>
                         <td className="px-3 py-2">
-                          <span className="inline-flex rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-700">
-                            {translateStatus(status)}
-                          </span>
+                          <div className="flex flex-col gap-1">
+                            <span className="inline-flex rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-700">
+                              Payment: {translatePaymentStatus(order.paymentStatus)}
+                            </span>
+                            <span className="inline-flex rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-700">
+                              Shipping: {translateShippingStatus(order.shippingStatus)}
+                            </span>
+                          </div>
                         </td>
                         <td className="px-3 py-2">
                           <Link

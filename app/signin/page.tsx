@@ -14,6 +14,38 @@ export default function SignInPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const resolveErrorMessage = (error?: string, code?: string) => {
+    const normalized = (error || "").trim();
+
+    if (code === "missing_credentials") {
+      return "Username dan password wajib diisi.";
+    }
+    if (code === "user_not_found") {
+      return "Akun belum terdaftar.";
+    }
+    if (code === "wrong_password") {
+      return "Password salah.";
+    }
+    if (code === "email_not_verified") {
+      return "Akun belum diaktivasi. Silakan cek email untuk verifikasi.";
+    }
+
+    if (!normalized) return "Login gagal";
+    if (normalized === "CredentialsSignin") {
+      return "Username atau password salah.";
+    }
+    if (normalized === "AccessDenied") {
+      return "Akses ditolak. Silakan hubungi admin.";
+    }
+    if (normalized === "Configuration") {
+      return "Konfigurasi login bermasalah. Coba lagi nanti.";
+    }
+    if (normalized === "Verification") {
+      return "Verifikasi gagal. Silakan coba lagi.";
+    }
+    return normalized;
+  };
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
@@ -31,22 +63,26 @@ export default function SignInPage() {
       });
 
       if (res?.error) {
-        setError(res.error || "Login gagal");
+        setError(resolveErrorMessage(res.error, res.code));
         return;
       }
 
       const targetUrl = res?.url ?? callbackUrl;
-      router.push(targetUrl);
+      window.location.href = targetUrl;
     } catch (err: any) {
-      setError(err.message || "Terjadi kesalahan");
+      setError(resolveErrorMessage(err.message || "Terjadi kesalahan"));
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
-      <div className="mx-auto w-full max-w-6xl px-4 md:px-6 py-10">
+    <div className="min-h-screen relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-24 left-[-10%] h-72 w-72 rounded-full bg-[#f6c56e]/30 blur-3xl" />
+        <div className="absolute top-10 right-[-8%] h-80 w-80 rounded-full bg-[#6cb4d9]/25 blur-3xl" />
+      </div>
+      <div className="relative mx-auto w-full max-w-6xl px-4 md:px-6 py-10">
         <div className="grid lg:grid-cols-2 gap-8 items-center">
           {/* Left: brand copy */}
           <div className="hidden lg:block">
@@ -60,7 +96,7 @@ export default function SignInPage() {
               Log in to access the catalog, custom orders, and transaction history. The look is minimal, warm, and focused on comfort.
             </p>
 
-            <div className="mt-6 rounded-2xl bg-white ring-1 ring-black/5 p-5 shadow-md max-w-md">
+            <div className="mt-6 rounded-2xl bg-gradient-to-br from-white/90 to-[#fbe7dc] ring-1 ring-white/70 p-5 shadow-md max-w-md backdrop-blur">
               <p className="text-sm font-semibold text-[#111827]">Catatan</p>
               <p className="mt-1 text-sm text-[#111827]/70">
                 Customers, Admins, and Owners will be directed according to their roles after logging in.
@@ -70,7 +106,7 @@ export default function SignInPage() {
 
           {/* Right: form card */}
           <div className="flex justify-center lg:justify-end">
-            <div className="w-full max-w-lg rounded-2xl bg-white ring-1 ring-black/5 shadow-md p-7 md:p-8">
+            <div className="w-full max-w-lg rounded-3xl bg-white/90 ring-1 ring-white/70 shadow-md p-7 md:p-8 backdrop-blur">
               <div className="text-center">
                 <p className="text-xs uppercase tracking-[0.32em] text-black/45">
                   Sign In
@@ -85,7 +121,7 @@ export default function SignInPage() {
 
               {/* Error message */}
               {error && (
-                <div className="mt-5 rounded-2xl bg-white ring-1 ring-red-500/20 p-4 text-red-700">
+                <div className="mt-5 rounded-2xl bg-white/95 ring-1 ring-red-500/20 p-4 text-red-700">
                   <p className="text-sm font-semibold">Login gagal</p>
                   <p className="text-sm mt-1 text-red-700/90">{error}</p>
                 </div>
@@ -100,7 +136,7 @@ export default function SignInPage() {
                   <input
                     type="text"
                     className="rounded-2xl px-4 py-3 text-sm text-[#111827]
-                               ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#DEA9B6]/70"
+                               ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
@@ -116,7 +152,7 @@ export default function SignInPage() {
                   <input
                     type="password"
                     className="rounded-2xl px-4 py-3 text-sm text-[#111827]
-                               ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#DEA9B6]/70"
+                               ring-1 ring-black/10 focus:outline-none focus:ring-2 focus:ring-[#f08c6a]/60"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -128,7 +164,7 @@ export default function SignInPage() {
                 <div className="flex justify-end">
                   <Link
                     href="/forgot-password"
-                    className="text-sm font-semibold text-[#224670] hover:opacity-80 transition"
+                    className="text-sm font-semibold text-[#224670] hover:text-[#f08c6a] transition"
                   >
                     Forgot password?
                   </Link>
@@ -138,7 +174,7 @@ export default function SignInPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full rounded-2xl bg-[#224670] text-white px-4 py-3 text-sm font-semibold
+                  className="w-full rounded-2xl bg-gradient-to-r from-[#224670] via-[#6cb4d9] to-[#f08c6a] text-white px-4 py-3 text-sm font-semibold
                              hover:opacity-90 transition shadow-md disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {loading ? "Memproses..." : "Sign In"}
@@ -150,7 +186,7 @@ export default function SignInPage() {
                 Dont have an account yet?{" "}
                 <Link
                   href="/signup"
-                  className="font-semibold text-[#224670] hover:opacity-80 transition"
+                  className="font-semibold text-[#224670] hover:text-[#f08c6a] transition"
                 >
                   Sign Up
                 </Link>

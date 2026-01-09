@@ -57,10 +57,35 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "Produk tidak ditemukan" }, { status: 404 });
   }
 
+  const stock = Number(produk.capacity || 0);
+  if (stock <= 0) {
+    return NextResponse.json(
+      {
+        message:
+          "Stok produk habis. Silakan hubungi admin untuk ketersediaan.",
+      },
+      { status: 400 }
+    );
+  }
+
   // pastikan cart ada
   const cart =
     (await prisma.cart.findFirst({ where: { userId } })) ??
     (await prisma.cart.create({ data: { userId } }));
+
+  const existingItem = await prisma.cartItem.findFirst({
+    where: { cartId: cart.id, produkId },
+  });
+
+  const nextQty = (existingItem?.quantity ?? 0) + quantity;
+  if (nextQty > stock) {
+    return NextResponse.json(
+      {
+        message: `Stok produk hanya tersedia ${stock}. Silakan kurangi jumlah atau hubungi admin.`,
+      },
+      { status: 400 }
+    );
+  }
 
   // upsert item (unique [cartId, produkId])
   await prisma.cartItem.upsert({
@@ -110,11 +135,31 @@ export async function PATCH(req: Request) {
   // pastikan item milik user
   const item = await prisma.cartItem.findUnique({
     where: { id: itemId },
-    include: { cart: true },
+    include: { cart: true, produk: true },
   });
 
   if (!item || item.cart.userId !== userId) {
     return NextResponse.json({ message: "Item tidak ditemukan" }, { status: 404 });
+  }
+
+  const stock = Number(item.produk?.capacity || 0);
+  if (stock <= 0) {
+    return NextResponse.json(
+      {
+        message:
+          "Stok produk habis. Silakan hubungi admin untuk ketersediaan.",
+      },
+      { status: 400 }
+    );
+  }
+
+  if (quantity > stock) {
+    return NextResponse.json(
+      {
+        message: `Stok produk hanya tersedia ${stock}. Silakan kurangi jumlah atau hubungi admin.`,
+      },
+      { status: 400 }
+    );
   }
 
   await prisma.cartItem.update({

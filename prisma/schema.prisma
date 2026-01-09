@@ -29,9 +29,7 @@ model Produk {
   amenities    ProdukAmenities[]
   reservations Reservation[]
   cartItems    CartItem[]
-
-  // relasi untuk order item
-  orderItems OrderItem[]
+  orderItems   OrderItem[]
 
   @@map("room")
 }
@@ -113,24 +111,24 @@ model Payment {
  * USER (pakai tabel `user`)
  */
 model User {
-  id            String    @id @default(cuid())
+  id            String   @id @default(cuid())
   name          String?
-  email         String?   @unique
-  username      String    @unique
+  email         String?  @unique
+  username      String   @unique
   password      String
   emailVerified DateTime?
   image         String?
-  role          Role      @default(CUSTOMER)
+  role          Role     @default(CUSTOMER)
   phone         String?
 
   accounts     Account[]
   reservations Reservation[]
   carts        Cart[]
-
   customOrders CustomOrder[]
   orders       Order[]
 
   passwordResetTokens PasswordResetToken[]
+  emailVerificationTokens EmailVerificationToken[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -218,6 +216,24 @@ model PasswordResetToken {
   @@index([userId])
   @@index([expires])
   @@map("passwordresettoken")
+}
+
+/**
+ * EMAIL VERIFICATION TOKEN
+ */
+model EmailVerificationToken {
+  id    String @id @default(cuid())
+  token String @unique
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  expires   DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expires])
+  @@map("emailverificationtoken")
 }
 
 /**
